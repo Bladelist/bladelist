@@ -1,0 +1,102 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+<!--<%- include('parts/headers', {
+  "title":"Home",
+  "img":"/img/logo.png",
+  "wavelogo": true,
+  "searchmoretxt":true,
+  "searchbar": true,
+  "wavetext":"BladeBotList - Next generation botlist"
+}) %>
+<% let allbots = db.bots.all() %> -->
+<div class="container">
+
+<h2 class="HomeBotsText"><a><i class="fas fa-certificate"></i></a> Certified discord bots</h2>
+
+  <div class="row">
+    <!--<% let sorted = allbots.filter(b => b.data.certified).sort((a,b) => b.data.votes||0 - a.data.votes||0).slice(0, 8) %>
+    <% for(var i = 0; sorted.length > i; i++){ %>
+    <% let bot = sorted[i] %>-->
+    <div class="col-xs-6 col-md-3">
+  <!--<%- include('parts/botcard', {
+    'bot': bot.data,
+    'showstatus': false
+  }) %> -->
+    </div>
+  <!--<% } %> -->
+  </div>
+
+
+  <h2 class="HomeBotsText"><a><i class="fas fa-dice"></i></a> Randomly-selected discord bots</h2>
+
+  <div class="row">
+    <!--<% let shuffled = shuffle(allbots.filter(b => b.data.status === "approved")).slice(0, 8) %>
+    <% for(var i = 0; shuffled.length > i; i++){ %>
+    <% let bot = shuffled[i] %>-->
+    <div class="col-xs-6 col-md-3">
+<!--  <%- include('parts/botcard', {
+    'bot': bot.data,
+    'showstatus': false
+  }) %> -->
+    </div>
+ <!-- <% } %>-->
+  </div>
+
+
+  <h2 class="HomeBotsText"><a><i class="fab fa-hotjar"></i></a> Trending discord bots </h2>
+
+  <div class="row">
+  <!--  <% let tending = allbots.filter(b => b.data.status === "approved").sort((a, b) => b.data.votes||0 - a.data.votes||0).slice(0, 8) %>
+    <% for(var i = 0; tending.length > i; i++){ %>
+    <% let bot = tending[i] %>-->
+    <div class="col-xs-6 col-md-3">
+ <!-- <%- include('parts/botcard', {
+    'bot': bot.data,
+    'showstatus': false
+  }) %> -->
+    </div>
+ <!-- <% } %> -->
+  </div>
+
+  <h2 class="HomeBotsText"><a><i class="fab fa-hotjar"></i></a> Recently-added discord bots </h2>
+
+  <div class="row">
+ <!--   <% let news = allbots.filter(b => b.data.status === "approved").reverse().slice(0, 8) %>
+    <% for(var i = 0; news.length > i; i++){ %>
+    <% let bot = news[i] %> -->
+    <div class="col-xs-6 col-md-3">
+ <!-- <%- include('parts/botcard', {
+    'bot': bot.data,
+    'showstatus': false
+  }) %>  -->
+    </div>
+<!--  <% } %> -->
+  </div>
+
+</div>
+
+<!-- <% function shuffle(array) {
+  var currentIndex = array.length, temporaryValue, randomIndex;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
+}
+%>
+
+<%- include('parts/footer') %> -->
+
+{% endblock content %}

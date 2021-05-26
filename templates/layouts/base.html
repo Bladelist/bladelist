@@ -1,0 +1,286 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>BladeBotList</title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="<%=logo%>" sizes="32x32" />
+    <link rel="icon" type="image/png" href="<%=logo%>" sizes="16x16" />
+
+    <!-- JQuery-->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+
+    <!-- Fontawesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
+    <script data-search-pseudo-elements="true" defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js"></script>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <!-- mobile viewing -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Metadata -->
+    <meta name="description" content="<%=description%>">
+    <meta name="author" content="HiiZun">
+    <meta itemprop="description" content="<%=description%>">
+    <meta itemprop="image" content="<%=logo%>">
+
+    <!-- Open Graph Metadatas -->
+    <meta property="og:type" content="Website" />
+    <meta property="og:title" content="<%=name%>" />
+    <meta property="og:image" content="<%=logo%>" />
+    <meta property="og:description" content="<%=description%>" />
+
+    <!-- Twitter Card Metadatas -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:site" content="@bladebotlist" />
+    <meta name="twitter:title" content="<%=name%>" />
+    <meta name="twitter:description" content="<%=description%>" />
+    <meta name="twitter:image" content=”/img/bbl-blue.png"/>
+
+    <!-- arc.io widget -->
+    <script async src="https://arc.io/widget.js#KCacsX27"></script>
+
+    <!-- custom css -->
+    <link rel="stylesheet" href="{%  static 'css/style.css' %}">
+
+    <!-- custom js -->
+    <script src="{% static 'js/script.js' %}"></script>
+    <!-- Cookie consent -->
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css" />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
+    <script>
+        window.addEventListener("load", function () {
+          window.cookieconsent.initialise({
+            "palette": {
+              "popup": {
+                "background": "#212121"
+              },
+              "button": {
+                "background": "#f44336"
+              }
+            },
+            "position": "top",
+            "static": true
+          })
+        });
+    </script>
+
+    <div>
+        <!-- <%- include('./banner') %> -->
+    </div>
+
+</head>
+
+<body>
+
+    <div class="topnav">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-collapse">
+            <a class="navbar-brand" href="/"><img src="{% static 'img/logo.png' %}" alt="bbl's logo" class="roundpic" width="32px" height="32px"> BladeBotList</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/bots"><i class="fas fa-robot"></i> Bots</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://docs.bladebotlist.xyz"><i class="fas fa-book"></i> Docs</a>
+
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/discord"><i class="fab fa-discord"></i> Community</a>
+                    </li>
+                </ul>
+                <ul class="navbar-right">
+                    <!--  <% if(is_logged){ %> -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle menav" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img src="https://cdn.discordapp.com/avatars/<%=req.user.id%>/<%=req.user.avatar%>" class="roundpic" width="32px" height="32px">
+                             <!--  <%=req.user.username%>#<%=req.user.discriminator%> --> Craig X#1232
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a href="/me"><button class="dropdown-item nav-item"><i aria-hidden="true" class="fas fa-user-circle"></i>&nbsp;Profile</button></a>
+                            <a href="/bots/new"><button class="dropdown-item nav-item"><i aria-hidden="true" class="fas fa-plus"></i>&nbsp;New Bot</button></a>
+                            <div class="dropdown-divider"></div>
+                            <a href="/staff"><button class="dropdown-item nav-item"><i aria-hidden="true" class="fas fa-gavel"></i>&nbsp;Staff panel</button></a>
+{#                            <% } %>#}
+                            <a href="/admin"><button class="dropdown-item nav-item"><i aria-hidden="true" class="fas fa-cogs"></i>&nbsp;Admin panel</button></a>
+{#                            <% } %>#}
+                            <div class="dropdown-divider"></div>
+                            <span class="text-danger" href="/auth/logout"><a class="dropdown-item"><i aria-hidden="true" class="fas fa-sign-in-alt"></i>&nbsp;Logout</a></span>
+                        </div>
+                    </li>
+{#                    <!--  <% } else { %> -->#}
+{#                    <a href="/auth/login"><i class="fas fa-sign-in-alt"></i> Login</a>#}
+{#                    <!--  <% } %> -->#}
+
+                </ul>
+
+            </div>
+        </nav>
+        <div class="wavepart center">
+
+{#              <% if(wavelogo) {%> #}
+            <img class="roundpic center" src="{% static 'img/logo.png' %}">
+{#           <% } %>#}
+
+{#      if(wavetext) {%> #}
+            <h1 class="centertext wavetitle">
+{#                <%=wavetext%>#}
+            </h1>
+{#            <% } %>#}
+
+
+{#    <% if(searchbar) {%> #}
+            <form action="/search" method="GET">
+                <h3>Search in more than
+                    <bold class="bold text-primary">
+                        <!--<%=db.bots.all().length%>-->
+                    </bold> Discord bots</h3>
+
+                <div>
+                    <div class="beforeicon">
+                        <svg class="svg-inline--fa fa-search fa-w-16" aria-hidden="true" data-prefix="fas" data-icon="search" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"></path></svg>
+                    </div>
+                    <input autocomplete="off" name="q" id="searchbox" type="text" class="bblsearchbar" placeholder=" Search a bot" data-target="autocomplete-options-1ae38207-0128-f5ed-9e8a-26265b0cda3d">
+                </div>
+            </form>
+
+            <div>
+                <a href="/search?tags=Music"><button class="btn btn-info"><i class="fas fa-music"></i>  Music</button></a>
+                <a href="/search?tags=Economy"><button class="btn btn-info"><i class="far fa-money-bill-alt"></i>  Economy</button></a>
+                <a href="/search?tags=Moderation"><button class="btn btn-info"><i class="fas fa-gavel"></i>  Moderation</button></a>
+                <a href="/search?tags=Useful"><button class="btn btn-info"><i class="fas fa-box"></i>  Useful</button></a>
+
+            </div>
+
+            <!-- <% } %> -->
+
+        </div>
+        <svg viewBox="0 0 500 150" preserveAspectRatio="none">
+        <path d="M0.00,49.98 C120.20,187.78 271.49,-50.00 500.00,49.98 L500.00,0.00 L0.0 0,0.00 Z"
+          style="display: block; fill: #212121;"></path>
+      </svg>
+
+    </div>
+
+    {% block content %}{% endblock content %}
+
+
+</body>
+<footer>
+
+    <svg class="reverse" viewBox="0 0 500 150" preserveAspectRatio="none">
+    <path d="M0.00,49.98 C120.20,187.78 271.49,-50.00 500.00,49.98 L500.00,0.00 L0.0 0,0.00 Z"
+      style="display: block; fill: #212121;"></path>
+  </svg>
+    <div class="footer_container">
+        <div class="row">
+
+            <div class="col-xs-6 col-md-2 center">
+                <h1>BladeBotList</h1>
+                <ul class="footer-list-icons">
+                    <a href="http://twitter.com/bladebotlist" class="icons icon-1"> <i class="fab fa-twitter fa-2x" style="color: #1da1f2;"></i> </a>
+                    <a href="http://discord.gg/JFz45Ak" class="icons icon-1"> <i class="fab fa-discord fa-2x" style="color: #7289DA;"></i> </a>
+                    <a href="http://www.github.com/bladebotlist" class="icons"><i class="fab fa-github fa-2x " style="color: white;"></i> </a>
+                    <a href="mailto:contact@bladebotlist.xyz" class="icons"><i class="far fa-envelope fa-2x " style="color: white;"></i> </a>
+
+                </ul>
+
+            </div>
+
+            <div class="col-xs-6 col-md-2 center">
+                <ul>
+
+                    <h2>Links</h2>
+                    <ul>
+                        <li>
+                            <a class="text-light" href="/"><i class="fa fa-home" style="color: white;"></i> Home</a>
+                        </li>
+
+                        <li>
+                            <a class="text-light" href="/bots"><i class="fa fa-robot" style="color: white;"></i> Browse Bots</a>
+                        </li>
+
+                        <li>
+                            <a class="text-light" href="/certify"><i class="fa fa-certificate" style="color: white;"></i> Certification program</a>
+                        </li>
+
+                        <li>
+                            <i class="fa fa-balance-scale-right" style="color: white;"></i><a class="text-light" href="/terms"> Terms</a> & <a class="text-light" href="/privacy">Privacy</a>
+                        </li>
+                    </ul>
+                </ul>
+            </div>
+
+            <div class="col-xs-6 col-md-2 center">
+                <ul>
+                    <h2>Important Links</h2>
+                    <li>
+                        <a class="text-light" href="/about"><i class="fa fa-lightbulb" style="color: white;"></i> About</a>
+                    </li>
+
+                    <li>
+                        <a class="text-light" href="https://discordjs.guide"><i class="fas fa-robot" style="color:white;"></i> Create your own bot</a>
+                    </li>
+
+                    <li>
+                        <a class="text-light" href="https://discordapp.com/developers/applications/me"><i class="fab fa-discord" style="color: white;"></i> Developers portail</a>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="col-xs-6 col-md-3 center">
+
+                <ul>
+                    <h2>Partners</h2>
+                    <li>
+                        <a class="text-light" href="https://infinitybotlist.com">Infinity Bot List</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="col-xs-6 col-md-2 center">
+
+                <ul>
+                    <h2>Dashboard</h2>
+                    <!-- <% if(is_logged){ %> -->
+                    <li>
+                        <a class="text-light" href="/bots/new"><i class="fa fa-plus" style="color: white;"></i> Add Bot</a>
+                    </li>
+                    <li>
+                        <a class="text-light" href="/me"><i class="fa fa-user" style="color: white;"></i> Profile</a>
+                    </li>
+                    <li>
+                        <a class="text-light" href="/auth/logout"><i class="fa fa-sign-out-alt" style="color: white;"></i> Logout</a>
+                    </li>
+
+                    <!--    <% } else { %> -->
+
+                    <li>
+                        <a class="text-light" href="/auth/login"><i class="fa fa-sign-in-alt" style="color: white;"></i> Login</a>
+                    </li>
+
+                    <!--    <% } %> -->
+                </ul>
+            </div>
+
+        </div>
+
+        <hr>
+        <p class="float-left">Copyright &copy; 2019-
+            <script>
+                document.write(new Date().getFullYear());
+            </script> . All rights reserved.</p>
+    </div>
+</footer>
