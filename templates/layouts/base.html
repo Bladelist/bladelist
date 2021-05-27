@@ -129,18 +129,13 @@
         </nav>
     </div>
         {% if search %}
-        <div class="wavepart center">
-
-            <img class="roundpic center" src="{% static 'img/logo.png' %}">
-
+        <div class="wavepart center"> <img class="lazyload roundpic center float" width=256 height=256 alt="Website logo" src="{% static 'img/logo.svg' %}">
             <h1 class="centertext wavetitle">Bladebotlist</h1>
-
             <form action="/search" method="GET">
                 <h3>Search in more than <bold class="bold text-primary">4000</bold> Discord bots</h3>
-
                 <div>
                     <div class="beforeicon">
-                        <svg class="svg-inline--fa fa-search fa-w-16" aria-hidden="true" data-prefix="fas" data-icon="search" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"></path></svg>
+                        <i class="fa fa-search"></i>
                     </div>
                     <input autocomplete="off" name="q" id="searchbox" type="text" class="bblsearchbar" placeholder=" Search a bot" data-target="autocomplete-options-1ae38207-0128-f5ed-9e8a-26265b0cda3d">
                 </div>
@@ -154,10 +149,7 @@
             </div>
         </div>
         {% endif %}
-        <svg viewBox="0 0 500 150" preserveAspectRatio="none">
-            <path d="M0.00,49.98 C120.20,187.78 271.49,-50.00 500.00,49.98 L500.00,0.00 L0.0 0,0.00 Z"
-              style="display: block; fill: #212121;"></path>
-        </svg>
+    <div class="wave wave-top"></div>
 
     {% block content %}{% endblock content %}
 
@@ -165,10 +157,11 @@
 </body>
 <footer>
 
-    <svg class="reverse" viewBox="0 0 500 150" preserveAspectRatio="none">
-    <path d="M0.00,49.98 C120.20,187.78 271.49,-50.00 500.00,49.98 L500.00,0.00 L0.0 0,0.00 Z"
-      style="display: block; fill: #212121;"></path>
-  </svg>
+{#    <svg class="reverse" viewBox="0 0 500 150" preserveAspectRatio="none">#}
+{#    <path d="M0.00,49.98 C120.20,187.78 271.49,-50.00 500.00,49.98 L500.00,0.00 L0.0 0,0.00 Z"#}
+{#      style="display: block; fill: #212121;"></path>#}
+{#  </svg>#}
+    <div id=footer_wave class=wave></div>
     <div class="footer_container">
         <div class="row">
 
