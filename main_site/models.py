@@ -1,11 +1,14 @@
 import uuid
 from django.db import models
 from django.contrib.auth.models import User
+from utils.oauth import Oauth
+oauth = Oauth()
 
 
 class Member(models.Model):
     id = models.BigIntegerField(primary_key=True)
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="member")
+    tag = models.CharField(max_length=4, default="0000")
     avatar = models.CharField(max_length=100, null=True)
     banned = models.BooleanField(default=False)
     ban_reason = models.TextField(null=True, blank=True)

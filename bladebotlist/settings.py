@@ -127,3 +127,9 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+OAUTH_CLIENT_ID = "847488758135914517"
+OAUTH_CLIENT_SECRET = "aiEWDvQaC0mbrsqEkcojWPWQlBwWEOyX"
+ENCRYPTION_SALT = "test"
+ENCRYPTION_ITERATION = 100

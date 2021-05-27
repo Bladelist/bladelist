@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Verification Handler</title>
+</head>
+<body>
+<script>
+    function setParam()
+    {
+        let url_string = window.location.href;
+        let url = new URL(url_string);
+        let code = url.searchParams.get("code");
+        let param = (`http://127.0.0.1:8000/login/?code=${code}`);
+        window.opener.location.replace(param);
+        window.close();
+    }
+    setTimeout(setParam,0);
+</script>
+</body>
+</html>

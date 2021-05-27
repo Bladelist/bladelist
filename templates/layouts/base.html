@@ -73,7 +73,15 @@
     </script>
 
     <div>
-        <!-- <%- include('./banner') %> -->
+        <noscript>
+
+        <div class="topBanner" align="center">
+
+            <span>You have disabled javascript, some features may not work correctly. Please re-enable it !</span>
+
+        </div>
+
+        </noscript>
     </div>
 
 </head>
@@ -94,7 +102,6 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="https://docs.bladebotlist.xyz"><i class="fas fa-book"></i> Docs</a>
-
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/discord"><i class="fab fa-discord"></i> Community</a>
@@ -102,6 +109,7 @@
                 </ul>
                 <ul class="navbar-right">
                     <!--  <% if(is_logged){ %> -->
+                    {% if request.user.is_authenticated %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle menav" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <img src="https://cdn.discordapp.com/avatars/<%=req.user.id%>/<%=req.user.avatar%>" class="roundpic" width="32px" height="32px">
@@ -119,12 +127,10 @@
                             <span class="text-danger" href="/auth/logout"><a class="dropdown-item"><i aria-hidden="true" class="fas fa-sign-in-alt"></i>&nbsp;Logout</a></span>
                         </div>
                     </li>
-{#                    <!--  <% } else { %> -->#}
-{#                    <a href="/auth/login"><i class="fas fa-sign-in-alt"></i> Login</a>#}
-{#                    <!--  <% } %> -->#}
-
+                    {% else %}
+                    <a href="#" onclick="popupCenter({url: '{{oauth.discord_login_url}}', title: 'Discord', w: 500, h: 750});"><i class="fas fa-sign-in-alt"></i> Login</a>
+                    {% endif %}
                 </ul>
-
             </div>
         </nav>
     </div>
@@ -156,11 +162,6 @@
 
 </body>
 <footer>
-
-{#    <svg class="reverse" viewBox="0 0 500 150" preserveAspectRatio="none">#}
-{#    <path d="M0.00,49.98 C120.20,187.78 271.49,-50.00 500.00,49.98 L500.00,0.00 L0.0 0,0.00 Z"#}
-{#      style="display: block; fill: #212121;"></path>#}
-{#  </svg>#}
     <div id=footer_wave class=wave></div>
     <div class="footer_container">
         <div class="row">
