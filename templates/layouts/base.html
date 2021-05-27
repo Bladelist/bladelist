@@ -127,25 +127,16 @@
 
             </div>
         </nav>
+    </div>
+        {% if search %}
         <div class="wavepart center">
 
-{#              <% if(wavelogo) {%> #}
             <img class="roundpic center" src="{% static 'img/logo.png' %}">
-{#           <% } %>#}
 
-{#      if(wavetext) {%> #}
-            <h1 class="centertext wavetitle">
-{#                <%=wavetext%>#}
-            </h1>
-{#            <% } %>#}
+            <h1 class="centertext wavetitle">Bladebotlist</h1>
 
-
-{#    <% if(searchbar) {%> #}
             <form action="/search" method="GET">
-                <h3>Search in more than
-                    <bold class="bold text-primary">
-                        <!--<%=db.bots.all().length%>-->
-                    </bold> Discord bots</h3>
+                <h3>Search in more than <bold class="bold text-primary">4000</bold> Discord bots</h3>
 
                 <div>
                     <div class="beforeicon">
@@ -154,7 +145,6 @@
                     <input autocomplete="off" name="q" id="searchbox" type="text" class="bblsearchbar" placeholder=" Search a bot" data-target="autocomplete-options-1ae38207-0128-f5ed-9e8a-26265b0cda3d">
                 </div>
             </form>
-
             <div>
                 <a href="/search?tags=Music"><button class="btn btn-info"><i class="fas fa-music"></i>  Music</button></a>
                 <a href="/search?tags=Economy"><button class="btn btn-info"><i class="far fa-money-bill-alt"></i>  Economy</button></a>
@@ -162,16 +152,12 @@
                 <a href="/search?tags=Useful"><button class="btn btn-info"><i class="fas fa-box"></i>  Useful</button></a>
 
             </div>
-
-            <!-- <% } %> -->
-
         </div>
+        {% endif %}
         <svg viewBox="0 0 500 150" preserveAspectRatio="none">
-        <path d="M0.00,49.98 C120.20,187.78 271.49,-50.00 500.00,49.98 L500.00,0.00 L0.0 0,0.00 Z"
-          style="display: block; fill: #212121;"></path>
-      </svg>
-
-    </div>
+            <path d="M0.00,49.98 C120.20,187.78 271.49,-50.00 500.00,49.98 L500.00,0.00 L0.0 0,0.00 Z"
+              style="display: block; fill: #212121;"></path>
+        </svg>
 
     {% block content %}{% endblock content %}
 
