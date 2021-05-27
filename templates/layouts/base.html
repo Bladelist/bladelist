@@ -234,7 +234,8 @@
 
                 <ul>
                     <h2>Dashboard</h2>
-                    <!-- <% if(is_logged){ %> -->
+
+                    {% if request.user.is_authenticated %}
                     <li>
                         <a class="text-light" href="/bots/new"><i class="fa fa-plus" style="color: white;"></i> Add Bot</a>
                     </li>
@@ -245,13 +246,13 @@
                         <a class="text-light" href="/auth/logout"><i class="fa fa-sign-out-alt" style="color: white;"></i> Logout</a>
                     </li>
 
-                    <!--    <% } else { %> -->
+                    {% else %}
 
                     <li>
                         <a class="text-light" href="/auth/login"><i class="fa fa-sign-in-alt" style="color: white;"></i> Login</a>
                     </li>
 
-                    <!--    <% } %> -->
+                    {% endif %}
                 </ul>
             </div>
 
