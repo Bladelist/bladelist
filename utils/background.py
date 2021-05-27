@@ -18,3 +18,11 @@ def create_user(user_json):
                           tag=user_json.get("discriminator"),
                           )
     return user
+
+
+def update_user(user, user_json):
+    user.first_name = user_json.get("username")
+    user.member.avatar = user_json.get("avatar")
+    user.member.tag = user_json.get("discriminator")
+    user.member.save()
+    user.save()

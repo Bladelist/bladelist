@@ -4,7 +4,7 @@ from django.views import View
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import login, logout, authenticate
-from utils.background import create_user
+from utils.background import create_user, update_user
 from utils.oauth import Oauth
 from utils.hashing import Hasher
 
@@ -39,6 +39,8 @@ class LoginView(View):
             user = authenticate(username=user_id, password=hasher.get_hashed_pass(user_id))
             if user is None:
                 user = create_user(self.user_json)
+            else:
+                update_user(user, self.user_json)
             if not user.member.banned:
                 login(request, user)
             else:

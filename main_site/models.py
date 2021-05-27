@@ -19,6 +19,7 @@ class Member(models.Model):
             return f"https://cdn.discordapp.com/avatars/{self.id}/{self.avatar}.png"
         return "https://cdn.discordapp.com/embed/avatars/4.png"
 
+
 class Tag(models.Model):
     name = models.CharField(max_length=15, primary_key=True)
     icon = models.CharField(max_length=25)
