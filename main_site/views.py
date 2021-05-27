@@ -47,7 +47,7 @@ class LoginView(View):
                 error = "Your are banned from accessing the site."
         else:
             error = "Internal Server Error. Contact Administrator"
-        return render(request, self.template_name, {"error": error})
+        return render(request, self.template_name, {"error": error, "search": True})
 
 
 def login_handler_view(request):

@@ -261,6 +261,11 @@
         <p class="float-left">Copyright &copy; 2019-
             <script>
                 document.write(new Date().getFullYear());
-            </script> . All rights reserved.</p>
+            </script> . All rights reserved.
+        </p>
+        {% if error %}
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        <script>swal("{{ error }}", "Contact administrator if this was a mistake", "error");</script>
+        {% endif %}
     </div>
 </footer>
