@@ -13,6 +13,11 @@ class Member(models.Model):
     banned = models.BooleanField(default=False)
     ban_reason = models.TextField(null=True, blank=True)
 
+    @property
+    def avatar_url(self):
+        if self.avatar != "":
+            return f"https://cdn.discordapp.com/avatars/{self.id}/{self.avatar}.png"
+        return "https://cdn.discordapp.com/embed/avatars/4.png"
 
 class Tag(models.Model):
     name = models.CharField(max_length=15, primary_key=True)

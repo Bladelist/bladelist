@@ -15,5 +15,6 @@ def create_user(user_json):
     Member.objects.create(id=user_id,
                           user=user,
                           avatar=user_json.get("avatar"),
+                          tag=user_json.get("discriminator"),
                           )
     return user

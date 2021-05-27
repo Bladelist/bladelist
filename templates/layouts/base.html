@@ -112,8 +112,8 @@
                     {% if request.user.is_authenticated %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle menav" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <img src="https://cdn.discordapp.com/avatars/<%=req.user.id%>/<%=req.user.avatar%>" class="roundpic" width="32px" height="32px">
-                             <!--  <%=req.user.username%>#<%=req.user.discriminator%> --> Craig X#1232
+                            <img src="{{ request.user.member.avatar_url }}" class="roundpic" width="32px" height="32px">
+                             {{ request.user.first_name }}#{{ request.user.member.tag }}
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a href="/me"><button class="dropdown-item nav-item"><i aria-hidden="true" class="fas fa-user-circle"></i>&nbsp;Profile</button></a>
@@ -124,7 +124,7 @@
                             <a href="/admin"><button class="dropdown-item nav-item"><i aria-hidden="true" class="fas fa-cogs"></i>&nbsp;Admin panel</button></a>
 {#                            <% } %>#}
                             <div class="dropdown-divider"></div>
-                            <span class="text-danger" href="/auth/logout"><a class="dropdown-item"><i aria-hidden="true" class="fas fa-sign-in-alt"></i>&nbsp;Logout</a></span>
+                            <a class="dropdown-item" href="{% url 'logout' %}"><i aria-hidden="true" class="fas fa-sign-in-alt text-danger"></i>&nbsp;Logout</a>
                         </div>
                     </li>
                     {% else %}
