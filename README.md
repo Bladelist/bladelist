@@ -8,7 +8,7 @@
     <img alt="License: ALL RIGHTS RESERVED" src="https://img.shields.io/badge/License-ALL RIGHTS RESERVED-yellow.svg" />
   </a>
   <a href="https://twitter.com/NaoismyWaifu" target="_blank">
-    <img alt="Twitter: NaoismyWaifu" src="https://img.shields.io/twitter/follow/HiiZunfr.svg?style=social" />
+    <img alt="Twitter: NaoismyWaifu" src="https://img.shields.io/twitter/follow/NaoismyWaifu.svg?style=social" />
   </a>
 </p>
 
@@ -51,7 +51,7 @@ Give a ⭐️ if this project helped you!
 
 ## 📝 License
 
-Copyright © 2020 [Jannik S. (Nao)](https://github.com/Naoismywaifu).<br />
+Copyright © 2021 [Jannik S. (Nao)](https://github.com/Naoismywaifu).<br />
 This project is [ALL RIGHTS RESERVED](https://github.com/bladebotlist/bladebotlist/blob/master/LICENCE) licensed.
 
 ***
