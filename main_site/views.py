@@ -1,3 +1,4 @@
+import random
 from datetime import datetime, timezone
 from django.shortcuts import render, redirect
 from django.views import View
@@ -7,13 +8,10 @@ from django.contrib.auth import login, logout, authenticate
 from utils.background import create_user, update_user
 from utils.oauth import Oauth
 from utils.hashing import Hasher
+from .models import Bot
 
 oauth = Oauth()
 hasher = Hasher()
-
-
-def index_view(request):
-    return render(request, "index.html", {"search": True, "oauth": oauth})
 
 
 def bot_view(request):
@@ -23,8 +21,6 @@ def bot_view(request):
 class LoginView(View):
 
     template_name = 'index.html'
-    verified = False
-    context = {"Oauth": oauth}
     user_json = None
     access_token = None
 
@@ -45,9 +41,28 @@ class LoginView(View):
                 login(request, user)
             else:
                 error = "Your are banned from accessing the site."
+                return render(request, self.template_name, {"error": error, "search": True})
         else:
-            error = "Internal Server Error. Contact Administrator"
-        return render(request, self.template_name, {"error": error, "search": True})
+            error = "Internal Server Error"
+            return render(request, self.template_name, {"error": error, "search": True})
+        return IndexView.as_view()(self.request)
+
+
+class IndexView(View):
+    template_name = "index.html"
+
+    def get(self, request):
+        random_bots = Bot.objects.order_by("?").distinct()[:8]
+        bot_count = Bot.objects.count()
+        recent_bots = Bot.objects.order_by('-date_added')[:8]
+        trending_bots = Bot.objects.order_by('-votes')[:8]
+        return render(request, self.template_name,
+                      {"search": True,
+                       "random_bots": random_bots,
+                       "recent_bots": recent_bots,
+                       "trending_bots": trending_bots,
+                       "oauth": oauth,
+                       "bot_count": bot_count})
 
 
 def login_handler_view(request):

@@ -15,7 +15,7 @@ class Member(models.Model):
 
     @property
     def avatar_url(self):
-        if self.avatar != "":
+        if self.avatar is not None:
             return f"https://cdn.discordapp.com/avatars/{self.id}/{self.avatar}.png"
         return "https://cdn.discordapp.com/embed/avatars/4.png"
 
@@ -31,7 +31,7 @@ class Bot(models.Model):
         ("UNVERIFIED", "Unverified"),
         ("REJECTED", "Rejected")
     )
-    id = models.UUIDField(default=uuid.uuid4, primary_key=True)
+    id = models.BigIntegerField(primary_key=True)
     name = models.CharField(max_length=50)
     owner = models.ForeignKey(Member, related_name="bots", on_delete=models.CASCADE)
     invite_link = models.URLField()
@@ -41,6 +41,10 @@ class Bot(models.Model):
     banned = models.BooleanField(default=False)
     verified = models.BooleanField(default=False)
     date_added = models.DateTimeField()
+    server_count = models.IntegerField(default=0)
+    avatar_url = models.URLField(default="https://cdn.discordapp.com/embed/avatars/4.png")
+    short_desc = models.CharField(max_length=120, null=True)
+    tags = models.ManyToManyField(Tag, null=True, related_name="bots")
 
 
 class BotMeta(models.Model):
@@ -57,6 +61,7 @@ class BotMeta(models.Model):
     rejection_count = models.IntegerField(default=0)
     rejection_reason = models.TextField(null=True, blank=True)
     moderator = models.ForeignKey(Member, on_delete=models.SET_NULL, null=True)
+    long_desc = models.TextField(null=True, blank=True)
 
 
 class BotReport(models.Model):

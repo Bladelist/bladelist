@@ -138,7 +138,7 @@
         <div class="wavepart center"> <img class="lazyload roundpic center float" width=256 height=256 alt="Website logo" src="{% static 'img/logo.svg' %}">
             <h1 class="centertext wavetitle">Bladebotlist</h1>
             <form action="/search" method="GET">
-                <h3>Search in more than <bold class="bold text-primary">4000</bold> Discord bots</h3>
+                <h3>Search in more than <bold class="bold text-primary">{{ bot_count }}</bold> Discord bots</h3>
                 <div>
                     <div class="beforeicon">
                         <i class="fa fa-search"></i>
@@ -266,7 +266,7 @@
         </p>
         {% if error %}
         <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-        <script>swal("{{ error }}", "Contact administrator if this was a mistake", "error");</script>
+        <script>swal("{{ error }}", "Contact administrator for support", "error");</script>
         {% endif %}
     </div>
 </footer>
