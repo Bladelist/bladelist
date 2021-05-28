@@ -25,11 +25,8 @@
                     </div>
                     <hr>
                     <div class="card-manage">
-                        <a href="bots/{{ bot.id }}"><button class="btn btn-primary mr-1">View Bot</button></a>
+                        <a href="{% url 'bot_single' bot_id=bot.id %}"><button class="btn btn-primary mr-1">View Bot</button></a>
                         <a href="{{ bot.invite_link }}"><button class="btn btn-success">Invite Bot</button></a>
-                        {% if request.user.is_staff %}
-                        <a href="bots/{{ bot.id }}/edit"><button class="btn btn-info mr-1 mt-1">Edit Bot</button></a>
-                        {% endif %}
                     </div>
 
             </div>
@@ -58,11 +55,8 @@
                     </div>
                     <hr>
                     <div class="card-manage">
-                        <a href="bots/{{ bot.id }}"><button class="btn btn-primary mr-1">View Bot</button></a>
+                        <a href="{% url 'bot_single' bot_id=bot.id %}"><button class="btn btn-primary mr-1">View Bot</button></a>
                         <a href="{{ bot.invite_link }}"><button class="btn btn-success">Invite Bot</button></a>
-                        {% if request.user.is_staff %}
-                        <a href="bots/{{ bot.id }}/edit"><button class="btn btn-info mr-1 mt-1">Edit Bot</button></a>
-                        {% endif %}
                     </div>
 
             </div>
@@ -90,11 +84,8 @@
                     </div>
                     <hr>
                     <div class="card-manage">
-                        <a href="bots/{{ bot.id }}"><button class="btn btn-primary mr-1">View Bot</button></a>
+                        <a href="{% url 'bot_single' bot_id=bot.id %}"><button class="btn btn-primary mr-1">View Bot</button></a>
                         <a href="{{ bot.invite_link }}"><button class="btn btn-success">Invite Bot</button></a>
-                        {% if request.user.is_staff %}
-                        <a href="bots/{{ bot.id }}/edit"><button class="btn btn-info mr-1 mt-1">Edit Bot</button></a>
-                        {% endif %}
                     </div>
 
             </div>

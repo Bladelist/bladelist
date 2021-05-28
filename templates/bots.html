@@ -5,10 +5,8 @@
 
 <div class="container">
 
-  <h2 class="HomeBotsText"><a><i class="fas fa-dice"></i></a> Randomly-selected discord bots</h2>
-
   <div class="row">
-      {% for bot in random_bots %}
+      {% for bot in bot_list %}
         <div class="col-xs-6 col-md-3">
             <div class="card center hoverable"><img class="banner lazyload" height="75px" width="100%" src="{{ bot.banner_url }}">
                 <img class="roundpic lazyload cardavatar {% if bot.online %}presence-online{% else %}presence-offline{% endif %} avatarbroadcasting" width=128 height=128 src="{{ bot.avatar_url }}">
@@ -25,13 +23,9 @@
                     </div>
                     <hr>
                     <div class="card-manage">
-                        <a href="bots/{{ bot.id }}"><button class="btn btn-primary mr-1">View Bot</button></a>
+                        <a href="{% url 'bot_single' bot_id=bot.id %}"><button class="btn btn-primary mr-1">View Bot</button></a>
                         <a href="{{ bot.invite_link }}"><button class="btn btn-success">Invite Bot</button></a>
-                        {% if request.user.is_staff %}
-                        <a href="bots/{{ bot.id }}/edit"><button class="btn btn-info mr-1 mt-1">Edit</button></a>
-                        {% endif %}
                     </div>
-
             </div>
         </div>
       {% endfor %}

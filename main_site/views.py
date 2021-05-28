@@ -9,6 +9,7 @@ from utils.background import create_user, update_user
 from utils.oauth import Oauth
 from utils.hashing import Hasher
 from .models import Bot
+from django.views.generic.list import ListView
 
 oauth = Oauth()
 hasher = Hasher()
@@ -76,7 +77,7 @@ class IndexView(View):
     template_name = "index.html"
 
     def get(self, request):
-        random_bots = Bot.objects.filter(verified=True, banned=False).order_by("?").distinct()[:8]
+        random_bots = Bot.objects.filter(verified=True, banned=False).order_by("id").distinct()[:8]
         bot_count = Bot.objects.count()
         recent_bots = Bot.objects.filter(verified=True, banned=False).order_by('-date_added')[:8]
         trending_bots = Bot.objects.filter(verified=True, banned=False).order_by('-votes')[:8]
@@ -95,6 +96,22 @@ class AboutView(View):
 
 class TemplateView(View):
     template_name = "404.html"
+
+    def get(self, request):
+        return render(request, self.template_name)
+
+
+class BotListView(ListView):
+    template_name = "bots.html"
+    model = Bot
+    paginate_by = 40
+
+    def get_queryset(self):
+        return self.model.objects.filter(verified=True, banned=False).order_by('-votes')
+
+
+class AddBotView(LoginRequiredMixin, View):
+    template_name = "add.html"
 
     def get(self, request):
         return render(request, self.template_name)
