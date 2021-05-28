@@ -6,12 +6,17 @@
     <div class="botcontainer">
         {% if bot.unverified %}
         <div class="warnTopBot">
-            <span><i class="fas fa-exclamation-triangle"></i> Warning, This bot is in waiting to be verified, you can't invite the bot for the moment. <i class="fas fa-exclamation-triangle"></i></span>
+            <span><i class="fas fa-exclamation-triangle"></i> This bot is in waiting to be verified and won't show up in search<i class="fas fa-exclamation-triangle"></i></span>
         </div>
         {% endif %}
         {% if bot.rejected %}
         <div class="warnTopBot">
-            <span><i class="fas fa-exclamation-triangle"></i> Warning, This bot was declined, you can't invite it or interact with.</span>
+            <span><i class="fas fa-exclamation-triangle"></i> This bot was rejected: {{ bot.meta.rejection_reason }}</span>
+        </div>
+        {% endif %}
+        {% if bot.banned %}
+        <div class="warnTopBot">
+            <span><i class="fas fa-exclamation-triangle"></i> This bot is banned: {{ bot.meta.ban_reason }}</span>
         </div>
         {% endif %}
         <div class="row">
@@ -119,8 +124,6 @@
                             <a href="#!"><button class="btn-sm btn-success float-right"><i class="fas fa-check-circle"></i> Accept</button></a>
                             {% endif %}
                             {% endif %}
-
-
                     </div>
                 </div>
                 <div class="LongDescContainer">

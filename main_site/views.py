@@ -14,19 +14,34 @@ oauth = Oauth()
 hasher = Hasher()
 
 
+def login_handler_view(request):
+    return render(request, "login_handler.html")
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('/')
+
+
+def discord_login_view(request):
+    return redirect(oauth.discord_login_url)
+
+
 class BotView(View):
     template_name = "bot.html"
     model = Bot
 
-    def get(self, request, bot_id=None):
-        if bot_id is not None:
-            try:
-                bot = self.model.objects.get(id=bot_id)
-                return render(request, self.template_name, {"bot": bot})
-            except self.model.DoesNotExist:
-                return render(request, "404.html", {"search": True})
-        else:
-            return render(request, "bots.html")
+    def get(self, request, bot_id):
+        try:
+            bot = self.model.objects.get(id=bot_id)
+            if bot.banned or not bot.verified:
+                if request.user.is_authenticated:
+                    if request.user.member == bot.owner or request.user.is_staff:
+                        return render(request, self.template_name, {"bot": bot})
+                return render(request, "404.html")
+            return render(request, self.template_name, {"bot": bot})
+        except self.model.DoesNotExist:
+            return render(request, "404.html", {"search": True})
 
 
 class LoginView(View):
@@ -36,8 +51,6 @@ class LoginView(View):
     access_token = None
 
     def get(self, request):
-        user = None
-        error = None
         code = request.GET.get('code')
         if code is not None:
             self.access_token = oauth.get_access_token(code)
@@ -63,32 +76,25 @@ class IndexView(View):
     template_name = "index.html"
 
     def get(self, request):
-        random_bots = Bot.objects.order_by("?").distinct()[:8]
+        random_bots = Bot.objects.filter(verified=True, banned=False).order_by("?").distinct()[:8]
         bot_count = Bot.objects.count()
-        recent_bots = Bot.objects.order_by('-date_added')[:8]
-        trending_bots = Bot.objects.order_by('-votes')[:8]
+        recent_bots = Bot.objects.filter(verified=True, banned=False).order_by('-date_added')[:8]
+        trending_bots = Bot.objects.filter(verified=True, banned=False).order_by('-votes')[:8]
         return render(request, self.template_name,
                       {"search": True,
                        "random_bots": random_bots,
                        "recent_bots": recent_bots,
                        "trending_bots": trending_bots,
-                       "oauth": oauth,
                        "bot_count": bot_count})
-
-
-def login_handler_view(request):
-    return render(request, "login_handler.html")
-
-
-def logout_view(request):
-    logout(request)
-    return redirect('/')
-
-
-def discord_login_view(request):
-    return redirect(oauth.discord_login_url)
 
 
 class AboutView(View):
     def get(self, request):
         return render(request, "about.html")
+
+
+class TemplateView(View):
+    template_name = "404.html"
+
+    def get(self, request):
+        return render(request, self.template_name)
