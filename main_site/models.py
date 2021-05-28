@@ -45,6 +45,7 @@ class Bot(models.Model):
     avatar_url = models.URLField(default="https://cdn.discordapp.com/embed/avatars/4.png")
     short_desc = models.CharField(max_length=120, null=True)
     tags = models.ManyToManyField(Tag, null=True, related_name="bots")
+    banner_url = models.URLField(default="https://i.postimg.cc/15TN17rQ/xirprofilback.jpg")
 
 
 class BotMeta(models.Model):

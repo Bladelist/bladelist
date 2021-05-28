@@ -72,3 +72,12 @@ def login_handler_view(request):
 def logout_view(request):
     logout(request)
     return redirect('/')
+
+
+def discord_login_view(request):
+    return redirect(oauth.discord_login_url)
+
+
+class AboutView(View):
+    def get(self, request):
+        return render(request, "about.html")

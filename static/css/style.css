@@ -703,3 +703,8 @@ max-width: 300px;
 .float-right{
     float: right !important;
 }
+.card{
+  padding-top: 0;
+  padding-left: 0;
+  padding-right: 0;
+}

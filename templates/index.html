@@ -10,8 +10,8 @@
   <div class="row">
       {% for bot in random_bots %}
         <div class="col-xs-6 col-md-3">
-            <div class="card center hoverable"><img class="banner lazyload" height="95px" width="100%" src="https://quacky.xyz/files/banner.png" alt="HentaiCord#4075's banner">
-                <img class="roundpic lazyload cardavatar {% if bot.online %}presence-online{% else %}presence-offline{% endif %} avatarbroadcasting" width=128 height=128 src="{{ bot.avatar_url }}" alt="{{ bot.name }}'s avatar">
+            <div class="card center hoverable"><img class="banner lazyload" height="75px" width="100%" src="{{ bot.banner_url }}">
+                <img class="roundpic lazyload cardavatar {% if bot.online %}presence-online{% else %}presence-offline{% endif %} avatarbroadcasting" width=128 height=128 src="{{ bot.avatar_url }}">
                 <h2><a class="poponHover" data-toggle="popover" title="Certified Bot" data-trigger="hover" data-content="mod">Nao</a></h2>
                     <div>
                         <a class="badge badge-info">{{ bot.votes }} votes</a>
@@ -43,8 +43,8 @@
   <div class="row">
       {% for bot in trending_bots %}
         <div class="col-xs-6 col-md-3">
-            <div class="card center hoverable"><img class="banner lazyload" height="95px" width="100%" src="https://quacky.xyz/files/banner.png" alt="HentaiCord#4075's banner">
-                <img class="roundpic lazyload cardavatar {% if bot.online %}presence-online{% else %}presence-offline{% endif %} avatarbroadcasting" width=128 height=128 src="{{ bot.avatar_url }}" alt="{{ bot.name }}'s avatar">
+            <div class="card center hoverable"><img class="banner lazyload" height="75px" width="100%" src="{{ bot.banner_url }}">
+                <img class="roundpic lazyload cardavatar {% if bot.online %}presence-online{% else %}presence-offline{% endif %} avatarbroadcasting" width=128 height=128 src="{{ bot.avatar_url }}">
                 <h2><a class="poponHover" data-toggle="popover" title="Certified Bot" data-trigger="hover" data-content="mod">Nao</a></h2>
                     <div>
                         <a class="badge badge-info">{{ bot.votes }} votes</a>
@@ -75,8 +75,8 @@
   <div class="row">
       {% for bot in recent_bots %}
         <div class="col-xs-6 col-md-3">
-            <div class="card center hoverable"><img class="banner lazyload" height="95px" width="100%" src="https://quacky.xyz/files/banner.png" alt="HentaiCord#4075's banner">
-                <img class="roundpic lazyload cardavatar {% if bot.online %}presence-online{% else %}presence-offline{% endif %} avatarbroadcasting" width=128 height=128 src="{{ bot.avatar_url }}" alt="{{ bot.name }}'s avatar">
+            <div class="card center hoverable"><img class="banner lazyload" height="75px" width="100%" src="{{ bot.banner_url }}">
+                <img class="roundpic lazyload cardavatar {% if bot.online %}presence-online{% else %}presence-offline{% endif %} avatarbroadcasting" width=128 height=128 src="{{ bot.avatar_url }}">
                 <h2><a class="poponHover" data-toggle="popover" title="Certified Bot" data-trigger="hover" data-content="mod">Nao</a></h2>
                     <div>
                         <a class="badge badge-info">{{ bot.votes }} votes</a>

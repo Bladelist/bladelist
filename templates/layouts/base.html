@@ -55,6 +55,7 @@
     <!-- Cookie consent -->
     <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.css" />
     <script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.0.3/cookieconsent.min.js"></script>
+    <script src="https://code.iconify.design/1/1.0.7/iconify.min.js"></script>
     <script>
         window.addEventListener("load", function () {
           window.cookieconsent.initialise({
@@ -118,17 +119,17 @@
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a href="/me"><button class="dropdown-item nav-item"><i aria-hidden="true" class="fas fa-user-circle"></i>&nbsp;Profile</button></a>
                             <a href="/bots/new"><button class="dropdown-item nav-item"><i aria-hidden="true" class="fas fa-plus"></i>&nbsp;New Bot</button></a>
+                            {% if request.user.is_staff %}
                             <div class="dropdown-divider"></div>
                             <a href="/staff"><button class="dropdown-item nav-item"><i aria-hidden="true" class="fas fa-gavel"></i>&nbsp;Staff panel</button></a>
-{#                            <% } %>#}
-                            <a href="/admin"><button class="dropdown-item nav-item"><i aria-hidden="true" class="fas fa-cogs"></i>&nbsp;Admin panel</button></a>
-{#                            <% } %>#}
+                            <a href="/admin"><button class="dropdown-item nav-item"><i aria-hidden="true" class="fas fa-cogs"></i>&nbsp;Stats</button></a>
+                            {% endif %}
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="{% url 'logout' %}"><i aria-hidden="true" class="fas fa-sign-in-alt text-danger"></i>&nbsp;Logout</a>
                         </div>
                     </li>
                     {% else %}
-                    <a href="#" onclick="popupCenter({url: '{{oauth.discord_login_url}}', title: 'Discord', w: 500, h: 750});"><i class="fas fa-sign-in-alt"></i> Login</a>
+                    <a href="#" onclick="popupCenter({url: '{% url "login" %}', title: 'Discord', w: 500, h: 750});"><i class="fas fa-sign-in-alt"></i> Login</a>
                     {% endif %}
                 </ul>
             </div>
@@ -206,7 +207,7 @@
                 <ul>
                     <h2>Important Links</h2>
                     <li>
-                        <a class="text-light" href="/about"><i class="fa fa-lightbulb" style="color: white;"></i> About</a>
+                        <a class="text-light" href="{% url 'about' %}"><i class="fa fa-lightbulb" style="color: white;"></i> About</a>
                     </li>
 
                     <li>
@@ -249,7 +250,7 @@
                     {% else %}
 
                     <li>
-                        <a class="text-light" href="/auth/login"><i class="fa fa-sign-in-alt" style="color: white;"></i> Login</a>
+                        <a class="text-light" href="{% url 'login' %}"><i class="fa fa-sign-in-alt" style="color: white;"></i> Login</a>
                     </li>
 
                     {% endif %}
