@@ -52,7 +52,7 @@ Give a ⭐️ if this project helped you!
 ## 📝 License
 
 Copyright © 2021 [Jannik S. (Nao)](https://github.com/Naoismywaifu).<br />
-This project is [ALL RIGHTS RESERVED](https://github.com/bladebotlist/bladebotlist/blob/master/LICENCE) licensed.
+This project is [ALL RIGHTS RESERVED](https://github.com/BladeBotList/bladebotlist-py/blob/master/LICENCE) licensed.
 
 ***
 _This README was generated with ❤️ by [readme-md-generator](https://github.com/kefranabg/readme-md-generator)_
