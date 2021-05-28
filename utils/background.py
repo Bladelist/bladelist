@@ -1,7 +1,9 @@
 from datetime import datetime
 from django.contrib.auth.models import User
-from main_site.models import Member
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 
+from main_site.models import Member, Bot, BotMeta
 from utils.hashing import Hasher
 
 hasher = Hasher()
@@ -26,3 +28,9 @@ def update_user(user, user_json):
     user.member.tag = user_json.get("discriminator")
     user.member.save()
     user.save()
+
+
+@receiver(post_save, sender=Bot)
+def create_bot_meta(sender, instance, created, **kwargs):
+    if created:
+        BotMeta.objects.create(bot=instance)

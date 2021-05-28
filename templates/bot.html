@@ -1,0 +1,134 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <div class="botcontainer">
+        {% if bot.unverified %}
+        <div class="warnTopBot">
+            <span><i class="fas fa-exclamation-triangle"></i> Warning, This bot is in waiting to be verified, you can't invite the bot for the moment. <i class="fas fa-exclamation-triangle"></i></span>
+        </div>
+        {% endif %}
+        {% if bot.rejected %}
+        <div class="warnTopBot">
+            <span><i class="fas fa-exclamation-triangle"></i> Warning, This bot was declined, you can't invite it or interact with.</span>
+        </div>
+        {% endif %}
+        <div class="row">
+            <div class="col-lg-4 col-md-12 col-sm-12 col-12">
+                    <div class=container>
+                        <script src="https://ajax.cloudflare.com/cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="561f42bbb55a89249e7fed4b-|49"></script>
+                        <img class="roundpic botavatar center lazyload" src="{{ bot.avatar_url }}?size=256"  alt="OcelotBOT's Avatar">
+                    </div>
+                    <div class="container card">
+                        <div class=supercard-header><span class=TitleCard><i class="far fa-question-circle"></i> Information</span></div>
+                        <ul class=buttons-group>
+                            <a class="btn-block btn-icon">
+                                <div class="btnicon-icon text-info"><i class="fas fa-chevron-up"></i></div><span class=btnicon-content style="width: calc(100% - 42px)">Votes <span class="float-right badge badge-light">{{ bot.votes }}</span></span>
+                            </a>
+                            <a class="btn-block btn-icon">
+                                <div class="btnicon-icon text-dark"><i class="fas fa-terminal"></i></div><span class=btnicon-content style="width: calc(100% - 42px)">Prefix <span class="float-right badge badge-light">{{ bot.meta.prefix }}</span></span>
+                            </a>
+                            <a class="btn-block btn-icon">
+                                <div class="btnicon-icon text-white"><i class="fas fa-book"></i></div><span class=btnicon-content style="width: calc(100% - 42px)">Library <span class="float-right badge badge-light">{{ bot.meta.library }}</span></span>
+                            </a>
+                            <a class="btn-block btn-icon">
+                                <div class="btnicon-icon text-primary"><i class="fas fa-shield-alt"></i></div><span class=btnicon-content style="width: calc(100% - 42px)">Status <span class="float-right badge badge-light"><i class="fas fa-circle {% if bot.online %}text-success{% else %}text-danger{% endif %}"></i> {% if bot.online %}online{% else %}offline{% endif %}</span></span>
+                            </a>
+                            <a class="btn-block btn-icon">
+                                <div class="btnicon-icon text-info"><i class="fas fa-globe"></i></div><span class=btnicon-content style="width: calc(100% - 42px)">Uptime <span class="float-right badge badge-light">{{ bot.meta.uptime }}</span></span>
+                            </a>
+                            <a class="btn-block btn-icon">
+                                <div class="btnicon-icon text-dark"><i class="fas fa-server"></i></div><span class=btnicon-content style="width: calc(100% - 42px)">Servers <span class="float-right badge badge-light">{% if bot.server_count %}{{ bot.server_count }}{% else %}N/A{% endif %}</span></span>
+                            </a>
+                            <a class="btn-block btn-icon">
+                                <div class="btnicon-icon text-dark"><i class="fas fa-hdd"></i></div><span class=btnicon-content style="width: calc(100% - 42px)">Shards <span class="float-right badge badge-light">{% if bot.meta.shard_count %}{{ bot.meta.shard_count }}{% else %}N/A{% endif %}</span></span>
+                            </a>
+                        </ul>
+                        <div class=supercard-header><span class=TitleCard><i class="fas fa-tasks"></i> Manage</span></div>
+                        <ul class=buttons-group>
+                            <a class="btn btn-block btn-icon" href="#!">
+                                <div class="btnicon-icon text-info"><i class="fas fa-chevron-up"></i></div><span class=btnicon-content>Vote</span> </a>
+                            <a class="btn btn-block btn-icon" href="{{ bot.invite_url }}">
+                                <div class="btnicon-icon text-success"><i class="fas fa-plus-square"></i></div><span class=btnicon-content>Invite</span> </a>
+                            <a class="btn btn-block btn-icon btn-danger" href="#!">
+                                <div class="btnicon-icon text-danger"><i class="fas fa-flag"></i></div><span class=btnicon-content>Report</span></a>
+                        </ul>
+                        {% if request.user.is_staff %}
+                        <div class=supercard-header><span class=TitleCard><i class="fas fa-gavel"></i> Staff</span></div>
+                        <ul class=buttons-group>
+                            <a class="btn-block btn-icon" href="users/{{ bot.meta.moderator.id }}/">
+                                <div class="btnicon-icon text-warning"><i class="fas fa-user"></i></div><span class=btnicon-content>{% if bot.meta.moderator %}{{ bot.meta.moderator.user.first_name }} #{{ bot.meta.moderator.tag }}{% else %}Anonymous{% endif %}</span>
+                            </a>
+                        </ul>
+                        {% else %}
+                        <div class=supercard-header><span class=TitleCard><i class="fas fa-user"></i> Owner</span></div>
+                        <ul class=buttons-group>
+                            <a class="btn-block btn-icon" href="users/{{ bot.owner.id }}/">
+                                <div class="btnicon-icon text-warning"><i class="fas fa-crown"></i></div><span class=btnicon-content>{{ bot.owner.user.first_name }} #{{ bot.owner.tag }}</span>
+                            </a>
+                        </ul>
+                        {% endif %}
+                        <div class=supercard-header><span class=TitleCard><i class="fas fa-tags"></i> Tags</span></div>
+                        <ul class=buttons-group>
+                            {% for tag in bot.tags.all %}
+                            <a class="btn-block btn-icon">
+                                <div class=btnicon-icon><i class="{{ tag.icon }}"></i></div><span class=btnicon-content>{{ tag.name }}</span>
+                            </a>
+                            {% endfor %}
+                        </ul>
+                    </div>
+            </div>
+            <div class="col-lg-8 col-md-8 col-sm-12 col-12">
+                <div class="container">
+                    <div style="color: white !important; display: table;">
+                        <span><h1 class=botName>{{ bot.name }}</h1></span>
+                        <a href="#!"><button class="votecase">1 <i class="fas fa-chevron-up"></i></button></a>
+                    </div>
+                    <p class=mb-10>Dank memes, Games, Trivia, NotSoBot style image filters, music, guessing games, meme generators, image search and hundreds of fun commands!</p>
+                    <div class="botButtons">
+                            <a href="#"><button class="btn-lg btn-success"><i class="fas fa-chevron-up"></i> Vote</button></a>
+                            <a href="#"><button class="btn-lg btn-danger"><i class="far fa-flag"></i> Report</button></a>
+                            <a href="{{ bot.invite_url }}"><button class="btn-lg btn-warning"><i class="fas fa-plus"></i> Invite</button></a>
+                            <a href="{{ bot.meta.support_server }}"><button class="btn-lg btn-info"><i class="fa fa-headphones"></i> Support</button></a>
+                            <br>
+                            {% if bot.meta.github %}
+                            <a href="{{ bot.meta.github }}"><button class="btn-sm btn-primary"><i class="fab fa-github"></i> GitHub</button></a>
+                            {% endif %}
+                            {% if bot.meta.website %}
+                            <a href="{{ bot.meta.website }}"><button class="btn-sm btn-primary"><i class="far fa-window-restore"></i> Website</button></a>
+                            {% endif %}
+                            {% if bot.meta.donate %}
+                            <a href="#"><button class="btn-sm btn-primary"><i class="fas fa-piggy-bank"></i> Donate</button></a>
+                            {% endif %}
+                            {% if bot.meta.twitter %}
+                            <a href="{{ bot.meta.twitter }}"><button class="btn-sm btn-primary" ><i class="fab fa-twitter"></i> Twitter</button></a>
+                            {% endif %}
+                            {% if bot.meta.privacy %}
+                            <a href="{{ bot.meta.privacy }}"><button class="btn-sm btn-primary"><i class="far fa-hdd"></i> Privacy policy</button></a>
+                            {% endif %}
+                            <br>
+                            {% if request.user.member == bot.owner %}
+                            <a href="#!"><button class="btn-sm btn-danger float-right"><i class="far fa-trash-alt"></i> Delete</button></a>
+                            <a href="#!"><button class="btn-sm btn-warning float-right"><i class="far fa-edit"></i> Edit</button></a>
+                            <a href="#!"><button class="btn-sm btn-info float-right"><i class="fas fa-key"></i> API Key</button></a>
+                            {% elif request.user.is_staff%}
+                            <a href="#!"><button class="btn-sm btn-danger float-right"><i class="fas fa-ban"></i> Ban</button></a>
+                            {% if not bot.verified %}
+                            <a href="#!"><button class="btn-sm btn-warning float-right"><i class="fa fa-times-circle"></i> Reject</button></a>
+                            <a href="#!"><button class="btn-sm btn-success float-right"><i class="fas fa-check-circle"></i> Accept</button></a>
+                            {% endif %}
+                            {% endif %}
+
+
+                    </div>
+                </div>
+                <div class="LongDescContainer">
+                        {{ bot.meta.long_desc }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

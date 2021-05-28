@@ -2,107 +2,40 @@
 {% load static %}
 
 {% block content %}
+
 <div class="container">
-    <div class="botcontainer">
-{#        <div class="warnTopBot">#}
-{#            <span><i class="fas fa-exclamation-triangle"></i> Warning, This bot is in waiting to be verified, you can't invite the bot for the moment. <i class="fas fa-exclamation-triangle"></i></span>#}
-{#        </div>#}
-        <div class="warnTopBot">
-            <span><i class="fas fa-exclamation-triangle"></i> Warning, This bot was declined, you will can't invite it or interact with. <i class="fas fa-exclamation-triangle"></i></span>
-        </div>
-        <div class="row">
-            <div class="col-lg-4 col-md-12 col-sm-12 col-12">
-                    <div class=container>
-                        <script src="https://ajax.cloudflare.com/cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="561f42bbb55a89249e7fed4b-|49"></script>
-                        <img class="roundpic botavatar center lazyload" src="https://cdn.discordapp.com/avatars/146293573422284800/3d8d2294aa9d2017dc840f5fe3f91644?size=256"  alt="OcelotBOT's Avatar">
+
+  <h2 class="HomeBotsText"><a><i class="fas fa-dice"></i></a> Randomly-selected discord bots</h2>
+
+  <div class="row">
+      {% for bot in random_bots %}
+        <div class="col-xs-6 col-md-3">
+            <div class="card center hoverable"><img class="banner lazyload" height="75px" width="100%" src="{{ bot.banner_url }}">
+                <img class="roundpic lazyload cardavatar {% if bot.online %}presence-online{% else %}presence-offline{% endif %} avatarbroadcasting" width=128 height=128 src="{{ bot.avatar_url }}">
+                <h2><a class="poponHover" data-toggle="popover" title="Certified Bot" data-trigger="hover" data-content="mod">Nao</a></h2>
+                    <div>
+                        <a class="badge badge-info">{{ bot.votes }} votes</a>
+                        <a class="badge badge-warning">{{ bot.server_count }} servers</a>
+                            {% for tag in bot.tags.all %}
+                            <a class="badge badge-muted">{{ tag.name }}</a>
+                            {% endfor %}
                     </div>
-                    <div class="container card">
-                        <div class=supercard-header><span class=TitleCard><i class="far fa-question-circle"></i> Information</span></div>
-                        <ul class=buttons-group>
-                            <a class="btn-block btn-icon">
-                                <div class="btnicon-icon text-info"><i class="fas fa-chevron-up"></i></div><span class=btnicon-content style="width: calc(100% - 42px)">Votes <span class="float-right badge badge-light">1</span></span>
-                            </a>
-                            <a class="btn-block btn-icon">
-                                <div class="btnicon-icon text-dark"><i class="fas fa-terminal"></i></div><span class=btnicon-content style="width: calc(100% - 42px)">Prefix <span class="float-right badge badge-light">!</span></span>
-                            </a>
-                            <a class="btn-block btn-icon">
-                                <div class="btnicon-icon text-white"><i class="fas fa-book"></i></div><span class=btnicon-content style="width: calc(100% - 42px)">Library <span class="float-right badge badge-light">discord.js</span></span>
-                            </a>
-                            <a class="btn-block btn-icon">
-                                <div class="btnicon-icon text-primary"><i class="fas fa-shield-alt"></i></div><span class=btnicon-content style="width: calc(100% - 42px)">Status <span class="float-right presence-online badge badge-light"><i class="fas fa-circle"></i> online</span></span>
-                            </a>
-                            <a class="btn-block btn-icon">
-                                <div class="btnicon-icon text-info"><i class="fas fa-globe"></i></div><span class=btnicon-content style="width: calc(100% - 42px)">Uptime <span class="float-right badge badge-light">100.00%</span></span>
-                            </a>
-                            <a class="btn-block btn-icon">
-                                <div class="btnicon-icon text-dark"><i class="fas fa-server"></i></div><span class=btnicon-content style="width: calc(100% - 42px)">Servers <span class="float-right badge badge-light">21547</span></span>
-                            </a>
-                            <a class="btn-block btn-icon">
-                                <div class="btnicon-icon text-dark"><i class="fas fa-hdd"></i></div><span class=btnicon-content style="width: calc(100% - 42px)">Shards <span class="float-right badge badge-light">21</span></span>
-                            </a>
-                        </ul>
-                        <div class=supercard-header><span class=TitleCard><i class="fas fa-tasks"></i> Manage</span></div>
-                        <ul class=buttons-group>
-                            <a class="btn btn-block btn-icon" href=/bot/146293573422284800/vote>
-                                <div class="btnicon-icon text-info"><i class="fas fa-chevron-up"></i></div><span class=btnicon-content>Vote</span> </a>
-                            <a class="btn btn-block btn-icon" href=/bot/146293573422284800/invite>
-                                <div class="btnicon-icon text-success"><i class="fas fa-plus-square"></i></div><span class=btnicon-content>Invite</span> </a>
-                            <a class="btn btn-block btn-icon btn-danger" href=/bot/146293573422284800/report>
-                                <div class="btnicon-icon text-danger"><i class="fas fa-flag"></i></div><span class=btnicon-content>Report</span></a>
-                        </ul>
-                        <div class=supercard-header><span class=TitleCard><i class="fas fa-gavel"></i> Staff</span></div>
-                        <ul class=buttons-group>
-                            <a class="btn-block btn-icon" href=/user/139871249567318017>
-                                <div class="btnicon-icon text-warning"><i class="fas fa-crown"></i></div><span class=btnicon-content>Big P#1843</span></a>
-                        </ul>
-                        <div class=supercard-header><span class=TitleCard><i class="fas fa-tags"></i> Tags</span></div>
-                        <ul class=buttons-group>
-                            <a class="btn-block btn-icon">
-                                <div class=btnicon-icon><i class="fas fa-laugh"></i></div><span class=btnicon-content>Fun</span> </a>
-                            <a class="btn-block btn-icon">
-                                <div class=btnicon-icon><i class="fas fa-hammer"></i></div><span class=btnicon-content>Utility</span> </a>
-                            <a class="btn-block btn-icon">
-                                <div class=btnicon-icon><i class="fas fa-align-center"></i></div><span class=btnicon-content>Multipurpose</span> </a>
-                            <a class="btn-block btn-icon">
-                                <div class=btnicon-icon><i class="fas fa-ban"></i></div><span class=btnicon-content>NSFW</span> </a>
-                            <a class="btn-block btn-icon">
-                                <div class=btnicon-icon><i class="fas fa-comment-dots"></i></div><span class=btnicon-content>Meme</span> </a>
-                            <a class="btn-block btn-icon">
-                                <div class=btnicon-icon><i class="fas fa-images"></i></div><span class=btnicon-content>Pictures</span> </a>
-                            <a class="btn-block btn-icon">
-                                <div class=btnicon-icon><i class="fab fa-reddit"></i></div><span class=btnicon-content>Reddit</span></a>
-                        </ul>
+                    <div class="card-desc-container">
+                        <p class="card-desc">{{ bot.short_desc }}</p>
                     </div>
-            </div>
-            <div class="col-lg-8 col-md-8 col-sm-12 col-12">
-                <div class="container">
-                    <div style="color: white !important; display: table;">
-                        <span><h1 class=botName>OcelotBOT</h1></span>
-                        <a href="/bot/146293573422284800/vote"><button class="votecase">1 <i class="fas fa-chevron-up"></i></button></a>
+                    <hr>
+                    <div class="card-manage">
+                        <a href="bots/{{ bot.id }}"><button class="btn btn-primary mr-1">View Bot</button></a>
+                        <a href="{{ bot.invite_link }}"><button class="btn btn-success">Invite Bot</button></a>
+                        {% if request.user.is_staff %}
+                        <a href="bots/{{ bot.id }}/edit"><button class="btn btn-info mr-1 mt-1">Edit</button></a>
+                        {% endif %}
                     </div>
-                    <p class=mb-10>Dank memes, Games, Trivia, NotSoBot style image filters, music, guessing games, meme generators, image search and hundreds of fun commands!</p>
-                    <div class="botButtons">
-                            <a href="#"><button class="btn btn-primary"><i class="fas fa-chevron-up"></i> Vote</button></a>
-                            <a href="#"><button class="btn btn-warning"><i class="fas fa-plus"></i> Invite</button></a>
-                            <a href="#"><button class="btn btn-danger"><i class="far fa-flag"></i> Report</button></a>
-                            <a href="#"><button class="btn btn-danger"><i class="far fa-trash-alt"></i> Delete</button></a>
-                            <a href="#"><button class="btn btn-primary"><i class="far fa-edit"></i> Edit</button></a>
-                            <a href="#"><button class="btn btn-danger"><i class="fas fa-key"></i> API Key</button></a>
-                            <a href="#"><button class="btn btn-default"><i class="fab fa-github"></i> GitHub</button></a>
-                            <a href="#"><button class="btn btn-outline-warning"><i class="far fa-window-restore"></i> Website</button></a>
-                            <a href="#"><button class="btn btn-outline-info"><i class="far fa-life-ring"></i> Support</button></a>
-                            <a href="#"><button class="btn" style="color:green !important; border-color: green !important;"><i class="fas fa-piggy-bank"></i> Donate</button></a>
-                            <a href="#"><button class="btn" style="color: #00acee !important; border-color: #00acee !important;"><i class="fab fa-twitter"></i> Twitter</button></a>
-                            <a href="#"><button class="btn btn-outline-primary"><i class="far fa-hdd"></i> Privacy policy</button></a>
-                    </div>
-                </div>
-                <div class="LongDescContainer">
-                        <p>OcelotBOT is the perfect bot for small groups. With Music Streaming, Games, Birthday Tracking, custom lua commands and much more.</p>
-                        <hr>
-                        <p>You can find the command list below, or in discord using !help</p>
-                </div>
+
             </div>
         </div>
-    </div>
+      {% endfor %}
+  </div>
+
 </div>
 {% endblock content %}

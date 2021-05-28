@@ -44,21 +44,30 @@ class Bot(models.Model):
     server_count = models.IntegerField(default=0)
     avatar_url = models.URLField(default="https://cdn.discordapp.com/embed/avatars/4.png")
     short_desc = models.CharField(max_length=120, null=True)
-    tags = models.ManyToManyField(Tag, null=True, related_name="bots")
+    tags = models.ManyToManyField(Tag, null=True, related_name="bots", blank=True)
     banner_url = models.URLField(default="https://i.postimg.cc/15TN17rQ/xirprofilback.jpg")
+
+    @property
+    def rejected(self):
+        return self.get_verification_status_display() == "Rejected"
+
+    @property
+    def unverified(self):
+        return self.get_verification_status_display() == "Unverified"
 
 
 class BotMeta(models.Model):
     bot = models.OneToOneField(Bot, on_delete=models.CASCADE, related_name="meta")
     uptime = models.FloatField(default=100)
-    prefix = models.CharField(max_length=10, null=True, blank=True)
+    prefix = models.CharField(max_length=10, null=True, blank=True, default="N/A")
     github = models.URLField(null=True, blank=True)
     website = models.URLField(null=True, blank=True)
     privacy = models.URLField(null=True, blank=True)
     twitter = models.URLField(null=True, blank=True)
-    library = models.CharField(max_length=15, null=True, blank=True)
+    support_server = models.URLField(null=True, blank=True)
+    library = models.CharField(max_length=15, null=True, blank=True, default="N/A")
     ban_reason = models.TextField(null=True, blank=True)
-    server_count = models.IntegerField(default=0, null=True)
+    shard_count = models.IntegerField(default=0, null=True)
     rejection_count = models.IntegerField(default=0)
     rejection_reason = models.TextField(null=True, blank=True)
     moderator = models.ForeignKey(Member, on_delete=models.SET_NULL, null=True)

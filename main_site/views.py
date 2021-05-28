@@ -14,8 +14,19 @@ oauth = Oauth()
 hasher = Hasher()
 
 
-def bot_view(request):
-    return render(request, "bots.html")
+class BotView(View):
+    template_name = "bot.html"
+    model = Bot
+
+    def get(self, request, bot_id=None):
+        if bot_id is not None:
+            try:
+                bot = self.model.objects.get(id=bot_id)
+                return render(request, self.template_name, {"bot": bot})
+            except self.model.DoesNotExist:
+                return render(request, "404.html", {"search": True})
+        else:
+            return render(request, "bots.html")
 
 
 class LoginView(View):
