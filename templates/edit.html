@@ -4,10 +4,8 @@
 {% block content %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/loader.min.js" integrity="sha512-gWqaPfGsZiCkYB6e5mNN4SMRpEvLGItLBqgOAoyLSKtDxWS2O1YPcOeGTy8d8l00gqc8rVue9ae/ncZqhmfj4g==" crossorigin="anonymous" type="ed8558f19f8c84c10ce91f61-text/javascript"></script>
     <div class="container">
-        <form class="newBotForm" action="{% url 'add' %}" method="POST">
-            {% csrf_token %}
-            <div class="FormField">
-                <h5>Bot ID <a style="color: #ff0000 !important">*</a></h5><span><p class="ml-2 mr-2">You can get it by right-clicking on your bot profile</p></span><input type="text" required maxlength=20 class="FormInput text-white ml-2 mr-2" minlength=16 placeholder="643499304950038539" name="id"></div>
+        <form class="newBotForm">
+            <input type="hidden" name="id" value="{{ bot.id }}">
             <div class="FormField">
                 <h5>Prefix <a style="color: red !important">*</a></h5><span><p class="ml-2 mr-2">The prefix of the bot is a small word/charter to avoid conflicts between each bot, the prefix is mandatory ! we don't accept bots without prefix (prefix can be a symbol, letter(s) or a mention</p></span><input type="text" required class="FormInput text-white ml-2 mr-2" minlength=1 placeholder="bbl!" name="prefix"></div>
             <div class="FormField">
@@ -28,7 +26,7 @@
             <div class="FormField"><span><h5>Donation page 💰 (Optional)</h5></span><input type=url style="width: 80%" class="FormInput text-white ml-2 mr-2" placeholder=https://utip.io/bladebotlist name="donate"></div>
             <div class="FormField"><span><h5>Privacy (Optional)</h5></span><input type=url style="width: 80%" class="FormInput text-white ml-2 mr-2" placeholder=https://bladebotlist.xyz/privacy name=privacy></div>
             <div class="FormField"><span><h5>Twitter (Optional)</h5></span><input type=url style="width: 80%" class="FormInput text-white ml-2 mr-2" placeholder=https://twitter.com/bladebotlist name=twitter></div>
-            <div class="FormField"><span><h5>Invite</h5></span><span><p class="ml-2 mr-2">Custom invite url for more powerful statistics or specifics permissions ?<br>We will generate one if left empty without permissions <a href=https://discordapi.com/permissions.html>[Generator]</a></p></span><input type=url style="width: 80%" class="FormInput ml-2 mr-2 text-white" placeholder=https://bladebotlist.xyz/bot/mybot/invite name="invite"></div> <button type="submit" onclick="if (!window.__cfRLUnblockHandlers) return false; doSubmit();" class="btn success" style="background-color: #4CAF50;color:white;display: block; margin:
+            <div class="FormField"><span><h5>Invite</h5></span><span><p class="ml-2 mr-2">Custom invite url for more powerful statistics or specifics permissions ?<br>We will generate one if left empty without permissions <a href=https://discordapi.com/permissions.html>[Generator]</a></p></span><input type=url style="width: 80%" class="FormInput ml-2 mr-2 text-white" placeholder=https://bladebotlist.xyz/bot/mybot/invite name="invite"></div> <button  class="btn success submit-btn" style="background-color: #4CAF50;color:white;display: block; margin:
           25px;" data-cf-modified-ed8558f19f8c84c10ce91f61-=""><i class="fas fa-paper-plane"></i> Submit*</button> <span class="ml-4">* when you click on "Submit" you agree have <a>read our terms of service</a> and you agree have <a>requirements</a> to post your bot.</span></form>
     </div>
     <script type="ed8558f19f8c84c10ce91f61-text/javascript">

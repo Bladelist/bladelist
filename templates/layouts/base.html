@@ -136,10 +136,10 @@
         </nav>
     </div>
         {% if search %}
-        <div class="wavepart center"> <img class="lazyload roundpic center float" width=256 height=256 alt="Website logo" src="{% static 'img/logo.svg' %}">
-            <h1 class="centertext wavetitle">Bladebotlist</h1>
+        <div class="wavepart center"> {% if not logo_off %}<img class="lazyload roundpic center float" width=256 height=256 alt="Website logo" src="{% static 'img/logo.svg' %}">
+            <h1 class="centertext wavetitle">Bladebotlist</h1>{% endif %}
             <form action="/search" method="GET">
-                <h3>Search in more than <bold class="bold text-primary">{{ bot_count }}</bold> Discord bots</h3>
+                <h3>Search in more than <bold class="bold text-primary">1000+</bold> Discord bots</h3>
                 <div>
                     <div class="beforeicon">
                         <i class="fa fa-search"></i>
@@ -215,7 +215,7 @@
                     </li>
 
                     <li>
-                        <a class="text-light" href="https://discordapp.com/developers/applications/me"><i class="fab fa-discord" style="color: white;"></i> Developers portail</a>
+                        <a class="text-light" href="https://discordapp.com/developers/applications/me"><i class="fab fa-discord" style="color: white;"></i> Developers portal</a>
                     </li>
 
                 </ul>
@@ -271,3 +271,4 @@
         {% endif %}
     </div>
 </footer>
+</html>

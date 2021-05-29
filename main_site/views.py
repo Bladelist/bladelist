@@ -10,13 +10,20 @@ from utils.oauth import Oauth
 from utils.hashing import Hasher
 from .models import Bot
 from django.views.generic.list import ListView
+from utils.api_client import DiscordAPIClient
 
-oauth = Oauth()
+popup_oauth = Oauth()
+normal_oauth = Oauth(redirect_uri="http://127.0.0.1:8000/login/")
 hasher = Hasher()
+discord_client = DiscordAPIClient()
 
 
 def login_handler_view(request):
     return render(request, "login_handler.html")
+
+
+def discord_login_normal(request):
+    return redirect(normal_oauth.discord_login_url)
 
 
 def logout_view(request):
@@ -25,7 +32,7 @@ def logout_view(request):
 
 
 def discord_login_view(request):
-    return redirect(oauth.discord_login_url)
+    return redirect(popup_oauth.discord_login_url)
 
 
 class BotView(View):
@@ -42,7 +49,7 @@ class BotView(View):
                 return render(request, "404.html")
             return render(request, self.template_name, {"bot": bot})
         except self.model.DoesNotExist:
-            return render(request, "404.html", {"search": True})
+            return render(request, "404.html")
 
 
 class LoginView(View):
@@ -53,6 +60,10 @@ class LoginView(View):
 
     def get(self, request):
         code = request.GET.get('code')
+        popup = request.GET.get('popup')
+        oauth = normal_oauth
+        if popup == "True":
+            oauth = popup_oauth
         if code is not None:
             self.access_token = oauth.get_access_token(code)
             self.user_json = oauth.get_user_json(self.access_token)
@@ -105,6 +116,7 @@ class BotListView(ListView):
     template_name = "bots.html"
     model = Bot
     paginate_by = 40
+    extra_context = {"search": True, "logo_off": True}
 
     def get_queryset(self):
         return self.model.objects.filter(verified=True, banned=False).order_by('-votes')
@@ -112,6 +124,24 @@ class BotListView(ListView):
 
 class AddBotView(LoginRequiredMixin, View):
     template_name = "add.html"
+    context = dict
+
+    def get(self, request):
+        return render(request, self.template_name)
+
+    def post(self, request):
+        data = request.POST
+        bot_id = data.get("id")
+        resp = discord_client.get_bot_info(bot_id)
+        if resp.status_code == 404:
+            self.context["not_found"] = True
+        elif resp.status_code == 200:
+            print(resp.status_code)
+        return render(request, self.template_name)
+
+
+class BotEditView(LoginRequiredMixin, View):
+    template_name = "edit.html"
 
     def get(self, request):
         return render(request, self.template_name)
