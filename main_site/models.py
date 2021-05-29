@@ -2,7 +2,9 @@ import uuid
 from django.db import models
 from django.contrib.auth.models import User
 from utils.oauth import Oauth
+from utils.api_client import DiscordAPIClient
 oauth = Oauth()
+api_client = DiscordAPIClient()
 
 
 class Member(models.Model):
@@ -12,12 +14,29 @@ class Member(models.Model):
     avatar = models.CharField(max_length=100, null=True)
     banned = models.BooleanField(default=False)
     ban_reason = models.TextField(null=True, blank=True)
+    dm_channel = models.BigIntegerField(null=True, blank=True)
 
     @property
     def avatar_url(self):
         if self.avatar is not None:
             return f"https://cdn.discordapp.com/avatars/{self.id}/{self.avatar}.png"
         return "https://cdn.discordapp.com/embed/avatars/4.png"
+
+    def send_message(self, message):
+        if not self.dm_channel:
+            channel_id = api_client.create_dm_channel(self.id)
+            if channel_id is not None:
+                self.dm_channel = channel_id
+                self.save()
+        api_client.send_message(self.dm_channel, message)
+
+    def send_embed(self, embed):
+        if not self.dm_channel:
+            channel_id = api_client.create_dm_channel(self.id)
+            if channel_id is not None:
+                self.dm_channel = channel_id
+                self.save()
+        api_client.send_embed(self.dm_channel, embed)
 
 
 class Tag(models.Model):

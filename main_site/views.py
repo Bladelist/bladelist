@@ -89,15 +89,13 @@ class IndexView(View):
 
     def get(self, request):
         random_bots = Bot.objects.filter(verified=True, banned=False).order_by("id").distinct()[:8]
-        bot_count = Bot.objects.count()
         recent_bots = Bot.objects.filter(verified=True, banned=False).order_by('-date_added')[:8]
         trending_bots = Bot.objects.filter(verified=True, banned=False).order_by('-votes')[:8]
         return render(request, self.template_name,
                       {"search": True,
                        "random_bots": random_bots,
                        "recent_bots": recent_bots,
-                       "trending_bots": trending_bots,
-                       "bot_count": bot_count})
+                       "trending_bots": trending_bots})
 
 
 class AboutView(View):
@@ -136,7 +134,7 @@ class AddBotView(LoginRequiredMixin, View):
         if resp.status_code == 404:
             self.context["not_found"] = True
         elif resp.status_code == 200:
-            print(resp.status_code)
+            request.user.member.send_message("Your bot is awaiting verification!")
         return render(request, self.template_name)
 
 
