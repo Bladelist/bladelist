@@ -3,4 +3,83 @@
 
 {% block content %}
 
+<div class="container center darker-container">
+    <div class=avatarandnamecontainer><img class="roundpic center" src="{{ member.avatar_url }}"> <span><h1 class=userName>{{ member.user.first_name }}#{{ member.tag }}</h1></span>
+        {% if member.meta.bio %}
+        <h5>{{ member.meta.bio }}</h5>
+        {% else %}
+        <h5><i class="fa fa-user-secret"></i> This user is anonymous</h5>
+        {% endif %}
+        <hr>
+        <div class=Links>
+            {% if member.meta.twitter %}
+            <a href="{{ member.meta.twitter }}"><button style="background-color: #00ACEE;" class="btn poponHover" data-toggle="popover" title="Twitter" data-trigger="hover" data-content="Twitter"><i class="fab fa-twitter"></i> Twitter</button></a>
+            {% endif %}
+            {% if member.meta.facebook %}
+            <a href="{{ member.meta.facebook }}"><button style="background-color: blue;" class="btn poponHover" data-toggle="popover" title="Facebook (Twitter for boomers)" data-trigger="hover" data-content="Facebook"><i class="fab fa-facebook-f"></i> Facebook</button></a>
+            {% endif %}
+            {% if member.meta.github %}
+            <a href="{{ member.meta.github }}"><button style="background-color: #23272A;" class="btn poponHover" data-toggle="popover" title="GitHub" data-trigger="hover" data-content="GitHub"><i class="fab fa-github"></i> GitHub</button></a>
+            {% endif %}
+            {% if member.meta.website %}
+            <a href="{{ member.meta.website }}"><button style="background-color: aqua;" class="btn poponHover" data-toggle="popover" title="Website, we aren't responsable if you got problems by going to this website !" data-trigger="hover" data-content="website"><i class="fa fa-desktop"></i> Website</button></a>
+            {% endif %}
+            {% if member.meta.reddit %}
+            <a href="{{ member.meta.reddit }}"><button style="background-color: #FF5700;" class="btn poponHover" data-toggle="popover" title="Reddit" data-trigger="hover" data-content="Reddit"><i class="fab fa-reddit"></i> Reddit</button></a>
+            {% endif %}
+            {% if member.meta.discordbio %}
+            <a href="{{ member.meta.discordbio }}"><button style="background-color: #7289DA;" class="btn poponHover" data-toggle="popover" title="Discord.bio" data-trigger="hover" data-content="Discord.bio"><i class="fab fa-discord"></i> Discord.bio</button></a>
+            {% endif %}
+        </div>
+        {% if request.user.member == member %}
+        <div class=ManageButtons>
+            <a href="{% url 'edit_profile' %}"><button class="btn btn-primary"><i class="fas fa-user-edit"></i> Edit</button></a>
+            <a href={% url 'add' %}><button class="btn btn-success"><i class="fas fa-plus"></i> New Bot</button></a>
+            <a href="{% url 'logout' %}"><button class="btn btn-danger"><i class="fas fa-sign-out-alt"></i> Logout</button></a>
+        </div>
+        {% endif %}
+    </div>
+    <div class=profile-badges>
+        <button class=poponHover data-toggle=popover title="Administrator of the website" data-trigger=hover data-content=Admin><i class="fas fa-crown" style="color: #faa61a"></i> Administrator</button>
+        <button class=poponHover data-toggle=popover title="Senior moderator of the website" data-trigger=hover data-content=smod><i class="fas fa-award" style="color: yellow;"></i> Senior Moderator</button>
+        <button class=poponHover data-toggle=popover title="Moderator of the website" data-trigger=hover data-content=mod><i class="fas fa-balance-scale" style="color: brown;"></i> Moderator</button>
+        <button class="poponHover" data-toggle="popover" title="Administrator of the website" data-trigger="hover" data-content="Admin"><i class="fas fa-crown" style="color: #faa61a"></i> Administrator</button>
+        <button  class="poponHover" data-toggle="popover" title="🪙 Donator 🪙" data-trigger="hover" data-content="donator"><i class="fas fa-piggy-bank" style="color: green;"></i> Donator</button>
+        <button class="poponHover" data-toggle="popover" title="Certified developer" data-trigger="hover" data-content="certdev"><i class="fas fa-code" style="color: azure;"></i> Certified Developer</button>
+    </div>
+</div>
+
+<div class=container>
+  <h2 class="HomeBotsText"><a><i class="fas fa-robot"></i></a> User's bots </h2>
+    <div class=row>
+    {% if member.bots %}
+      {% for bot in member.verified_bots %}
+        <div class="col-xs-6 col-md-3">
+            <div class="card center hoverable"><img class="banner lazyload" height="75px" width="100%" src="{{ bot.banner_url }}">
+                <img class="roundpic lazyload cardavatar {% if bot.online %}presence-online{% else %}presence-offline{% endif %} avatarbroadcasting" width=128 height=128 src="{{ bot.avatar_url }}">
+                <h2><a class="poponHover" data-toggle="popover" title="Certified Bot" data-trigger="hover" data-content="mod">{{ bot.name }}</a></h2>
+                    <div>
+                        <a class="badge badge-info">{{ bot.votes }} votes</a>
+                        <a class="badge badge-warning">{{ bot.server_count }} servers</a>
+                            {% for tag in bot.tags.all %}
+                            <a class="badge badge-muted">{{ tag.name }}</a>
+                            {% endfor %}
+                    </div>
+                    <div class="card-desc-container">
+                        <p class="card-desc">{{ bot.short_desc }}</p>
+                    </div>
+                    <hr>
+                    <div class="card-manage">
+                        <a href="{% url 'bot_single' bot_id=bot.id %}"><button class="btn btn-primary mr-1">View Bot</button></a>
+                        <a href="{{ bot.invite_link }}"><button class="btn btn-success">Invite Bot</button></a>
+                    </div>
+            </div>
+        </div>
+      {% endfor %}
+    {% endif %}
+    </div>
+</div>
+<script src="https://ajax.cloudflare.com/cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="f3f2983f8e31bd49e880ec2a-|49" defer=""></script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"rayId":"657859767e18dd7b","version":"2021.5.2","r":1,"token":"6683d05ba1564622b8a5ce7ee48bd638","si":10}'></script>
+
 {% endblock content %}

@@ -22,6 +22,10 @@ class Member(models.Model):
             return f"https://cdn.discordapp.com/avatars/{self.id}/{self.avatar}.png"
         return "https://cdn.discordapp.com/embed/avatars/4.png"
 
+    @property
+    def verified_bots(self):
+        return self.bots.filter(verified=True)
+
     def send_message(self, message):
         if not self.dm_channel:
             channel_id = api_client.create_dm_channel(self.id)
@@ -37,6 +41,17 @@ class Member(models.Model):
                 self.dm_channel = channel_id
                 self.save()
         api_client.send_embed(self.dm_channel, embed)
+
+
+class MemberMeta(models.Model):
+    member = models.OneToOneField(Member, on_delete=models.CASCADE, related_name="meta")
+    bio = models.TextField(null=True, blank=True)
+    twitter = models.URLField(null=True, blank=True)
+    github = models.URLField(null=True, blank=True)
+    website = models.URLField(null=True, blank=True)
+    discordbio = models.URLField(null=True, blank=True)
+    facebook = models.URLField(null=True, blank=True)
+    reddit = models.URLField(null=True, blank=True)
 
 
 class Tag(models.Model):
@@ -61,7 +76,7 @@ class Bot(models.Model):
     verified = models.BooleanField(default=False)
     date_added = models.DateTimeField()
     server_count = models.IntegerField(default=0)
-    avatar_url = models.URLField(default="https://cdn.discordapp.com/embed/avatars/4.png")
+    avatar = models.CharField(max_length=100, null=True)
     short_desc = models.CharField(max_length=120, null=True)
     tags = models.ManyToManyField(Tag, null=True, related_name="bots", blank=True)
     banner_url = models.URLField(default="https://i.postimg.cc/15TN17rQ/xirprofilback.jpg")
@@ -73,6 +88,12 @@ class Bot(models.Model):
     @property
     def unverified(self):
         return self.get_verification_status_display() == "Unverified"
+
+    @property
+    def avatar_url(self):
+        if self.avatar is not None:
+            return f"https://cdn.discordapp.com/avatars/{self.id}/{self.avatar}.png"
+        return "https://cdn.discordapp.com/embed/avatars/4.png"
 
 
 class BotMeta(models.Model):

@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <!-- mobile viewing -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -117,7 +118,7 @@
                              {{ request.user.first_name }}#{{ request.user.member.tag }}
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a href="/me"><button class="dropdown-item nav-item"><i aria-hidden="true" class="fas fa-user-circle"></i>&nbsp;Profile</button></a>
+                            <a href="{% url 'profile' user_id=request.user.username %}"><button class="dropdown-item nav-item"><i aria-hidden="true" class="fas fa-user-circle"></i>&nbsp;Profile</button></a>
                             <a href="{% url 'add' %}"><button class="dropdown-item nav-item"><i aria-hidden="true" class="fas fa-plus"></i>&nbsp;New Bot</button></a>
                             {% if request.user.is_staff %}
                             <div class="dropdown-divider"></div>
@@ -185,15 +186,11 @@
                     <h2>Links</h2>
                     <ul>
                         <li>
-                            <a class="text-light" href="/"><i class="fa fa-home" style="color: white;"></i> Home</a>
+                            <a class="text-light" href="{% url 'home' %}"><i class="fa fa-home" style="color: white;"></i> Home</a>
                         </li>
 
                         <li>
-                            <a class="text-light" href="/bots"><i class="fa fa-robot" style="color: white;"></i> Browse Bots</a>
-                        </li>
-
-                        <li>
-                            <a class="text-light" href="/certify"><i class="fa fa-certificate" style="color: white;"></i> Certification program</a>
+                            <a class="text-light" href="{% url 'bots' %}"><i class="fa fa-robot" style="color: white;"></i> Browse Bots</a>
                         </li>
 
                         <li>
@@ -241,10 +238,10 @@
                         <a class="text-light" href="{% url 'add' %}"><i class="fa fa-plus" style="color: white;"></i> Add Bot</a>
                     </li>
                     <li>
-                        <a class="text-light" href="/me"><i class="fa fa-user" style="color: white;"></i> Profile</a>
+                        <a class="text-light" href="{% url 'profile' user_id=request.user.username %}"><i class="fa fa-user" style="color: white;"></i> Profile</a>
                     </li>
                     <li>
-                        <a class="text-light" href="/auth/logout"><i class="fa fa-sign-out-alt" style="color: white;"></i> Logout</a>
+                        <a class="text-light" href="{% url 'logout' %}"><i class="fa fa-sign-out-alt" style="color: white;"></i> Logout</a>
                     </li>
 
                     {% else %}
@@ -265,9 +262,14 @@
                 document.write(new Date().getFullYear());
             </script> . All rights reserved.
         </p>
-        {% if error %}
+        {% if banned %}
         <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-        <script>swal("{{ error }}", "Contact administrator for support", "error");</script>
+        <script>swal("You are banned!", "Contact administrator if this was a mistake", "error");</script>
+        {% endif %}
+        <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+        {% if error %}
+            var notyf = new Notyf();
+            notyf.error({{ error }});
         {% endif %}
     </div>
 </footer>
