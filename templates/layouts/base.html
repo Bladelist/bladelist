@@ -6,10 +6,6 @@
     <meta charset="utf-8">
     <title>BladeBotList</title>
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="<%=logo%>" sizes="32x32" />
-    <link rel="icon" type="image/png" href="<%=logo%>" sizes="16x16" />
-
     <!-- JQuery-->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 
@@ -46,7 +42,7 @@
     <meta name="twitter:image" content=”/img/bbl-blue.png"/>
 
     <!-- arc.io widget -->
-    <script async src="https://arc.io/widget.js#KCacsX27"></script>
+{#    <script async src="https://arc.io/widget.js#KCacsX27"></script>#}
 
     <!-- custom css -->
     <link rel="stylesheet" href="{%  static 'css/style.css' %}">
@@ -110,7 +106,6 @@
                     </li>
                 </ul>
                 <ul class="navbar-right">
-                    <!--  <% if(is_logged){ %> -->
                     {% if request.user.is_authenticated %}
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle menav" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

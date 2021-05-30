@@ -104,6 +104,7 @@ class BotMeta(models.Model):
     website = models.URLField(null=True, blank=True)
     privacy = models.URLField(null=True, blank=True)
     twitter = models.URLField(null=True, blank=True)
+    donate = models.URLField(null=True, blank=True)
     support_server = models.URLField(null=True, blank=True)
     library = models.CharField(max_length=15, null=True, blank=True, default="N/A")
     ban_reason = models.TextField(null=True, blank=True)

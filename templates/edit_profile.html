@@ -8,35 +8,35 @@
 
  <form action="{% url 'edit_profile' %}" method="POST">
  {% csrf_token %}
-<h3>Biography</h3>
-<p><a style="color: red;">Note:</a> You can only write a description with few than 250 chars, advertisement and <a style="color: red;">links</a> are forbidden, advertising will give you a lifetime ban</p>
-<input type="text" name="bio" maxlength="250" placeholder="Hello i'm John Doe, i'm 35 years old and i love cookies 🍪🍪" value="{{ request.user.member.meta.bio }}" class="text-white">
+<h3 class="ml-3">Biography</h3>
+<p class="ml-3"><a style="color: red;">Note:</a> You can only write a description with few than 250 chars, advertisement and <a style="color: red;">links</a> are forbidden, advertising will give you a lifetime ban</p>
+<input type="text" name="bio" maxlength="250" placeholder="Hello i'm John Doe, i'm 35 years old and i love cookies 🍪🍪" value="{{ request.user.member.meta.bio }}" class="text-white ml-3 ml-3">
 
-<h3>Twitter</h3>
-<p>You must provide a valid link, not the @username !</p>
-<input type="url" name="twitter" placeholder="https://twitter.com/bladebotlist" value="{{ request.user.member.meta.twitter }}" class="text-white">
+<h3 class="ml-3">Twitter</h3>
+<p class="ml-3">You must provide a valid link, not the @username !</p>
+<input type="url" name="twitter" placeholder="https://twitter.com/bladebotlist" value="{{ request.user.member.meta.twitter }}" class="text-white ml-3 ml-3">
 
-<h3>Facebook</h3>
-<p>You must provide a valid link, not the username/full name !</p>
-<input type="url" name="facebook" placeholder="https://facebook.com/bladebotlist" value="{{ request.user.member.meta.facebook }}" class="text-white">
+<h3 class="ml-3">Facebook</h3>
+<p class="ml-3">You must provide a valid link, not the username/full name !</p>
+<input type="url" name="facebook" placeholder="https://facebook.com/bladebotlist" value="{{ request.user.member.meta.facebook }}" class="text-white ml-3">
 
-<h3>GitHub</h3>
-<p>You must provide a valid link, not the username/full name !</p>
-<input type="url" name="github" placeholder="https://github.com/bladebotlist" value="{{ request.user.member.meta.github }}" class="text-white">
+<h3 class="ml-3">GitHub</h3>
+<p class="ml-3">You must provide a valid link, not the username/full name !</p>
+<input type="url" name="github" placeholder="https://github.com/bladebotlist" value="{{ request.user.member.meta.github }}" class="text-white ml-3">
 
-<h3>Website</h3>
-<p>Providing a malicious/illegal website (like selling drugs/arms/malwares/cracks) will expose you to a permanent ban of the website ! <br>we can report this juridically (france) and with some conditions</p>
-<input type="url" name="website" placeholder="https://naodev.eu" value="{{ request.user.member.meta.website }}" class="text-white">
+<h3 class="ml-3">Website</h3>
+<p class="ml-3">Providing a malicious/illegal website (like selling drugs/arms/malwares/cracks) will expose you to a permanent ban of the website ! <br>we can report this juridically (france) and with some conditions</p>
+<input type="url" name="website" placeholder="https://naodev.eu" value="{{ request.user.member.meta.website }}" class="text-white ml-3">
 
-<h3>Reddit</h3>
-<p>You must provide a valid link, not the username/full name !</p>
-<input type="url" name="reddit" placeholder="https://reddit.com/bladebotlist" value="{{ request.user.member.meta.reddit }}" class="text-white">
+<h3 class="ml-3">Reddit</h3>
+<p class="ml-3">You must provide a valid link, not the username/full name !</p>
+<input type="url" name="reddit" placeholder="https://reddit.com/bladebotlist" value="{{ request.user.member.meta.reddit }}" class="text-white ml-3">
 
-<h3>Discord.bio</h3>
-<p>You can provide you <a href="https://discord.bio">discord.bio</a> account (we are not affilied with them !)</p>
-<input type="url" name="discordbio" placeholder="https://dsc.bio/nao" value="{{ request.user.member.meta.discord_bio }}" class="text-white">
+<h3 class="ml-3">Discord.bio</h3>
+<p class="ml-3">You can provide you <a href="https://discord.bio">discord.bio</a> account (we are not affilied with them !)</p>
+<input type="url" name="discordbio" placeholder="https://dsc.bio/nao" value="{{ request.user.member.meta.discord_bio }}" class="text-white ml-3">
 <br>
-<button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Submit</button>
+<button type="submit" class="btn btn-success ml-3"><i class="fa fa-save"></i> Submit</button>
 <button type="reset" class="btn btn-danger"><i class="fas fa-sync-alt"></i> Reset settings</button>
 
  </form>

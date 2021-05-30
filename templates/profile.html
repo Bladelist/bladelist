@@ -43,7 +43,6 @@
         <button class=poponHover data-toggle=popover title="Administrator of the website" data-trigger=hover data-content=Admin><i class="fas fa-crown" style="color: #faa61a"></i> Administrator</button>
         <button class=poponHover data-toggle=popover title="Senior moderator of the website" data-trigger=hover data-content=smod><i class="fas fa-award" style="color: yellow;"></i> Senior Moderator</button>
         <button class=poponHover data-toggle=popover title="Moderator of the website" data-trigger=hover data-content=mod><i class="fas fa-balance-scale" style="color: brown;"></i> Moderator</button>
-        <button class="poponHover" data-toggle="popover" title="Administrator of the website" data-trigger="hover" data-content="Admin"><i class="fas fa-crown" style="color: #faa61a"></i> Administrator</button>
         <button  class="poponHover" data-toggle="popover" title="🪙 Donator 🪙" data-trigger="hover" data-content="donator"><i class="fas fa-piggy-bank" style="color: green;"></i> Donator</button>
         <button class="poponHover" data-toggle="popover" title="Certified developer" data-trigger="hover" data-content="certdev"><i class="fas fa-code" style="color: azure;"></i> Certified Developer</button>
     </div>
@@ -72,6 +71,9 @@
                     <div class="card-manage">
                         <a href="{% url 'bot_single' bot_id=bot.id %}"><button class="btn btn-primary mr-1">View Bot</button></a>
                         <a href="{{ bot.invite_link }}"><button class="btn btn-success">Invite Bot</button></a>
+                        {% if request.user.member == bot.owner %}
+                         <a href="{% url 'bot_edit_view' bot_id=bot.id %}"><button class="btn btn-info mt-2"><i class="fa fa-edit"></i> Edit Bot</button></a>
+                        {% endif %}
                     </div>
             </div>
         </div>

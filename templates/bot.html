@@ -41,7 +41,7 @@
                                 <div class="btnicon-icon text-dark"><i class="fas fa-terminal"></i></div><span class=btnicon-content style="width: calc(100% - 42px)">Prefix <span class="float-right badge badge-light">{{ bot.meta.prefix }}</span></span>
                             </a>
                             <a class="btn-block btn-icon">
-                                <div class="btnicon-icon text-white"><i class="fas fa-book"></i></div><span class=btnicon-content style="width: calc(100% - 42px)">Library <span class="float-right badge badge-light">{{ bot.meta.library }}</span></span>
+                                <div class="btnicon-icon text-white ml-3"><i class="fas fa-book"></i></div><span class=btnicon-content style="width: calc(100% - 42px)">Library <span class="float-right badge badge-light">{{ bot.meta.library }}</span></span>
                             </a>
                             <a class="btn-block btn-icon">
                                 <div class="btnicon-icon text-primary"><i class="fas fa-shield-alt"></i></div><span class=btnicon-content style="width: calc(100% - 42px)">Status <span class="float-right badge badge-light"><i class="fas fa-circle {% if bot.online %}text-success{% else %}text-danger{% endif %}"></i> {% if bot.online %}online{% else %}offline{% endif %}</span></span>
@@ -66,16 +66,18 @@
                                 <div class="btnicon-icon text-danger"><i class="fas fa-flag"></i></div><span class=btnicon-content>Report</span></a>
                         </ul>
                         {% if request.user.is_staff %}
+                        {% if bot.verified %}
                         <div class=supercard-header><span class=TitleCard><i class="fas fa-gavel"></i> Staff</span></div>
                         <ul class=buttons-group>
-                            <a class="btn-block btn-icon" href="users/{{ bot.meta.moderator.id }}/">
+                            <a class="btn-block btn-icon" href="{%  url 'profile' user_id=bot.meta.moderator.id %}">
                                 <div class="btnicon-icon text-warning"><i class="fas fa-user"></i></div><span class=btnicon-content>{% if bot.meta.moderator %}{{ bot.meta.moderator.user.first_name }} #{{ bot.meta.moderator.tag }}{% else %}Anonymous{% endif %}</span>
                             </a>
                         </ul>
+                        {% endif %}
                         {% else %}
                         <div class=supercard-header><span class=TitleCard><i class="fas fa-user"></i> Owner</span></div>
                         <ul class=buttons-group>
-                            <a class="btn-block btn-icon" href="users/{{ bot.owner.id }}/">
+                            <a class="btn-block btn-icon" href="{% url 'profile' user_id=bot.owner.id %}">
                                 <div class="btnicon-icon text-warning"><i class="fas fa-crown"></i></div><span class=btnicon-content>{{ bot.owner.user.first_name }} #{{ bot.owner.tag }}</span>
                             </a>
                         </ul>

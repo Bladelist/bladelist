@@ -149,6 +149,7 @@ class AddBotView(LoginRequiredMixin, View):
             bot.meta.twitter = data.get("twitter")
             bot.meta.support_server = data.get("support_server")
             bot.meta.privacy = data.get("privacy")
+            bot.meta.donate = data.get("donate")
             bot.meta.long_desc = data.get("long_desc")
             bot.meta.save()
         else:
@@ -159,14 +160,38 @@ class AddBotView(LoginRequiredMixin, View):
 class BotEditView(LoginRequiredMixin, View):
     template_name = "edit_bot.html"
 
-    def get(self, request):
-        return render(request, self.template_name)
+    def get(self, request, bot_id):
+        bot = Bot.objects.get(id=bot_id)
+        return render(request, self.template_name, {"bot": bot})
+
+    def post(self, request):
+        data = request.POST
+        bot_id = data.get("id")
+        if bot_id is not None:
+            bot = Bot.objects.get(id=bot_id)
+            bot.invite_link = data.get("invite")
+            bot.short_desc = data.get("short_desc")
+            bot.save()
+            bot.tags.set(Tag.objects.filter(bots__tags__in=data.getlist('tags')))
+            bot.meta.prefix = data.get("prefix")
+            bot.meta.github = data.get("github")
+            bot.meta.website = data.get("website")
+            bot.meta.library = data.get("library")
+            bot.meta.twitter = data.get("twitter")
+            bot.meta.donate = data.get("donate")
+            bot.meta.support_server = data.get("support_server")
+            bot.meta.privacy = data.get("privacy")
+            bot.meta.long_desc = data.get("long_desc")
+            bot.meta.save()
+        return render(request, self.template_name, {"bot": bot})
 
 
-class ProfileView(View):
+class ProfileView(LoginRequiredMixin, View):
     template_name = "profile.html"
 
-    def get(self, request, user_id):
+    def get(self, request, user_id=None):
+        if not user_id:
+            return render(request, self.template_name, {"member": request.user.member})
         try:
             member = Member.objects.get(id=user_id)
             return render(request, self.template_name, {"member": member})
