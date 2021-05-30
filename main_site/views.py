@@ -1,4 +1,4 @@
-import random
+import markdown
 from datetime import datetime, timezone
 from django.shortcuts import render, redirect
 from django.views import View

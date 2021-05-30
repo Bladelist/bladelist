@@ -1,4 +1,5 @@
 {% extends 'layouts/base.html' %}
+{% load markdown_extras %}
 {% load static %}
 
 {% block content %}
@@ -112,7 +113,7 @@
                             <a href="{{ bot.meta.website }}"><button class="btn-sm btn-primary"><i class="far fa-window-restore"></i> Website</button></a>
                             {% endif %}
                             {% if bot.meta.donate %}
-                            <a href="#"><button class="btn-sm btn-primary"><i class="fas fa-piggy-bank"></i> Donate</button></a>
+                            <a href="{{ bot.meta.donate }}"><button class="btn-sm btn-primary"><i class="fas fa-piggy-bank"></i> Donate</button></a>
                             {% endif %}
                             {% if bot.meta.twitter %}
                             <a href="{{ bot.meta.twitter }}"><button class="btn-sm btn-primary" ><i class="fab fa-twitter"></i> Twitter</button></a>
@@ -123,7 +124,7 @@
                             <br>
                             {% if request.user.member == bot.owner %}
                             <a href="#!"><button class="btn-sm btn-danger float-right"><i class="far fa-trash-alt"></i> Delete</button></a>
-                            <a href="#!"><button class="btn-sm btn-warning float-right"><i class="far fa-edit"></i> Edit</button></a>
+                            <a href="{% url 'bot_edit_view' bot_id=bot.id %}"><button class="btn-sm btn-warning float-right"><i class="far fa-edit"></i> Edit</button></a>
                             <a href="#!"><button class="btn-sm btn-info float-right"><i class="fas fa-key"></i> API Key</button></a>
                             {% elif request.user.is_staff%}
                             <a href="#!"><button class="btn-sm btn-danger float-right"><i class="fas fa-ban"></i> Ban</button></a>
@@ -135,7 +136,7 @@
                     </div>
                 </div>
                 <div class="LongDescContainer">
-                        {{ bot.meta.long_desc }}
+                        {{ bot.meta.long_desc | markdown | safe }}
                 </div>
             </div>
         </div>
