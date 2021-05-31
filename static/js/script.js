@@ -73,3 +73,40 @@ $(document).on('click', '.voteBotBtn', function (){
         },
     });
 })
+
+$('#report_selector').on('change', ()=>{
+    if ($('#report_selector').val() === "Other") {
+        $('#customField').css('display', 'block');
+    }
+})
+
+
+$(document).on('click', '.reportBotBtn', function (){
+    let bot_id = $(this).attr("bot_id")
+    let reason = $('#report_selector').val()
+    if(reason==="Other"){
+        reason = $('#customReason').val()
+    }
+    $.ajax({
+        url: '/bots/edit/',
+        headers: {'X-CSRFToken': csrftoken},
+        type: 'PUT',
+        data: {bot_id: bot_id, reason: reason},
+        success:function (data)
+        {
+          notyf.success("Reported successfully!");
+        },
+        error:function (response) {
+            switch (response.status) {
+                case 401:
+                    notyf.error("You need to be logged in to report");
+                    break;
+                case 403:
+                    notyf.error("You already have 1 report awaiting review.");
+                    break;
+                default:
+                    notyf.error("Something went wrong.");
+            }
+        },
+    });
+})

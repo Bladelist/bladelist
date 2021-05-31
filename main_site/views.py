@@ -9,7 +9,7 @@ from utils.background import create_user, update_user
 from utils.oauth import Oauth
 from utils.hashing import Hasher
 from utils.mixins import ResponseMixin
-from .models import Bot, Tag, Member, Vote
+from .models import Bot, Tag, Member, Vote, BotReport
 from django.views.generic.list import ListView
 from utils.api_client import DiscordAPIClient
 
@@ -193,7 +193,7 @@ class AddBotView(LoginRequiredMixin, View):
         return render(request, self.template_name, self.context)
 
 
-class BotEditView(LoginRequiredMixin, View):
+class BotEditView(LoginRequiredMixin, View, ResponseMixin):
     template_name = "edit_bot.html"
     context = {}
 
@@ -225,6 +225,21 @@ class BotEditView(LoginRequiredMixin, View):
                               {"bot": bot, "tags": TAGS, "success": "Bot edited successfully!"})
         else:
             return ProfileView.as_view(self.request, {"error": "Internal Server error"})
+
+    def put(self, request):
+        if request.user.is_authenticated:
+            data = QueryDict(request.body)
+            bot_id = data.get("bot_id")
+            if BotReport.objects.filter(bot_id=bot_id, reporter=self.request.user.member, reviewed=False).exists():
+                return self.json_response_403()
+            BotReport.objects.create(
+                bot_id=bot_id,
+                reporter=request.user.member,
+                reason=data.get("reason"),
+                creation_date=datetime.now(timezone.utc)
+            )
+            return self.json_response_200()
+        return self.json_response_401()
 
 
 class ProfileView(LoginRequiredMixin, View):

@@ -42,7 +42,7 @@
                                 <div class="btnicon-icon text-dark"><i class="fas fa-terminal"></i></div><span class=btnicon-content style="width: calc(100% - 42px)">Prefix <span class="float-right badge badge-light">{{ bot.meta.prefix }}</span></span>
                             </a>
                             <a class="btn-block btn-icon">
-                                <div class="btnicon-icon text-white ml-3"><i class="fas fa-book"></i></div><span class=btnicon-content style="width: calc(100% - 42px)">Library <span class="float-right badge badge-light">{{ bot.meta.library }}</span></span>
+                                <div class="btnicon-icon text-white"><i class="fas fa-book"></i></div><span class=btnicon-content style="width: calc(100% - 42px)">Library <span class="float-right badge badge-light">{{ bot.meta.library }}</span></span>
                             </a>
                             <a class="btn-block btn-icon">
                                 <div class="btnicon-icon text-primary"><i class="fas fa-shield-alt"></i></div><span class=btnicon-content style="width: calc(100% - 42px)">Status <span class="float-right badge badge-light"><i class="fas fa-circle {% if bot.online %}text-success{% else %}text-danger{% endif %}"></i> {% if bot.online %}online{% else %}offline{% endif %}</span></span>
@@ -101,8 +101,8 @@
                     </div>
                     <p class=mb-10>{{ bot.short_desc }}</p>
                     <div class="botButtons">
-                            <a href="#"><button class="btn-lg btn-success voteBotBtn" bot_id="{{ bot.id }}"><i class="fas fa-chevron-up"></i> Vote</button></a>
-                            <a href="#"><button class="btn-lg btn-danger"><i class="far fa-flag"></i> Report</button></a>
+                            <a href="#!"><button class="btn-lg btn-success voteBotBtn" bot_id="{{ bot.id }}"><i class="fas fa-chevron-up"></i> Vote</button></a>
+                            <a href="#!"><button class="btn-lg btn-danger" {% if not request.user.is_authenticated %}disabled data-toggle="tooltip" data-placement="bottom" title="Login to report"{% else %}data-toggle="modal" data-target="#reportBotModalCenter" {% endif %}><i class="far fa-flag"></i> Report</button></a>
                             <a href="{{ bot.invite_url }}"><button class="btn-lg btn-warning"><i class="fas fa-plus"></i> Invite</button></a>
                             <a href="{{ bot.meta.support_server }}"><button class="btn-lg btn-info"><i class="fa fa-headphones"></i> Support</button></a>
                             <br>
@@ -122,16 +122,16 @@
                             <a href="{{ bot.meta.privacy }}"><button class="btn-sm btn-primary"><i class="far fa-hdd"></i> Privacy policy</button></a>
                             {% endif %}
                             <br>
-                            {% if request.user.member == bot.owner %}
-                            <a href="#!"><button class="btn-sm btn-danger float-right"><i class="far fa-trash-alt"></i> Delete</button></a>
-                            <a href="{% url 'bot_edit_view' bot_id=bot.id %}"><button class="btn-sm btn-warning float-right"><i class="far fa-edit"></i> Edit</button></a>
-                            <a href="#!"><button class="btn-sm btn-info float-right"><i class="fas fa-key"></i> API Key</button></a>
-                            {% elif request.user.is_staff%}
-                            <a href="#!"><button class="btn-sm btn-danger float-right"><i class="fas fa-ban"></i> Ban</button></a>
-                            {% if not bot.verified %}
-                            <a href="#!"><button class="btn-sm btn-warning float-right"><i class="fa fa-times-circle"></i> Reject</button></a>
-                            <a href="#!"><button class="btn-sm btn-success float-right"><i class="fas fa-check-circle"></i> Accept</button></a>
-                            {% endif %}
+                            {% if request.user.is_staff  %}
+                                <a href="#!"><button class="btn-sm btn-danger float-right"><i class="fas fa-ban"></i> Ban</button></a>
+                                {% if not bot.verified %}
+                                    <a href="#!"><button class="btn-sm btn-warning float-right"><i class="fa fa-times-circle"></i> Reject</button></a>
+                                    <a href="#!"><button class="btn-sm btn-success float-right"><i class="fas fa-check-circle"></i> Accept</button></a>
+                                {% endif %}
+                            {% elif request.user.member == bot.owner%}
+                                 <a href="#!"><button class="btn-sm btn-danger float-right"><i class="far fa-trash-alt"></i> Delete</button></a>
+                                <a href="{% url 'bot_edit_view' bot_id=bot.id %}"><button class="btn-sm btn-warning float-right"><i class="far fa-edit"></i> Edit</button></a>
+                                <a href="#!"><button class="btn-sm btn-info float-right"><i class="fas fa-key"></i> API Key</button></a>
                             {% endif %}
                     </div>
                 </div>
@@ -143,4 +143,36 @@
     </div>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="reportBotModalCenter" tabindex="-1" role="dialog" aria-labelledby="reportBotModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content bg-dark">
+      <h5 class="modal-title text-white ml--2" id="reportBotModalCenterTitle"><i class="fa fa-flag"></i> Report this bot</h5>
+      <div class="modal-body">
+      <label for="report_selector text-white">Select Reason</label>
+        <select id="report_selector" class="form-control w-75 bg-dark text-white" name="selector">
+            <option value="" selected disabled>Please select</option>
+            <option value="NSFW bot without nsfw tag">NSFW bot without nsfw tag</option>
+            <option value="Hacked bot">Hacked bot</option>
+            <option value="Bad/Illegal Short/Long desc">Bad Short/Long desc</option>
+            <option value="Never online Bot">Bot never online</option>
+            <option value="Malicious (dm all, and others)">Malicious (like dm all)</option>
+            <option value="Fork without edit">Fork without modifications</option>
+            <option value="Other">Other</option>
+        </select>
+        <div id="customField" style="display: none;">
+            <br>
+            <label>Enter Reason</label>
+            <input type="text" class="form-control" id="customReason">
+        </div>
+      </div>
+        <p class="text-white"><b class="text-danger">Note:</b> False reports could get your account banned.</p>
+      <div class="modal-footer bg-transparent">
+        <button type="button" class="btn btn-white mr-2" data-dismiss="modal">Close</button>
+        <button type="button" bot_id="{{ bot.id }}" class="btn btn-danger reportBotBtn" data-dismiss="modal">Report</button>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock content %}
+
