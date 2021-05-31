@@ -97,11 +97,11 @@
                 <div class="container">
                     <div style="color: white !important; display: table;">
                         <span><h1 class=botName>{{ bot.name }}</h1></span>
-                        <a href="#!"><button class="votecase">1 <i class="fas fa-chevron-up"></i></button></a>
+                        <a href="#!"><button class="votecase voteBotBtn" bot_id="{{ bot.id }}"><span id="botVoteCount">{{ bot.votes }}</span> <i class="fas fa-chevron-up"></i></button></a>
                     </div>
                     <p class=mb-10>{{ bot.short_desc }}</p>
                     <div class="botButtons">
-                            <a href="#"><button class="btn-lg btn-success"><i class="fas fa-chevron-up"></i> Vote</button></a>
+                            <a href="#"><button class="btn-lg btn-success voteBotBtn" bot_id="{{ bot.id }}"><i class="fas fa-chevron-up"></i> Vote</button></a>
                             <a href="#"><button class="btn-lg btn-danger"><i class="far fa-flag"></i> Report</button></a>
                             <a href="{{ bot.invite_url }}"><button class="btn-lg btn-warning"><i class="fas fa-plus"></i> Invite</button></a>
                             <a href="{{ bot.meta.support_server }}"><button class="btn-lg btn-info"><i class="fa fa-headphones"></i> Support</button></a>

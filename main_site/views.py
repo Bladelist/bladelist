@@ -1,5 +1,5 @@
-import markdown
 from datetime import datetime, timezone
+from django.http import QueryDict, JsonResponse
 from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth.models import User
@@ -8,7 +8,8 @@ from django.contrib.auth import login, logout, authenticate
 from utils.background import create_user, update_user
 from utils.oauth import Oauth
 from utils.hashing import Hasher
-from .models import Bot, Tag, Member
+from utils.mixins import ResponseMixin
+from .models import Bot, Tag, Member, Vote
 from django.views.generic.list import ListView
 from utils.api_client import DiscordAPIClient
 
@@ -16,6 +17,7 @@ popup_oauth = Oauth()
 normal_oauth = Oauth(redirect_uri="http://127.0.0.1:8000/login/")
 hasher = Hasher()
 discord_client = DiscordAPIClient()
+TAGS = Tag.objects.all()
 
 
 def login_handler_view(request):
@@ -109,7 +111,7 @@ class TemplateView(View):
         return render(request, self.template_name)
 
 
-class BotListView(ListView):
+class BotListView(ListView, ResponseMixin):
     template_name = "bots.html"
     model = Bot
     paginate_by = 40
@@ -117,6 +119,35 @@ class BotListView(ListView):
 
     def get_queryset(self):
         return self.model.objects.filter(verified=True, banned=False, owner__banned=False).order_by('-votes')
+
+    def put(self, request):
+        data = QueryDict(request.body)
+        if request.user.is_authenticated:
+            bot = Bot.objects.get(id=data.get("bot_id"))
+            vote = Vote.objects.filter(member=request.user.member, bot=bot).order_by("-creation_time").first()
+            if vote is None:
+                Vote.objects.create(
+                    member=request.user.member,
+                    bot=bot,
+                    creation_time=datetime.now(timezone.utc)
+                )
+                bot.votes += 1
+                bot.save()
+                return JsonResponse({"vote_count": bot.votes})
+            elif (datetime.now(timezone.utc) - vote.creation_time).total_seconds() >= 43200:
+                vote.delete()
+                Vote.objects.create(
+                    member=request.user.member,
+                    bot=bot,
+                    creation_time=datetime.now(timezone.utc)
+                )
+                bot.votes += 1
+                bot.save()
+                return JsonResponse({"vote_count": bot.votes})
+            else:
+                return self.json_response_403()
+        else:
+            return self.json_response_401()
 
 
 class AddBotView(LoginRequiredMixin, View):
@@ -129,61 +160,71 @@ class AddBotView(LoginRequiredMixin, View):
     def post(self, request):
         data = request.POST
         bot_id = data.get("id")
-        resp = discord_client.get_bot_info(bot_id)
-        if resp.status_code == 404:
-            self.context["not_found"] = True
-        elif resp.status_code == 200:
-            resp = resp.json()
-            bot = Bot.objects.create(id=bot_id,
-                                     name=resp.get("username"),
-                                     owner=request.user.member,
-                                     invite_link=data.get("invite"),
-                                     date_added=datetime.now(timezone.utc),
-                                     avatar=resp.get("avatar"),
-                                     short_desc=data.get("short_desc"))
-            bot.tags.set(Tag.objects.filter(bots__tags__in=data.getlist('tags')))
-            bot.meta.prefix = data.get("prefix")
-            bot.meta.github = data.get("github")
-            bot.meta.website = data.get("website")
-            bot.meta.library = data.get("library")
-            bot.meta.twitter = data.get("twitter")
-            bot.meta.support_server = data.get("support_server")
-            bot.meta.privacy = data.get("privacy")
-            bot.meta.donate = data.get("donate")
-            bot.meta.long_desc = data.get("long_desc")
-            bot.meta.save()
+        if int(bot_id) <= 9223372036854775807:
+            self.context["tags"] = TAGS
+            resp = discord_client.get_bot_info(bot_id)
+            if resp.status_code == 404:
+                self.context["error"] = "Bot account does not exists!"
+            elif resp.status_code == 200:
+                resp = resp.json()
+                bot = Bot.objects.create(id=bot_id,
+                                         name=resp.get("username"),
+                                         owner=request.user.member,
+                                         invite_link=data.get("invite"),
+                                         date_added=datetime.now(timezone.utc),
+                                         avatar=resp.get("avatar"),
+                                         short_desc=data.get("short_desc"))
+                bot.tags.set(Tag.objects.filter(name__in=data.getlist('tags')))
+                bot.meta.prefix = data.get("prefix")
+                bot.meta.github = data.get("github")
+                bot.meta.website = data.get("website")
+                bot.meta.library = data.get("library")
+                bot.meta.twitter = data.get("twitter")
+                bot.meta.support_server = data.get("support_server")
+                bot.meta.privacy = data.get("privacy")
+                bot.meta.donate = data.get("donate")
+                bot.meta.long_desc = data.get("long_desc")
+                bot.meta.save()
+                self.context["success"] = "Bot added successfully!"
+            else:
+                self.context["error"] = "Internal Server Error"
         else:
-            self.context["error"] = "Internal Server Error"
+            self.context["error"] = "Enter a valid Bot Id"
         return render(request, self.template_name, self.context)
 
 
 class BotEditView(LoginRequiredMixin, View):
     template_name = "edit_bot.html"
+    context = {}
 
     def get(self, request, bot_id):
         bot = Bot.objects.get(id=bot_id)
-        return render(request, self.template_name, {"bot": bot})
+        return render(request, self.template_name, {"bot": bot, "tags": TAGS})
 
     def post(self, request):
         data = request.POST
         bot_id = data.get("id")
         if bot_id is not None:
             bot = Bot.objects.get(id=bot_id)
-            bot.invite_link = data.get("invite")
-            bot.short_desc = data.get("short_desc")
-            bot.save()
-            bot.tags.set(Tag.objects.filter(bots__tags__in=data.getlist('tags')))
-            bot.meta.prefix = data.get("prefix")
-            bot.meta.github = data.get("github")
-            bot.meta.website = data.get("website")
-            bot.meta.library = data.get("library")
-            bot.meta.twitter = data.get("twitter")
-            bot.meta.donate = data.get("donate")
-            bot.meta.support_server = data.get("support_server")
-            bot.meta.privacy = data.get("privacy")
-            bot.meta.long_desc = data.get("long_desc")
-            bot.meta.save()
-        return render(request, self.template_name, {"bot": bot})
+            if request.user.member == bot.owner:
+                bot.invite_link = data.get("invite")
+                bot.short_desc = data.get("short_desc")
+                bot.save()
+                bot.tags.set(Tag.objects.filter(name__in=data.getlist('tags')))
+                bot.meta.prefix = data.get("prefix")
+                bot.meta.github = data.get("github")
+                bot.meta.website = data.get("website")
+                bot.meta.library = data.get("library")
+                bot.meta.twitter = data.get("twitter")
+                bot.meta.donate = data.get("donate")
+                bot.meta.support_server = data.get("support_server")
+                bot.meta.privacy = data.get("privacy")
+                bot.meta.long_desc = data.get("long_desc")
+                bot.meta.save()
+                return render(request, self.template_name,
+                              {"bot": bot, "tags": TAGS, "success": "Bot edited successfully!"})
+        else:
+            return ProfileView.as_view(self.request, {"error": "Internal Server error"})
 
 
 class ProfileView(LoginRequiredMixin, View):
@@ -213,6 +254,4 @@ class ProfileEditView(LoginRequiredMixin, View):
             if value is not None:
                 setattr(meta, field, value)
         meta.save()
-        return render(request, self.template_name)
-
-
+        return render(request, self.template_name, {"success": "Profile edited successfully!"})

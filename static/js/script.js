@@ -1,3 +1,22 @@
+var notyf = new Notyf({position: {x:'right',y:'top'}});
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
+const csrftoken = getCookie('csrftoken')
+
 $("#popover").popover({ trigger: "hover" });
 window.FontAwesomeConfig = {
     searchPseudoElements: true
@@ -26,3 +45,31 @@ const newWindow = window.open(url, title,
 
 if (window.focus) newWindow.focus();
 }
+
+$(document).on('click', '.voteBotBtn', function (){
+    let bot_id = $(this).attr("bot_id")
+
+    $.ajax({
+        url: '/bots/',
+        headers: {'X-CSRFToken': csrftoken},
+        type: 'PUT',
+        data: {bot_id: bot_id},
+        success:function (data)
+        {
+          $("#botVoteCount").text(data["vote_count"]);
+          notyf.success("Voted successfully!")
+        },
+        error:function (response) {
+            switch (response.status) {
+                case 401:
+                    notyf.error("You need to be logged in to vote");
+                    break;
+                case 403:
+                    notyf.error("You can only vote once in 12 hours per bot");
+                    break;
+                default:
+                    notyf.error("Something went wrong.");
+            }
+        },
+    });
+})

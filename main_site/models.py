@@ -78,7 +78,7 @@ class Bot(models.Model):
     server_count = models.IntegerField(default=0)
     avatar = models.CharField(max_length=100, null=True)
     short_desc = models.CharField(max_length=120, null=True)
-    tags = models.ManyToManyField(Tag, null=True, related_name="bots", blank=True)
+    tags = models.ManyToManyField(Tag, related_name="bots", blank=True)
     banner_url = models.URLField(default="https://i.postimg.cc/15TN17rQ/xirprofilback.jpg")
 
     @property
@@ -121,3 +121,11 @@ class BotReport(models.Model):
     reason = models.TextField()
     creation_date = models.DateTimeField()
     reviewed = models.BooleanField(default=False)
+
+
+class Vote(models.Model):
+    id = models.UUIDField(default=uuid.uuid4, primary_key=True)
+    member = models.ForeignKey(Member, related_name="voted_bots", on_delete=models.CASCADE)
+    bot = models.ForeignKey(Bot, related_name="all_votes", on_delete=models.CASCADE, null=True)
+    creation_time = models.DateTimeField(null=True)
+
