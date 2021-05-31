@@ -21,12 +21,8 @@ discord_client = DiscordAPIClient()
 TAGS = Tag.objects.all()
 
 
-def auth_handler_url(request):
-    return redirect(settings.AUTH_HANDLER_URL)
-
-
 def login_handler_view(request):
-    return render(request, "login_handler.html")
+    return render(request, "login_handler.html", {"handler_url": settings.AUTH_HANDLER_URL})
 
 
 def discord_login_normal(request):

@@ -11,6 +11,7 @@ markdown = "*"
 gunicorn = "*"
 whitenoise = "*"
 django-environ = "*"
+psycopg2-binary = "*"
 
 [dev-packages]
 

@@ -11,7 +11,7 @@
         let url_string = window.location.href;
         let url = new URL(url_string);
         let code = url.searchParams.get("code");
-        let param = (`{% url 'auth_handler' %}?code=${code}&popup=True`);
+        let param = (`{{ handler_url }}?code=${code}&popup=True`);
         window.opener.location.replace(param);
         window.close();
     }
