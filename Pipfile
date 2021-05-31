@@ -8,6 +8,8 @@ django = "*"
 djangorestframework = "*"
 requests = "*"
 markdown = "*"
+gunicorn = "*"
+whitenoise = "*"
 
 [dev-packages]
 
