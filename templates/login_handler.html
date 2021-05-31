@@ -11,7 +11,7 @@
         let url_string = window.location.href;
         let url = new URL(url_string);
         let code = url.searchParams.get("code");
-        let param = (`http://127.0.0.1:8000/login/?code=${code}&popup=True`);
+        let param = (`{% url 'auth_handler' %}?code=${code}&popup=True`);
         window.opener.location.replace(param);
         window.close();
     }

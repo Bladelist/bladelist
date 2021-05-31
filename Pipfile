@@ -10,6 +10,7 @@ requests = "*"
 markdown = "*"
 gunicorn = "*"
 whitenoise = "*"
+django-environ = "*"
 
 [dev-packages]
 

@@ -11,21 +11,32 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# reading .env file
+env = environ.Env(
+DEBUG=(bool, False)
+)
+
+env_path = environ.Path(__file__) - 2
+environ.Env.read_env(env_file=env_path('.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-juimvl+_r6162zne)$#hmtp7m%kx-gh&h(3x=1)y#2&4bw#s&e'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = []
+if DEBUG:
+    ALLOWED_HOSTS = ['*']
+else:
+    ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -129,8 +140,9 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-OAUTH_CLIENT_ID = "847488758135914517"
-OAUTH_CLIENT_SECRET = "aiEWDvQaC0mbrsqEkcojWPWQlBwWEOyX"
-ENCRYPTION_SALT = "test"
-ENCRYPTION_ITERATION = 100
-DISCORD_API_TOKEN = "ODQ3NDg4NzU4MTM1OTE0NTE3.YK-zaQ.e3ZT3cYXoRBVmfJw65eT6kQGEXk"
+OAUTH_CLIENT_ID = env('OAUTH_CLIENT_ID')
+OAUTH_CLIENT_SECRET = env('OAUTH_CLIENT_SECRET')
+ENCRYPTION_SALT = env('ENCRYPTION_SALT')
+ENCRYPTION_ITERATION = env('ENCRYPTION_ITERATION')
+DISCORD_API_TOKEN = env('DISCORD_API_TOKEN')
+AUTH_HANDLER_URL = env('AUTH_HANDLER_URL')

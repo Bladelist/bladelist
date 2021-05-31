@@ -12,12 +12,17 @@ from utils.mixins import ResponseMixin
 from .models import Bot, Tag, Member, Vote, BotReport
 from django.views.generic.list import ListView
 from utils.api_client import DiscordAPIClient
+from django.conf import settings
 
 popup_oauth = Oauth()
 normal_oauth = Oauth(redirect_uri="http://127.0.0.1:8000/login/")
 hasher = Hasher()
 discord_client = DiscordAPIClient()
 TAGS = Tag.objects.all()
+
+
+def auth_handler_url(request):
+    return redirect(settings.AUTH_HANDLER_URL)
 
 
 def login_handler_view(request):
