@@ -15,7 +15,7 @@ from utils.api_client import DiscordAPIClient
 from django.conf import settings
 
 popup_oauth = Oauth()
-normal_oauth = Oauth(redirect_uri="http://127.0.0.1:8000/login/")
+normal_oauth = Oauth(redirect_uri=settings.AUTH_HANDLER_URL)
 hasher = Hasher()
 discord_client = DiscordAPIClient()
 TAGS = Tag.objects.all()

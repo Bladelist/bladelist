@@ -3,14 +3,14 @@ from django.conf import settings
 
 
 class Oauth:
-    redirect_uri = "http://127.0.0.1:8000/login/handlers/"
+    redirect_uri = settings.AUTH_CALLBACK_URL
     discord_token_url = "https://discord.com/api/oauth2/token"
     discord_api_url = "https://discord.com/api"
     client_id = settings.OAUTH_CLIENT_ID
     client_secret = settings.OAUTH_CLIENT_SECRET
 
     def __init__(self,
-                 redirect_uri="http://127.0.0.1:8000/login/handlers/",
+                 redirect_uri=settings.AUTH_CALLBACK_URL,
                  scope="identify"
                  ):
         self.redirect_uri = redirect_uri
