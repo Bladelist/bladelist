@@ -17,6 +17,10 @@ class Member(models.Model):
     dm_channel = models.BigIntegerField(null=True, blank=True)
 
     @property
+    def has_bots(self):
+        return self.bots.first()
+
+    @property
     def avatar_url(self):
         if self.avatar is not None:
             return f"https://cdn.discordapp.com/avatars/{self.id}/{self.avatar}.png"
