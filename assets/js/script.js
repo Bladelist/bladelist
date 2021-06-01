@@ -110,3 +110,109 @@ $(document).on('click', '.reportBotBtn', function (){
         },
     });
 })
+
+
+$(document).on('click', '.deleteBotBtn', function(e){
+    let bot_id = $('#deleteBotId').val()
+    $.ajax({
+        url: `/bots/edit/` + '?' + $.param({"bot_id": bot_id,}) ,
+        headers: {'X-CSRFToken': csrftoken},
+        type: 'DELETE',
+        success:function (data)
+        {
+          notyf.success("Bot deleted successfully!");
+        },
+        error:function (response) {
+            switch (response.status) {
+                case 401:
+                    notyf.error("You need to be logged in to delete");
+                    break;
+                case 404:
+                    notyf.error("Bot object not found!");
+                    break;
+                default:
+                    notyf.error("Something went wrong.");
+            }
+        },
+    });
+})
+
+
+$(document).on('click', '.reviewBtn', function(e){
+    e.preventDefault();
+    let bot_id = $(this).attr("bot_id")
+    $.ajax({
+        url: '/staff/',
+        headers: {'X-CSRFToken': csrftoken},
+        type: 'POST',
+        data: {bot_id: bot_id},
+        success:function (data)
+        {
+          $('#verificationQueue').html(data)
+          notyf.success("Queued for review");
+        },
+        error:function (response) {
+            switch (response.status) {
+                case 401:
+                    notyf.error("You need to be logged in to review");
+                    break;
+                case 403:
+                    notyf.error("You already have 1 bot awaiting review.");
+                    break;
+                case 404:
+                    notyf.error("Bot object not found!");
+                    break;
+                case 503:
+                    notyf.error("Bot is being reviewed by another moderator");
+                    break;
+                default:
+                    notyf.error("Something went wrong.");
+            }
+        },
+    });
+})
+
+$(document).ready(function (){
+
+    $.ajaxSetup({
+        url: '/staff/',
+        headers: {'X-CSRFToken': csrftoken},
+        type : 'PUT',
+        success: function (data) {
+            $('#verificationQueue').html(data)
+            notyf.success("Action completed successfully!")
+        },
+        error: function (response) {
+            switch (response.status) {
+                case 401:
+                    notyf.error("You need to be logged in to review");
+                    break;
+                case 404:
+                    notyf.error("Bot object not found!");
+                    break;
+                case 503:
+                    notyf.error("Bot is being reviewed by another moderator");
+                    break;
+                default:
+                    notyf.error("Something went wrong.");
+            }
+        }
+    });
+
+    $('.verifyBotBtn').on('click',function() {
+            let bot_id = $('#verifyBotId').val()
+            $.ajax({data: {action: "verify", bot_id: bot_id}});
+    });
+
+    $('.rejectBotBtn').on('click',function() {
+            let bot_id = $('#rejectBotId').val()
+            let reason = $('#rejectBotReason').val()
+            $.ajax({data: {action: "reject", bot_id: bot_id, rejection_reason: reason}});
+    });
+
+    $('.banBotBtn').on('click',function() {
+            let bot_id = $('#banBotId').val()
+            let reason = $('#banBotReason').val()
+            $.ajax({data: {action: "ban", bot_id: bot_id, ban_reason: reason}});
+    });
+});
