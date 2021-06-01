@@ -134,7 +134,7 @@
                                 {% endif %}
                             {% elif request.user.member == bot.owner%}
                                 {% if not bot.banned %}
-                                    <a href="#!"><button class="btn-sm btn-danger float-right"><i class="far fa-trash-alt"></i> Delete</button></a>
+                                    <a href="#!"><button class="btn-sm btn-danger float-right" onclick="setBotId('deleteBotId', '{{ bot.id }}');" data-toggle="modal" data-target="#deleteBotModalCenter"><i class="far fa-trash-alt"></i> Delete</button></a>
                                     <a href="{% url 'bot_edit_view' bot_id=bot.id %}"><button class="btn-sm btn-warning float-right"><i class="far fa-edit"></i> Edit</button></a>
                                     {% if bot.rejected %}
                                         <a href="#!"><button class="btn-sm btn-info float-right"><i class="fas fa-redo"></i> Reapply</button></a>
@@ -239,6 +239,21 @@
   </div>
 </div>
 
+<div class="modal fade" id="deleteBotModalCenter" tabindex="-1" role="dialog" aria-labelledby="deleteBotModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content bg-dark">
+      <h5 class="modal-title text-white ml--2" id="deleteBotModalCenterTitle"><i class="fa fa-check"></i> Delete this bot</h5>
+      <div class="modal-body">
+          <p class="text-white">Are you sure you want to delete this bot?</p>
+            <input type="hidden" id="deleteBotId">
+      </div>
+      <div class="modal-footer bg-transparent">
+        <button type="button" class="btn btn-white mr-2" data-dismiss="modal">Close</button>
+        <button type="button" bot_id="{{ bot.id }}" class="btn btn-danger deleteBotBtn" data-dismiss="modal">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
 <script>
 function setBotId(elementId, botId){
     document.getElementById(elementId).value = botId;

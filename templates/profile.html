@@ -52,6 +52,34 @@
   <h2 class="HomeBotsText"><a><i class="fas fa-robot"></i></a> User's bots </h2>
     <div class=row>
     {% if member.bots %}
+      {% if request.user.member == member %}
+      {% for bot in member.bots.all %}
+        <div class="col-xs-6 col-md-3">
+            <div class="card center hoverable"><img class="banner lazyload" height="75px" width="100%" src="{{ bot.banner_url }}">
+                <img class="roundpic lazyload cardavatar {% if bot.online %}presence-online{% else %}presence-offline{% endif %} avatarbroadcasting" width=128 height=128 src="{{ bot.avatar_url }}">
+                <h2><a class="poponHover" data-toggle="popover" title="Certified Bot" data-trigger="hover" data-content="mod">{{ bot.name }}</a></h2>
+                    <div>
+                        <a class="badge badge-info">{{ bot.votes }} votes</a>
+                        <a class="badge badge-warning">{{ bot.server_count }} servers</a>
+                            {% for tag in bot.tags.all %}
+                            <a class="badge badge-muted">{{ tag.name }}</a>
+                            {% endfor %}
+                    </div>
+                    <div class="card-desc-container">
+                        <p class="card-desc">{{ bot.short_desc }}</p>
+                    </div>
+                    <hr>
+                    <div class="card-manage">
+                        <a href="{% url 'bot_single' bot_id=bot.id %}"><button class="btn btn-primary mr-1">View Bot</button></a>
+                        <a href="{{ bot.invite_link }}"><button class="btn btn-success">Invite Bot</button></a>
+                        {% if request.user.member == bot.owner %}
+                         <a href="{% url 'bot_edit_view' bot_id=bot.id %}"><button class="btn btn-info mt-2"><i class="fa fa-edit"></i> Edit Bot</button></a>
+                        {% endif %}
+                    </div>
+            </div>
+        </div>
+      {% endfor %}
+      {% else %}
       {% for bot in member.verified_bots %}
         <div class="col-xs-6 col-md-3">
             <div class="card center hoverable"><img class="banner lazyload" height="75px" width="100%" src="{{ bot.banner_url }}">
@@ -78,6 +106,7 @@
             </div>
         </div>
       {% endfor %}
+      {% endif %}
     {% endif %}
     </div>
 </div>

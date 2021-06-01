@@ -112,6 +112,32 @@ $(document).on('click', '.reportBotBtn', function (){
 })
 
 
+$(document).on('click', '.deleteBotBtn', function(e){
+    let bot_id = $('#deleteBotId').val()
+    $.ajax({
+        url: `/bots/edit/` + '?' + $.param({"bot_id": bot_id,}) ,
+        headers: {'X-CSRFToken': csrftoken},
+        type: 'DELETE',
+        success:function (data)
+        {
+          notyf.success("Bot deleted successfully!");
+        },
+        error:function (response) {
+            switch (response.status) {
+                case 401:
+                    notyf.error("You need to be logged in to delete");
+                    break;
+                case 404:
+                    notyf.error("Bot object not found!");
+                    break;
+                default:
+                    notyf.error("Something went wrong.");
+            }
+        },
+    });
+})
+
+
 $(document).on('click', '.reviewBtn', function(e){
     e.preventDefault();
     let bot_id = $(this).attr("bot_id")

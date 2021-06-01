@@ -242,6 +242,18 @@ class BotEditView(LoginRequiredMixin, View, ResponseMixin):
             return self.json_response_200()
         return self.json_response_401()
 
+    def delete(self, request):
+        if request.user.is_authenticated:
+            bot_id = request.GET.get("bot_id")
+            try:
+                bot = Bot.objects.get(id=bot_id)
+                if bot.owner == request.user.member:
+                    bot.delete()
+                    return self.json_response_200()
+            except Bot.DoesNotExist:
+                return self.json_response_404()
+        return self.json_response_401()
+
 
 class ProfileView(LoginRequiredMixin, View):
     template_name = "profile.html"
