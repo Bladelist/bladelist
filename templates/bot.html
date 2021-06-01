@@ -97,10 +97,13 @@
                 <div class="container">
                     <div style="color: white !important; display: table;">
                         <span><h1 class=botName>{{ bot.name }}</h1></span>
+                        {% if not bot.banned %}
                         <a href="#!"><button class="votecase voteBotBtn" bot_id="{{ bot.id }}"><span id="botVoteCount">{{ bot.votes }}</span> <i class="fas fa-chevron-up"></i></button></a>
+                        {% endif %}
                     </div>
                     <p class=mb-10>{{ bot.short_desc }}</p>
                     <div class="botButtons">
+                        {% if not bot.banned %}
                             <a href="#!"><button class="btn-lg btn-success voteBotBtn" bot_id="{{ bot.id }}"><i class="fas fa-chevron-up"></i> Vote</button></a>
                             <a href="#!"><button class="btn-lg btn-danger" {% if not request.user.is_authenticated %}disabled data-toggle="tooltip" data-placement="bottom" title="Login to report"{% else %}data-toggle="modal" data-target="#reportBotModalCenter" {% endif %}><i class="far fa-flag"></i> Report</button></a>
                             <a href="{{ bot.invite_url }}"><button class="btn-lg btn-warning"><i class="fas fa-plus"></i> Invite</button></a>
@@ -121,17 +124,24 @@
                             {% if bot.meta.privacy %}
                             <a href="{{ bot.meta.privacy }}"><button class="btn-sm btn-primary"><i class="far fa-hdd"></i> Privacy policy</button></a>
                             {% endif %}
+                        {% endif %}
                             <br>
                             {% if request.user.is_staff  %}
-                                <a href="#!"><button class="btn-sm btn-danger float-right"><i class="fas fa-ban"></i> Ban</button></a>
+                                <a href="#!"><button class="btn-sm btn-danger float-right" data-toggle="modal" data-target="#banBotModalCenter" onclick="setBotId('banBotId', '{{ bot.id }}');"><i class="fas fa-ban"></i> Ban</button></a>
                                 {% if not bot.verified %}
-                                    <a href="#!"><button class="btn-sm btn-warning float-right"><i class="fa fa-times-circle"></i> Reject</button></a>
-                                    <a href="#!"><button class="btn-sm btn-success float-right"><i class="fas fa-check-circle"></i> Accept</button></a>
+                                    <a href="#!"><button class="btn-sm btn-warning float-right" data-toggle="modal" data-target="#rejectBotModalCenter" onclick="setBotId('rejectBotId', '{{ bot.id }}');"><i class="fa fa-times-circle"></i> Reject</button></a>
+                                    <a href="#!"><button class="btn-sm btn-success float-right" onclick="setBotId('verifyBotId', '{{ bot.id }}');" data-toggle="modal" data-target="#verifyBotModalCenter"><i class="fas fa-check-circle"></i> Accept</button></a>
                                 {% endif %}
                             {% elif request.user.member == bot.owner%}
-                                 <a href="#!"><button class="btn-sm btn-danger float-right"><i class="far fa-trash-alt"></i> Delete</button></a>
-                                <a href="{% url 'bot_edit_view' bot_id=bot.id %}"><button class="btn-sm btn-warning float-right"><i class="far fa-edit"></i> Edit</button></a>
-                                <a href="#!"><button class="btn-sm btn-info float-right"><i class="fas fa-key"></i> API Key</button></a>
+                                {% if not bot.banned %}
+                                    <a href="#!"><button class="btn-sm btn-danger float-right"><i class="far fa-trash-alt"></i> Delete</button></a>
+                                    <a href="{% url 'bot_edit_view' bot_id=bot.id %}"><button class="btn-sm btn-warning float-right"><i class="far fa-edit"></i> Edit</button></a>
+                                    {% if bot.rejected %}
+                                        <a href="#!"><button class="btn-sm btn-info float-right"><i class="fas fa-redo"></i> Reapply</button></a>
+                                    {% else %}
+                                    <a href="#!"><button class="btn-sm btn-info float-right"><i class="fas fa-key"></i> API Key</button></a>
+                                    {% endif %}
+                                {% endif %}
                             {% endif %}
                     </div>
                 </div>
@@ -174,5 +184,65 @@
     </div>
   </div>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="verifyBotModalCenter" tabindex="-1" role="dialog" aria-labelledby="verifyBotModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content bg-dark">
+      <h5 class="modal-title text-white ml--2" id="verifyBotModalCenterTitle"><i class="fa fa-check"></i> Approve this bot</h5>
+      <div class="modal-body">
+          <p class="text-white">Are you sure you want to approve this bot?</p>
+            <input type="hidden" id="verifyBotId">
+      </div>
+      <div class="modal-footer bg-transparent">
+        <button type="button" class="btn btn-white mr-2" data-dismiss="modal">Close</button>
+        <button type="button" bot_id="{{ bot.id }}" class="btn btn-success verifyBotBtn" data-dismiss="modal">Approve</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="rejectBotModalCenter" tabindex="-1" role="dialog" aria-labelledby="rejectBotModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content bg-dark">
+      <h5 class="modal-title text-white ml--2" id="rejectBotModalCenterTitle"><i class="fa fa-times"></i> Reject this bot</h5>
+      <div class="modal-body">
+        <p>Are you sure you want to reject this bot?</p><br><br>
+        <label>Enter Reason</label>
+        <input type="text" class="form-control" id="rejectBotReason" required>
+        <input type="hidden" id="rejectBotId">
+      </div>
+      <div class="modal-footer bg-transparent">
+        <button type="button" class="btn btn-white mr-2" data-dismiss="modal">Close</button>
+        <button type="button" bot_id="{{ bot.id }}" class="btn btn-danger rejectBotBtn" data-dismiss="modal">Reject</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="banBotModalCenter" tabindex="-1" role="dialog" aria-labelledby="banBotModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content bg-dark">
+      <h5 class="modal-title text-white ml--2" id="banBotModalCenterTitle"><i class="fa fa-ban"></i> Ban this bot</h5>
+      <div class="modal-body">
+        <p>Are you sure you want to ban this bot?</p><br><br>
+        <label>Enter Reason</label>
+        <input type="text" class="form-control" id="banBotReason" required>
+        <input type="hidden" id="banBotId">
+      </div>
+      <div class="modal-footer bg-transparent">
+        <button type="button" class="btn btn-white mr-2" data-dismiss="modal">Close</button>
+        <button type="button" bot_id="{{ bot.id }}" class="btn btn-danger banBotBtn" data-dismiss="modal">Ban</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function setBotId(elementId, botId){
+    document.getElementById(elementId).value = botId;
+}
+</script>
 {% endblock content %}
 
