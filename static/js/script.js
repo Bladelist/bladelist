@@ -154,7 +154,7 @@ $(document).ready(function (){
         type : 'PUT',
         success: function (data) {
             $('#verificationQueue').html(data)
-            notyf.success("Success!")
+            notyf.success("Action completed successfully!")
         },
         error: function (response) {
             switch (response.status) {
