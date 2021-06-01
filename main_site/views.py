@@ -273,14 +273,90 @@ class ProfileEditView(LoginRequiredMixin, View):
         return render(request, self.template_name, {"success": "Profile edited successfully!"})
 
 
-class StaffView(LoginRequiredMixin, View):
+class StaffView(View, ResponseMixin):
     template_name = "staff.html"
     context = {}
 
     def get(self, request):
-        awaiting_review = Bot.objects.filter(verification_status="UNVERIFIED", banned=False).order_by('date_added')[:10]
-        under_review = Bot.objects.filter(verification_status="UNDER_REVIEW", banned=False).order_by('date_added')[:10]
-        return render(request, self.template_name, {
-            "bots_awaiting_review": awaiting_review,
-            "bots_under_review": under_review
-        })
+        if request.user.is_staff:
+            awaiting_review = Bot.objects.filter(verification_status="UNVERIFIED",
+                                                 banned=False).order_by('date_added')[:10]
+            under_review = Bot.objects.filter(verification_status="UNDER_REVIEW",
+                                              banned=False).order_by('date_added')[:10]
+            return render(request, self.template_name, {
+                "bots_awaiting_review": awaiting_review,
+                "bots_under_review": under_review
+            })
+        else:
+            return self.http_responce_404(request)
+
+    def post(self, request):
+        if request.user.is_staff:
+            if not Bot.objects.filter(meta__moderator=request.user.member, verification_status="UNDER_REVIEW").exists():
+                bot_id = request.POST.get("bot_id")
+                try:
+                    bot = Bot.objects.get(id=bot_id)
+                    if bot.meta.moderator != request.user.member:
+                        return self.json_response_503()
+                    else:
+                        bot.verification_status = "UNDER_REVIEW"
+                        bot.meta.moderator = request.user.member
+                        bot.save()
+                        bot.meta.save()
+                        awaiting_review = Bot.objects.filter(verification_status="UNVERIFIED",
+                                                             banned=False).order_by('date_added')[:10]
+                        under_review = Bot.objects.filter(verification_status="UNDER_REVIEW",
+                                                          banned=False).order_by('date_added')[:10]
+                        return render(request, "refresh_pages/queue.html", {
+                            "bots_awaiting_review": awaiting_review,
+                            "bots_under_review": under_review
+                        })
+                except Bot.DoesNotExist:
+                    return self.json_response_404()
+            return self.json_response_403()
+        return self.json_response_401()
+
+    def put(self, request):
+        if request.user.is_staff:
+            data = QueryDict(request.body)
+            try:
+                bot = Bot.objects.get(id=data.get("bot_id"))
+                if bot.meta.moderator == request.user.member:
+                    if data.get("action") == "verify":
+                        bot.verified = True
+                        bot.verification_status = "VERIFIED"
+                        bot.save()
+                    elif data.get("action") == "reject":
+                        bot.meta.rejection_count += 1
+                        if bot.meta.rejection_count == 3:
+                            bot.banned = True
+                            bot.verified = False
+                            bot.save()
+                            bot.meta.ban_reason = "Got rejected 3 times."
+                        bot.verification_status = "REJECTED"
+                        bot.save()
+                        bot.meta.rejection_reason = data.get("rejection_reason")
+                        bot.meta.save()
+                    elif data.get("action") == "ban":
+                        bot.banned = True
+                        bot.verified = False
+                        bot.meta.ban_reason = data.get("ban_reason")
+                        bot.meta.save()
+                        bot.save()
+                    else:
+                        return self.json_response_500()
+                    awaiting_review = Bot.objects.filter(verification_status="UNVERIFIED",
+                                                         banned=False).order_by('date_added')[:10]
+                    under_review = Bot.objects.filter(verification_status="UNDER_REVIEW",
+                                                      banned=False).order_by('date_added')[:10]
+                    return render(request, "refresh_pages/queue.html", {
+                        "bots_awaiting_review": awaiting_review,
+                        "bots_under_review": under_review
+                    })
+                else:
+                    return self.json_response_503()
+            except Bot.DoesNotExist:
+                return self.json_response_404()
+        else:
+            return self.json_response_401()
+

@@ -82,7 +82,7 @@ class ResponseMixin(object):
 
     @staticmethod
     def http_responce_404(request):
-        return render(request, "dashboard/response-page.html", Response.code_404, status=404)
+        return render(request, "404.html", Response.code_404, status=404)
 
     @staticmethod
     def http_responce_405(request):

@@ -91,6 +91,10 @@ class Bot(models.Model):
         return self.get_verification_status_display() == "Unverified"
 
     @property
+    def verification_attempt(self):
+        return self.meta.rejection_count + 1
+
+    @property
     def avatar_url(self):
         if self.avatar is not None:
             return f"https://cdn.discordapp.com/avatars/{self.id}/{self.avatar}.png"
