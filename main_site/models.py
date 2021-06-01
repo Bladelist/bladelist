@@ -63,6 +63,7 @@ class Bot(models.Model):
     VERIFICATION_STATUS = (
         ("VERIFIED", "Verified"),
         ("UNVERIFIED", "Unverified"),
+        ("UNDER_REVIEW", "Under Review"),
         ("REJECTED", "Rejected")
     )
     id = models.BigIntegerField(primary_key=True)

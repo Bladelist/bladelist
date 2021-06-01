@@ -1,0 +1,68 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block content %}
+
+   <div class="container staffcontainer center">
+
+
+    {% if bots_awaiting_review %}
+    <h2 class="text-left">Bots Awaiting Review</h2><br>
+    <div id="BotsToReview" class="">
+      <div>
+        <table class="table text-left">
+        <tr>
+            <th scope="col">Bot Name</th>
+            <th scope="col">Bot ID</th>
+            <th scope="col">Bot Prefix</th>
+             <th scope="col">Manage</th>
+        </tr>
+       {% for bot in bots_awaiting_review %}
+        <tr>
+            <td>{{ bot.name }}</td>
+            <td>{{ bot.id }}</td>
+            <td>{{ bot.meta.prefix }}</td>
+            <td>
+                <a class="btn btn-primary" href="#!"><i class="fa fa-address-card" aria-hidden="true"></i> Review</a>
+            </td>
+        </tr>
+       {% endfor %}
+        </table>
+      </div>
+    </div>
+   {% endif %}
+
+    {% if bots_under_review %}
+    <h2 class="text-left">Bots Under Review</h2><br>
+    <div id="BotsUnderReview">
+      <div style="overflow-x:auto;">
+        <table class="table text-left">
+        <tr>
+            <th>Manage</th>
+            <th>Bot Name</th>
+            <th>Bot ID</th>
+            <th style="width:10%;">Bot Prefix</th>
+        </tr>
+        {% for bot in bots_under_review %}
+        <tr>
+            <td>
+                <a class="btn btn-primary" href="#!"><i class="fa fa-address-card" aria-hidden="true"></i> View Profile</a>
+                <a class="btn btn-primary" onclick="window.open('https://discordapp.com/oauth2/authorize?client_id={{ bot.id }}&scope=bot&permissions=0&guild_id=645281161949741064','name','width=400,height=700')"><i class="fa fa-plus" aria-hidden="true"></i> Invite</a>
+                <a class="btn btn-warning" href="#!"><i class="fa fa-check-circle" aria-hidden="true"></i> Approve<i aria-hidden="true"></i></a>
+                <a class="btn btn-danger" href="#!"><i class="fas fa-times-circle"></i> Reject<i aria-hidden="true"></i></a>
+                <a class="btn btn-danger" href="#!"><i class="fas fa-trash-o"></i> Delete<i aria-hidden="true"></i></a>
+                <a class="btn btn-danger" href="#!"><i class="fa fa-ban" aria-hidden="true"></i> Ban<i aria-hidden="true"></i></a>
+            </td>
+            <td>{{ bot.name }}</td>
+            <td>{{ bot.id }}</td>
+            <td>{{ bot.meta.prefix }}</td>
+        </tr>
+        {% endfor %}
+        </table>
+      </div>
+    </div>
+    {% endif %}
+
+    </div>
+
+{% endblock content %}

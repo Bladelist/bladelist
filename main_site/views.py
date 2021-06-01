@@ -19,6 +19,7 @@ normal_oauth = Oauth(redirect_uri=settings.AUTH_HANDLER_URL)
 hasher = Hasher()
 discord_client = DiscordAPIClient()
 TAGS = Tag.objects.all()
+RANDOM_BOTS = Bot.objects.filter(verified=True, banned=False, owner__banned=False).order_by("id").distinct()[:8]
 
 
 def login_handler_view(request):
@@ -90,12 +91,11 @@ class IndexView(View):
     template_name = "index.html"
 
     def get(self, request):
-        random_bots = Bot.objects.filter(verified=True, banned=False, owner__banned=False).order_by("id").distinct()[:8]
         recent_bots = Bot.objects.filter(verified=True, banned=False, owner__banned=False).order_by('-date_added')[:8]
         trending_bots = Bot.objects.filter(verified=True, banned=False, owner__banned=False).order_by('-votes')[:8]
         return render(request, self.template_name,
                       {"search": True,
-                       "random_bots": random_bots,
+                       "random_bots": RANDOM_BOTS,
                        "recent_bots": recent_bots,
                        "trending_bots": trending_bots})
 
@@ -271,3 +271,16 @@ class ProfileEditView(LoginRequiredMixin, View):
                 setattr(meta, field, value)
         meta.save()
         return render(request, self.template_name, {"success": "Profile edited successfully!"})
+
+
+class StaffView(LoginRequiredMixin, View):
+    template_name = "staff.html"
+    context = {}
+
+    def get(self, request):
+        awaiting_review = Bot.objects.filter(verification_status="UNVERIFIED", banned=False).order_by('date_added')[:10]
+        under_review = Bot.objects.filter(verification_status="UNDER_REVIEW", banned=False).order_by('date_added')[:10]
+        return render(request, self.template_name, {
+            "bots_awaiting_review": awaiting_review,
+            "bots_under_review": under_review
+        })
