@@ -26,6 +26,9 @@
 </div>
 {% endif %}
 <br><br>
+{% if not bots_under_review and not bots_awaiting_review %}
+    <h2><--No bots in queue--></h2>
+{% endif %}
 {% if bots_under_review %}
 <h2 class="text-left">Bots Under Review</h2><br>
 <div id="BotsUnderReview">
