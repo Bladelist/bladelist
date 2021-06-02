@@ -13,7 +13,7 @@ from .models import Bot, Tag, Member, Vote, BotReport
 from django.views.generic.list import ListView
 from utils.api_client import DiscordAPIClient
 from django.conf import settings
-
+from django.db.models import Q
 popup_oauth = Oauth()
 normal_oauth = Oauth(redirect_uri=settings.AUTH_HANDLER_URL)
 hasher = Hasher()
@@ -308,7 +308,7 @@ class StaffView(View, ResponseMixin):
                 bot_id = request.POST.get("bot_id")
                 try:
                     bot = Bot.objects.get(id=bot_id)
-                    if bot.meta.moderator != request.user.member:
+                    if bot.meta.moderator and bot.meta.moderator != request.user.member:
                         return self.json_response_503()
                     else:
                         bot.verification_status = "UNDER_REVIEW"
@@ -371,4 +371,25 @@ class StaffView(View, ResponseMixin):
                 return self.json_response_404()
         else:
             return self.json_response_401()
+
+
+class SearchView(ListView):
+    paginate_by = 16
+    template_name = "search.html"
+
+    def get_queryset(self):
+        query = self.request.GET.get("q")
+        tag = self.request.GET.get("tag")
+        if tag:
+            return Bot.objects.filter(tags__name__contains=tag).order_by("-votes")
+        if query:
+            if query.isdigit():
+                return Bot.objects.filter(
+                    id__exact=query
+                ).order_by("-votes")
+            else:
+                return Bot.objects.filter(
+                    Q(name__contains=query) | Q(tags__name__contains=query),
+                    banned=False, owner__banned=False
+                ).order_by("-votes")
 

@@ -3,7 +3,7 @@ from django.conf.urls import url
 from .views import (IndexView, BotView, LoginView, login_handler_view,
                     logout_view, discord_login_view, AboutView, TemplateView,
                     BotListView, AddBotView, BotEditView, discord_login_normal,
-                    ProfileView, ProfileEditView, StaffView)
+                    ProfileView, ProfileEditView, StaffView, SearchView)
 
 
 urlpatterns = [
@@ -22,5 +22,6 @@ urlpatterns = [
     url(r'^discord/login/', discord_login_view, name="login"),
     url(r'^accounts/login/', discord_login_normal, name="normal_login"),
     url(r'^users/(?P<user_id>[0-9]{18})', ProfileView.as_view(), name="profile"),
+    url(r'^search/', SearchView.as_view(), name="search"),
     path('', IndexView.as_view(), name="home"),
 ]
