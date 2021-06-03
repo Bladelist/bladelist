@@ -3,6 +3,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from utils.oauth import Oauth
 from utils.api_client import DiscordAPIClient
+from rest_framework.authtoken.models import Token
+
 oauth = Oauth()
 api_client = DiscordAPIClient()
 
@@ -45,6 +47,10 @@ class Member(models.Model):
                 self.dm_channel = channel_id
                 self.save()
         api_client.send_embed(self.dm_channel, embed)
+
+    @property
+    def api_token(self):
+        return Token.objects.get(user=self.user)
 
 
 class MemberMeta(models.Model):

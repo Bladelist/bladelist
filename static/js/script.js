@@ -137,6 +137,38 @@ $(document).on('click', '.deleteBotBtn', function(e){
     });
 })
 
+$(document).on('click', '.reapplyBtn', function(e){
+    let bot_id = $(this).attr("bot_id")
+    $.ajax({
+        url: `/bots/${bot_id}`,
+        headers: {'X-CSRFToken': csrftoken},
+        type: 'PUT',
+        data: {bot_id: bot_id},
+        success:function (data)
+        {
+          notyf.success("Successfully reapplied for review");
+        },
+        error:function (response) {
+            switch (response.status) {
+                case 401:
+                    notyf.error("You need to be logged in to reapply");
+                    break;
+                case 403:
+                    notyf.error("This bot is banned and cannot apply for verification");
+                    break;
+                case 404:
+                    notyf.error("Bot object not found!");
+                    break;
+                case 503:
+                    notyf.error("You have already reapplied for verification");
+                    break;
+                default:
+                    notyf.error("Something went wrong.");
+            }
+        },
+    });
+})
+
 
 $(document).on('click', '.reviewBtn', function(e){
     e.preventDefault();

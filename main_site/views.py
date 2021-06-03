@@ -39,7 +39,7 @@ def discord_login_view(request):
     return redirect(popup_oauth.discord_login_url)
 
 
-class BotView(View):
+class BotView(View, ResponseMixin):
     template_name = "bot.html"
     model = Bot
 
@@ -54,6 +54,22 @@ class BotView(View):
             return render(request, self.template_name, {"bot": bot})
         except self.model.DoesNotExist:
             return render(request, "404.html")
+
+    def put(self, request, bot_id):
+        try:
+            bot = self.model.objects.get(id=bot_id)
+            if request.user.member == bot.owner:
+                if not bot.banned:
+                    if bot.rejected:
+                        bot.verification_status = "UNVERIFIED"
+                        bot.save()
+                        return self.json_response_200()
+                    return self.json_response_503()
+                else:
+                    return self.json_response_403()
+            return self.json_response_401()
+        except self.model.DoesNotExist:
+            return self.json_response_404()
 
 
 class LoginView(View):
