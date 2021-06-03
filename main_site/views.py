@@ -202,6 +202,9 @@ class AddBotView(LoginRequiredMixin, View):
                 bot.meta.donate = data.get("donate")
                 bot.meta.long_desc = data.get("long_desc")
                 bot.meta.save()
+                request.user.member.send_message(
+                    "<:botadded:652482091971248140> Your bot is added and is currently awaiting verification."
+                )
                 self.context["success"] = "Bot added successfully!"
             else:
                 self.context["error"] = "Internal Server Error"
@@ -354,13 +357,21 @@ class StaffView(View, ResponseMixin):
                         bot.verified = True
                         bot.verification_status = "VERIFIED"
                         bot.save()
+                        bot.owner.send_message(
+                            "<:botadded:652482091971248140> Your bot is now verified and is now public."
+                        )
                     elif data.get("action") == "reject":
                         bot.meta.rejection_count += 1
+                        bot.owner.send_message(f"Your bot got rejected for reason: {data.get('rejection_reason')}")
                         if bot.meta.rejection_count == 3:
                             bot.banned = True
                             bot.verified = False
                             bot.save()
                             bot.meta.ban_reason = "Got rejected 3 times."
+                            bot.owner.send_message(
+                                f"<:botdeclined:652482092499730433> "
+                                f"Your bot got shadow banned since it got rejected 3 times."
+                            )
                         bot.verification_status = "REJECTED"
                         bot.save()
                         bot.meta.rejection_reason = data.get("rejection_reason")
@@ -371,6 +382,10 @@ class StaffView(View, ResponseMixin):
                         bot.meta.ban_reason = data.get("ban_reason")
                         bot.meta.save()
                         bot.save()
+                        bot.owner.send_message(
+                            f"<:botdeclined:652482092499730433> "
+                            f"Your bot got banned for the reason: {data.get('ban_reason')}"
+                        )
                     else:
                         return self.json_response_500()
                     awaiting_review = Bot.objects.filter(verification_status="UNVERIFIED",
