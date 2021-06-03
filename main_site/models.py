@@ -80,7 +80,7 @@ class Bot(models.Model):
     banned = models.BooleanField(default=False)
     verified = models.BooleanField(default=False)
     date_added = models.DateTimeField()
-    server_count = models.IntegerField(default=0)
+    server_count = models.IntegerField(default=0, null=True)
     avatar = models.CharField(max_length=100, null=True)
     short_desc = models.CharField(max_length=120, null=True)
     tags = models.ManyToManyField(Tag, related_name="bots", blank=True)

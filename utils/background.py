@@ -2,6 +2,7 @@ from datetime import datetime
 from django.contrib.auth.models import User
 from django.dispatch import receiver
 from django.db.models.signals import post_save
+from rest_framework.authtoken.models import Token
 
 from main_site.models import Member, Bot, BotMeta, MemberMeta
 from utils.hashing import Hasher
@@ -40,3 +41,9 @@ def create_bot_meta(sender, instance, created, **kwargs):
 def create_member_meta(sender, instance, created, **kwargs):
     if created:
         MemberMeta.objects.create(member=instance)
+
+
+@receiver(post_save, sender=User)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)

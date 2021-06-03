@@ -13,6 +13,7 @@ whitenoise = "*"
 django-environ = "*"
 psycopg2-binary = "*"
 django-hosts = "*"
+django-filter = "*"
 
 [dev-packages]
 
