@@ -207,6 +207,8 @@ class AddBotView(LoginRequiredMixin, View):
                         "<:botadded:652482091971248140> Your bot is added and is currently awaiting verification."
                     )
                     self.context["success"] = "Bot added successfully!"
+                    self.context["member"] = request.user.member
+                    return render(request, "profile.html", self.context)
                 else:
                     self.context["error"] = "Internal Server Error"
             else:
