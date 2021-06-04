@@ -195,6 +195,7 @@ class AddBotView(LoginRequiredMixin, View):
                                              avatar=resp.get("avatar"),
                                              short_desc=data.get("short_desc"))
                     bot.tags.set(Tag.objects.filter(name__in=data.getlist('tags')))
+                    bot.meta.support_server = data.get("support_server")
                     bot.meta.prefix = data.get("prefix")
                     bot.meta.github = data.get("github")
                     bot.meta.website = data.get("website")
@@ -238,6 +239,7 @@ class BotEditView(LoginRequiredMixin, View, ResponseMixin):
                 bot.short_desc = data.get("short_desc")
                 bot.save()
                 bot.tags.set(Tag.objects.filter(name__in=data.getlist('tags')))
+                bot.meta.support_server = data.get("support_server")
                 bot.meta.prefix = data.get("prefix")
                 bot.meta.github = data.get("github")
                 bot.meta.website = data.get("website")
