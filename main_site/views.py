@@ -178,36 +178,39 @@ class AddBotView(LoginRequiredMixin, View):
         data = request.POST
         bot_id = data.get("id")
         if int(bot_id) <= 9223372036854775807:
-            self.context["tags"] = TAGS
-            resp = discord_client.get_bot_info(bot_id)
-            if resp.status_code == 404:
-                self.context["error"] = "Bot account does not exists!"
-            elif resp.status_code == 200:
-                resp = resp.json()
-                bot = Bot.objects.create(id=bot_id,
-                                         name=resp.get("username"),
-                                         owner=request.user.member,
-                                         invite_link=data.get("invite"),
-                                         date_added=datetime.now(timezone.utc),
-                                         avatar=resp.get("avatar"),
-                                         short_desc=data.get("short_desc"))
-                bot.tags.set(Tag.objects.filter(name__in=data.getlist('tags')))
-                bot.meta.prefix = data.get("prefix")
-                bot.meta.github = data.get("github")
-                bot.meta.website = data.get("website")
-                bot.meta.library = data.get("library")
-                bot.meta.twitter = data.get("twitter")
-                bot.meta.support_server = data.get("support_server")
-                bot.meta.privacy = data.get("privacy")
-                bot.meta.donate = data.get("donate")
-                bot.meta.long_desc = data.get("long_desc")
-                bot.meta.save()
-                request.user.member.send_message(
-                    "<:botadded:652482091971248140> Your bot is added and is currently awaiting verification."
-                )
-                self.context["success"] = "Bot added successfully!"
+            if not Bot.objects.filter(id=bot_id).exists():
+                self.context["tags"] = TAGS
+                resp = discord_client.get_bot_info(bot_id)
+                if resp.status_code == 404:
+                    self.context["error"] = "Bot account does not exists!"
+                elif resp.status_code == 200:
+                    resp = resp.json()
+                    bot = Bot.objects.create(id=bot_id,
+                                             name=resp.get("username"),
+                                             owner=request.user.member,
+                                             invite_link=data.get("invite"),
+                                             date_added=datetime.now(timezone.utc),
+                                             avatar=resp.get("avatar"),
+                                             short_desc=data.get("short_desc"))
+                    bot.tags.set(Tag.objects.filter(name__in=data.getlist('tags')))
+                    bot.meta.prefix = data.get("prefix")
+                    bot.meta.github = data.get("github")
+                    bot.meta.website = data.get("website")
+                    bot.meta.library = data.get("library")
+                    bot.meta.twitter = data.get("twitter")
+                    bot.meta.support_server = data.get("support_server")
+                    bot.meta.privacy = data.get("privacy")
+                    bot.meta.donate = data.get("donate")
+                    bot.meta.long_desc = data.get("long_desc")
+                    bot.meta.save()
+                    request.user.member.send_message(
+                        "<:botadded:652482091971248140> Your bot is added and is currently awaiting verification."
+                    )
+                    self.context["success"] = "Bot added successfully!"
+                else:
+                    self.context["error"] = "Internal Server Error"
             else:
-                self.context["error"] = "Internal Server Error"
+                self.context["error"] = "Bot record Exists. Please add a new bot."
         else:
             self.context["error"] = "Enter a valid Bot Id"
         return render(request, self.template_name, self.context)
