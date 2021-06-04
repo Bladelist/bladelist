@@ -30,6 +30,7 @@
                         <option value="{{ tag.name }}" {% if tag in bot.tags.all %}selected{% endif %}>{{ tag.name }}</option>
                     {% endfor %}
                 </select></div>
+            <div class="FormField"><span><h5>Support Server</h5></span><input type=url style="width: 80%" class="FormInput text-white ml-3 ml-2 mr-2" placeholder="http://discord.gg/support/" name="support_server" value="{{ bot.meta.support_server }}"></div>
             <div class="FormField"><span><h5>Website 🕸</h5></span><input type="url" style="width: 80%" class="FormInput text-white ml-3 ml-2 mr-2" placeholder=https://bladebotlist.xyz name="website" value="{{ bot.meta.website }}"></div>
             <div class="FormField"><span><h5>GitHub 🐈 (Optional)</h5></span><input type="url" style="width: 80%" class="FormInput text-white ml-3 ml-2 mr-2" placeholder=https://github.com/bladebotlist/docs name="github" value="{{ bot.meta.github }}"></div>
             <div class="FormField"><span><h5>Donation page 💰 (Optional)</h5></span><input type=url style="width: 80%" class="FormInput text-white ml-3 ml-2 mr-2" placeholder=https://utip.io/bladebotlist name="donate" value="{{ bot.meta.donate }}"></div>
