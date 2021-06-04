@@ -361,52 +361,49 @@ class StaffView(View, ResponseMixin):
             data = QueryDict(request.body)
             try:
                 bot = Bot.objects.get(id=data.get("bot_id"))
-                if bot.meta.moderator == request.user.member:
-                    if data.get("action") == "verify":
-                        bot.verified = True
-                        bot.verification_status = "VERIFIED"
-                        bot.save()
-                        bot.owner.send_message(
-                            "<:botadded:652482091971248140> Your bot is now verified and is now public."
-                        )
-                    elif data.get("action") == "reject":
-                        bot.meta.rejection_count += 1
-                        bot.owner.send_message(f"Your bot got rejected for reason: {data.get('rejection_reason')}")
-                        if bot.meta.rejection_count == 3:
-                            bot.banned = True
-                            bot.verified = False
-                            bot.save()
-                            bot.meta.ban_reason = "Got rejected 3 times."
-                            bot.owner.send_message(
-                                f"<:botdeclined:652482092499730433> "
-                                f"Your bot got shadow banned since it got rejected 3 times."
-                            )
-                        bot.verification_status = "REJECTED"
-                        bot.save()
-                        bot.meta.rejection_reason = data.get("rejection_reason")
-                        bot.meta.save()
-                    elif data.get("action") == "ban":
+                if data.get("action") == "verify":
+                    bot.verified = True
+                    bot.verification_status = "VERIFIED"
+                    bot.save()
+                    bot.owner.send_message(
+                        "<:botadded:652482091971248140> Your bot is now verified and is now public."
+                    )
+                elif data.get("action") == "reject":
+                    bot.meta.rejection_count += 1
+                    bot.owner.send_message(f"Your bot got rejected for reason: {data.get('rejection_reason')}")
+                    if bot.meta.rejection_count == 3:
                         bot.banned = True
                         bot.verified = False
-                        bot.meta.ban_reason = data.get("ban_reason")
-                        bot.meta.save()
                         bot.save()
+                        bot.meta.ban_reason = "Got rejected 3 times."
                         bot.owner.send_message(
                             f"<:botdeclined:652482092499730433> "
-                            f"Your bot got banned for the reason: {data.get('ban_reason')}"
+                            f"Your bot got shadow banned since it got rejected 3 times."
                         )
-                    else:
-                        return self.json_response_500()
-                    awaiting_review = Bot.objects.filter(verification_status="UNVERIFIED",
-                                                         banned=False).order_by('date_added')[:10]
-                    under_review = Bot.objects.filter(verification_status="UNDER_REVIEW",
-                                                      banned=False).order_by('date_added')[:10]
-                    return render(request, "refresh_pages/queue.html", {
-                        "bots_awaiting_review": awaiting_review,
-                        "bots_under_review": under_review
-                    })
+                    bot.verification_status = "REJECTED"
+                    bot.save()
+                    bot.meta.rejection_reason = data.get("rejection_reason")
+                    bot.meta.save()
+                elif data.get("action") == "ban":
+                    bot.banned = True
+                    bot.verified = False
+                    bot.meta.ban_reason = data.get("ban_reason")
+                    bot.meta.save()
+                    bot.save()
+                    bot.owner.send_message(
+                        f"<:botdeclined:652482092499730433> "
+                        f"Your bot got banned for the reason: {data.get('ban_reason')}"
+                    )
                 else:
-                    return self.json_response_503()
+                    return self.json_response_500()
+                awaiting_review = Bot.objects.filter(verification_status="UNVERIFIED",
+                                                     banned=False).order_by('date_added')[:10]
+                under_review = Bot.objects.filter(verification_status="UNDER_REVIEW",
+                                                  banned=False).order_by('date_added')[:10]
+                return render(request, "refresh_pages/queue.html", {
+                    "bots_awaiting_review": awaiting_review,
+                    "bots_under_review": under_review
+                })
             except Bot.DoesNotExist:
                 return self.json_response_404()
         else:
