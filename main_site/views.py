@@ -62,6 +62,8 @@ class BotView(View, ResponseMixin):
                 if not bot.banned:
                     if bot.rejected:
                         bot.verification_status = "UNVERIFIED"
+                        bot.meta.moderator = None
+                        bot.meta.save()
                         bot.save()
                         return self.json_response_200()
                     return self.json_response_503()
