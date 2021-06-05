@@ -19,6 +19,7 @@ urlpatterns = [
     url(r'^staff/', StaffView.as_view(), name="staff_panel"),
     url(r'^profile/edit/', ProfileEditView.as_view(), name="edit_profile"),
     url(r'^privacy', TemplateView.as_view(template_name="privacy.html"), name="privacy"),
+    url(r'^terms', TemplateView.as_view(template_name="terms.html"), name="terms"),
     url(r'^discord/login/', discord_login_view, name="login"),
     url(r'^accounts/login/', discord_login_normal, name="normal_login"),
     url(r'^users/(?P<user_id>[0-9]{18})', ProfileView.as_view(), name="profile"),
