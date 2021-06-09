@@ -5,7 +5,6 @@ from rest_framework.response import Response
 from .serializers import BotSerializer
 from rest_framework.generics import get_object_or_404
 from django.contrib.auth.models import User
-from utils.hashing import Hasher
 from utils.background import create_user
 
 
@@ -35,7 +34,7 @@ class UserMigrateView(APIView, ResponseMixin):
 
     def post(self, request):
         if request.user.is_superuser:
-            data = request.POST
+            data = request.data
             if User.objects.filter(username=data.get("id")).exists():
                 return self.json_response_503()
             create_user(data)
