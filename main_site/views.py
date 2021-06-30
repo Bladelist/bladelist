@@ -211,7 +211,7 @@ class AddBotView(LoginRequiredMixin, View):
                     )
                     self.context["success"] = "Bot added successfully!"
                     self.context["member"] = request.user.member
-                    return render(request, "profile.html", self.context)
+                    return render(request, "profile_page.html", self.context)
                 else:
                     self.context["error"] = "Internal Server Error"
             else:
@@ -284,7 +284,7 @@ class BotEditView(LoginRequiredMixin, View, ResponseMixin):
 
 
 class ProfileView(LoginRequiredMixin, View):
-    template_name = "profile.html"
+    template_name = "profile_page.html"
 
     def get(self, request, user_id=None):
         if not user_id:
@@ -412,7 +412,7 @@ class StaffView(View, ResponseMixin):
 
 class SearchView(ListView):
     paginate_by = 16
-    template_name = "search.html"
+    template_name = "bot_search.html"
 
     def get_queryset(self):
         query = self.request.GET.get("q")
@@ -430,3 +430,6 @@ class SearchView(ListView):
                     banned=False, owner__banned=False
                 ).order_by("-votes")
 
+
+def test_view(request):
+    return render(request, "test.html")

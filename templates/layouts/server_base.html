@@ -3,7 +3,7 @@
 <head>
   <meta charset='utf-8'>
   <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-  <title>BladeBotList - Servers</title>
+  <title>BladeBotList - New Server</title>
   <meta name='viewport' content='width=device-width, initial-scale=1'>
   <link rel='stylesheet' type='text/css' media='screen' href='../static/css/servers.css'>
 
@@ -13,6 +13,9 @@
 
   <!-- fontawesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- monaco editor -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/loader.min.js" integrity="sha512-gWqaPfGsZiCkYB6e5mNN4SMRpEvLGItLBqgOAoyLSKtDxWS2O1YPcOeGTy8d8l00gqc8rVue9ae/ncZqhmfj4g==" crossorigin="anonymous"></script>
 
 </head>
 <body>
@@ -83,73 +86,14 @@
             <!-- </div> --->
             <input autocomplete="off" name="q" id="searchbox" type="text" value="" class="bblsearchbar" placeholder="Search a server" >
           </div>
-         
-    </form>
-  </div>
-  <div class="wave wave-top"></div>
-
-  <div class="container text-white">
+         </form>
+      </div>
+      <div class="wave wave-top"></div>
+  {% block content %} {% endblock content %}
 
 
-    <div class="row text-center">
+{% block script %} {% endblock script %}
 
-      <!-- Start of card -->
-
-        <div class="col-xs-6 col-lg-3 col-md-3">
-          <div class='card bg-dark p-2 m-3'>
-            <img class="card-logo m-auto" src="https://bladebotlist.xyz/img/logo.svg" width="128" height="128">
-            <h3 class="card-title">PornHub Community</h3>
-            <div class="tags">
-              <span class="badge rounded-pill bg-primary">10 <i class="fas fa-chevron-up"></i></span>
-              <span class="badge rounded-pill bg-secondary">267 <i class="fas fa-users"></i></span>
-              <span class="badge rounded-pill bg-danger">18 <i class="fas fa-gem"></i></i></span>
-            </div>
-            <p class="card-desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-            <div class="card-buttons m-2 text-center">
-                  <a href="#"><button class="m-2 btn btn-primary"><i class="fas fa-user-plus"></i> Join</button></a>
-                  <a href="#"><button class="m-2 btn btn-success"><i class="fas fa-chevron-up"></i> Vote</button></a>
-                  <a href="#"><button class="m-2 btn btn-secondary"><i class="far fa-eye"></i> View</button></a>
-                  <a href="#"><button class="m-2 btn btn-danger"><i class="far fa-flag"></i> Report</button></a>
-              </div>
-
-            </div>
-          </div>
-
-          <!-- End of card -->
-          <!-- Just make this part as template -->
-
-
-
-          <div class="col-xs-6 col-lg-3 col-md-3">
-            <div class='card bg-dark p-2 m-3'>
-              <img class="card-logo m-auto" src="https://bladebotlist.xyz/img/logo.svg" width="128" height="128">
-              <h3 class="card-title">PornHub Community</h3>
-              <div class="tags">
-                <span class="badge rounded-pill bg-primary">10 <i class="fas fa-chevron-up"></i></span>
-                <span class="badge rounded-pill bg-secondary">267 <i class="fas fa-users"></i></span>
-                <span class="badge rounded-pill bg-danger">18 <i class="fas fa-gem"></i></i></span>
-              </div>
-              <p class="card-desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-              <div class="card-buttons m-2 text-center">
-                    <a href="#"><button class="m-2 btn btn-primary"><i class="fas fa-user-plus"></i> Join</button></a>
-                    <a href="#"><button class="m-2 btn btn-success"><i class="fas fa-chevron-up"></i> Vote</button></a>
-                    <a href="#"><button class="m-2 btn btn-secondary"><i class="far fa-eye"></i> View</button></a>
-                    <a href="#"><button class="m-2 btn btn-danger"><i class="far fa-flag"></i> Report</button></a>
-                </div>
-  
-              </div>
-            </div>
-
-            
-
-
-    </div>
-
-
-
-
-
-  </div>
 </body>
 
 <footer>
