@@ -47,16 +47,16 @@ body {
 #longDescEditor {
     height: 150px;
 }
-/*
+
 .beforeicon {
     display: inline-block !important;
     position: absolute !important;
     align-items: center !important;
-    margin-top: 15px !important;
+    margin-top: 11px !important;
     margin-left: 15px !important;
     color: #7289DA;
   }
-  */
+
   .bblsearchbar {
     display:inline-block;
     background-color: #000000 !important;

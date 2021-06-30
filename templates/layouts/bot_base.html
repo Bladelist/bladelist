@@ -106,7 +106,8 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a href="{% url 'profile' user_id=request.user.username %}"><button class="dropdown-item nav-item"><i aria-hidden="true" class="fas fa-user-circle"></i>&nbsp;Profile</button></a>
-                            <a href="{% url 'add' %}"><button class="dropdown-item nav-item"><i aria-hidden="true" class="fas fa-plus"></i>&nbsp;New Bot</button></a>
+                            <a href="{% url 'bot_add' %}"><button class="dropdown-item nav-item"><i aria-hidden="true" class="fas fa-plus"></i>&nbsp;New Bot</button></a>
+                            <a href="{% url 'server_add' %}"><button class="dropdown-item nav-item"><i aria-hidden="true" class="fas fa-plus"></i>&nbsp;New Bot</button></a>
                             {% if request.user.is_staff %}
                             <div class="dropdown-divider"></div>
                             <a href="/staff"><button class="dropdown-item nav-item"><i aria-hidden="true" class="fas fa-gavel"></i>&nbsp;Staff panel</button></a>
@@ -221,7 +222,10 @@
 
                     {% if request.user.is_authenticated %}
                     <li>
-                        <a class="text-light" href="{% url 'add' %}"><i class="fa fa-plus" style="color: white;"></i> Add Bot</a>
+                        <a class="text-light" href="{% url 'bot_add' %}"><i class="fa fa-plus" style="color: white;"></i> Add Bot</a>
+                    </li>
+                    <li>
+                        <a class="text-light" href="{% url 'server_add' %}"><i class="fa fa-plus" style="color: white;"></i> Add Server</a>
                     </li>
                     <li>
                         <a class="text-light" href="{% url 'profile' user_id=request.user.username %}"><i class="fa fa-user" style="color: white;"></i> Profile</a>
