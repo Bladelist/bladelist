@@ -40,7 +40,7 @@ def discord_login_view(request):
 
 
 class BotView(View, ResponseMixin):
-    template_name = "bot.html"
+    template_name = "bot_page.html"
     model = Bot
 
     def get(self, request, bot_id):
@@ -131,7 +131,7 @@ class TemplateView(View):
 
 
 class BotListView(ListView, ResponseMixin):
-    template_name = "bots.html"
+    template_name = "bot_list.html"
     model = Bot
     paginate_by = 40
     extra_context = {"search": True, "logo_off": True}
@@ -170,7 +170,7 @@ class BotListView(ListView, ResponseMixin):
 
 
 class AddBotView(LoginRequiredMixin, View):
-    template_name = "add.html"
+    template_name = "bot_add.html"
     context = {}
 
     def get(self, request):
@@ -222,7 +222,7 @@ class AddBotView(LoginRequiredMixin, View):
 
 
 class BotEditView(LoginRequiredMixin, View, ResponseMixin):
-    template_name = "edit_bot.html"
+    template_name = "bot_edit.html"
     context = {}
 
     def get(self, request, bot_id):
@@ -297,7 +297,7 @@ class ProfileView(LoginRequiredMixin, View):
 
 
 class ProfileEditView(LoginRequiredMixin, View):
-    template_name = "edit_profile.html"
+    template_name = "profile_edit.html"
     fields = ["website", "bio", "reddit", "github", "twitter", "facebook", "discordbio"]
 
     def get(self, request):
