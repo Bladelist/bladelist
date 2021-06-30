@@ -21,14 +21,14 @@ body {
     color: rgb(33, 33, 33) !important;
 }
 .wave-top {
-    background: url(/static/img/reversedwave.svg) repeat-x !important;
+    background: url(../img/reversedwave.svg) repeat-x !important;
     fill: #212121;
 }
 .text-discord {
     color: #5865F2 !important;
 }
 .wave {
-    background: url(/static/img/wave.svg) repeat-x;
+    background: url(../img/wave.svg) repeat-x;
     height: 163px;
     fill: #212121;
     animation: wave 60s linear infinite;
