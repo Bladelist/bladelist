@@ -169,7 +169,7 @@ class BotListView(ListView, ResponseMixin):
             return self.json_response_401()
 
 
-class AddBotView(LoginRequiredMixin, View):
+class BotAddView(LoginRequiredMixin, View):
     template_name = "bot_add.html"
     context = {}
 
@@ -410,7 +410,7 @@ class StaffView(View, ResponseMixin):
             return self.json_response_401()
 
 
-class SearchView(ListView):
+class BotSearchView(ListView):
     paginate_by = 16
     template_name = "bot_search.html"
 
@@ -431,5 +431,39 @@ class SearchView(ListView):
                 ).order_by("-votes")
 
 
-def test_view(request):
-    return render(request, "test.html")
+class ServerListView(View, ResponseMixin):
+    template_name = "server_list.html"
+
+    def get(self, request):
+        return render(request, self.template_name)
+
+
+class ServerView(View, ResponseMixin):
+    template_name = "server_page.html"
+
+    def get(self, request):
+        return render(request, self.template_name)
+
+
+class ServerAddView(View, ResponseMixin):
+    template_name = "server_add.html"
+
+    def get(self, request):
+        return render(request, self.template_name)
+
+
+class ServerEditView(View, ResponseMixin):
+    template_name = "server_edit.html"
+
+    def get(self, request):
+        return render(request, self.template_name)
+
+
+class ServerSearchView(View, ResponseMixin):
+    template_name = "server_search.html"
+
+    def get(self, request):
+        return render(request, self.template_name)
+
+
+

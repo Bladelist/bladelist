@@ -123,7 +123,7 @@
         {% if search %}
         <div class="wavepart center"> {% if not logo_off %}<img class="lazyload roundpic center float" width=256 height=256 alt="Website logo" src="{% static 'img/logo.svg' %}">
             <h1 class="centertext wavetitle">Bladelist</h1>{% endif %}
-            <form action="{% url 'search' %}" method="GET">
+            <form action="{% url 'bot_search' %}" method="GET">
                 <h3>Search in more than <bold class="bold text-primary">1000+</bold> Discord bots</h3>
                 <div>
                     <div class="beforeicon">
@@ -133,10 +133,10 @@
                 </div>
             </form>
             <div>
-                <a href="{% url 'search' %}?tag=Music"><button class="btn btn-info"><i class="fas fa-music"></i>  Music</button></a>
-                <a href="{% url 'search' %}?tag=Economy"><button class="btn btn-info"><i class="far fa-money-bill-alt"></i>  Economy</button></a>
-                <a href="{% url 'search' %}?tag=Moderation"><button class="btn btn-info"><i class="fas fa-gavel"></i>  Moderation</button></a>
-                <a href="{% url 'search' %}?tag=Useful"><button class="btn btn-info"><i class="fas fa-box"></i>  Useful</button></a>
+                <a href="{% url 'bot_search' %}?tag=Music"><button class="btn btn-info"><i class="fas fa-music"></i>  Music</button></a>
+                <a href="{% url 'bot_search' %}?tag=Economy"><button class="btn btn-info"><i class="far fa-money-bill-alt"></i>  Economy</button></a>
+                <a href="{% url 'bot_search' %}?tag=Moderation"><button class="btn btn-info"><i class="fas fa-gavel"></i>  Moderation</button></a>
+                <a href="{% url 'bot_search' %}?tag=Useful"><button class="btn btn-info"><i class="fas fa-box"></i>  Useful</button></a>
             </div>
         </div>
         {% endif %}

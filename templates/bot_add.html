@@ -4,7 +4,7 @@
 {% block content %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs/loader.min.js" integrity="sha512-gWqaPfGsZiCkYB6e5mNN4SMRpEvLGItLBqgOAoyLSKtDxWS2O1YPcOeGTy8d8l00gqc8rVue9ae/ncZqhmfj4g==" crossorigin="anonymous" type="ed8558f19f8c84c10ce91f61-text/javascript"></script>
     <div class="container">
-        <form class="newBotForm" action="{% url 'add' %}" method="POST">
+        <form class="newBotForm" action="{% url 'bot_add' %}" method="POST">
             {% csrf_token %}
             <div class="FormField">
                 <h5>Bot ID <a style="color: #ff0000 !important">*</a></h5><span><p class="ml-2 mr-2">You can get it by right-clicking on your bot profile</p></span><input type="text" required maxlength=20 class="FormInput text-white ml-3 ml-2 mr-2" minlength=16 placeholder="643499304950038539" name="id"></div>
