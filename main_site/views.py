@@ -9,7 +9,7 @@ from utils.background import create_user, update_user
 from utils.oauth import Oauth
 from utils.hashing import Hasher
 from utils.mixins import ResponseMixin
-from .models import Bot, BotTag, Member, BotVote, BotReport
+from .models import Bot, BotTag, Member, BotVote, BotReport, Server, ServerTag, ServerReport, ServerVote
 from django.views.generic.list import ListView
 from utils.api_client import DiscordAPIClient
 from django.conf import settings
@@ -438,13 +438,6 @@ class ServerListView(View, ResponseMixin):
         return render(request, self.template_name)
 
 
-class ServerView(View, ResponseMixin):
-    template_name = "server_page.html"
-
-    def get(self, request):
-        return render(request, self.template_name)
-
-
 class ServerAddView(View, ResponseMixin):
     template_name = "server_add.html"
 
@@ -459,11 +452,41 @@ class ServerEditView(View, ResponseMixin):
         return render(request, self.template_name)
 
 
-class ServerSearchView(View, ResponseMixin):
+class ServerView(View, ResponseMixin):
+    template_name = "server_page.html"
+    model = Server
+
+    def get(self, request, bot_id):
+        try:
+            server = self.model.objects.get(id=bot_id)
+            if server.banned or not server.verified:
+                if request.user.is_authenticated:
+                    if request.user.member == server.owner or request.user.is_staff:
+                        return render(request, self.template_name, {"server": server})
+                return render(request, "404.html")
+            return render(request, self.template_name, {"server": server})
+        except self.model.DoesNotExist:
+            return render(request, "404.html")
+
+
+class ServerSearchView(ListView):
+    paginate_by = 16
     template_name = "server_search.html"
 
-    def get(self, request):
-        return render(request, self.template_name)
-
+    def get_queryset(self):
+        query = self.request.GET.get("q")
+        tag = self.request.GET.get("tag")
+        if tag:
+            return Server.objects.filter(tags__name__contains=tag).order_by("-votes")
+        if query:
+            if query.isdigit():
+                return Server.objects.filter(
+                    id__exact=query
+                ).order_by("-votes")
+            else:
+                return Server.objects.filter(
+                    Q(name__contains=query) | Q(tags__name__contains=query),
+                    banned=False, owner__banned=False
+                ).order_by("-votes")
 
 
