@@ -11,7 +11,7 @@ class Oauth:
 
     def __init__(self,
                  redirect_uri=settings.AUTH_CALLBACK_URL,
-                 scope="identify"
+                 scope="identify%20guilds"
                  ):
         self.redirect_uri = redirect_uri
         self.scope = scope
