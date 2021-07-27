@@ -62,6 +62,9 @@ class MemberMeta(models.Model):
     discordbio = models.URLField(null=True, blank=True)
     facebook = models.URLField(null=True, blank=True)
     reddit = models.URLField(null=True, blank=True)
+    access_token = models.CharField(max_length=32, null=True, blank=True)
+    refresh_token = models.CharField(max_length=32, null=True, blank=True)
+    access_token_expiry = models.DateTimeField(null=True, blank=True)
 
 
 class BotTag(models.Model):
@@ -165,6 +168,7 @@ class Server(models.Model):
     verification_status = models.CharField(max_length=20, choices=VERIFICATION_STATUS, default="UNVERIFIED")
     verified = models.BooleanField(default=False)
     date_added = models.DateTimeField()
+    is_nsfw = models.BooleanField(default=False)
     member_count = models.IntegerField(default=0, null=True)
     members_online = models.IntegerField(default=0, null=True)
     icon = models.CharField(max_length=100, null=True)
