@@ -64,7 +64,12 @@ class MemberMeta(models.Model):
     reddit = models.URLField(null=True, blank=True)
 
 
-class Tag(models.Model):
+class BotTag(models.Model):
+    name = models.CharField(max_length=15, primary_key=True)
+    icon = models.CharField(max_length=25)
+
+
+class ServerTag(models.Model):
     name = models.CharField(max_length=15, primary_key=True)
     icon = models.CharField(max_length=25)
 
@@ -89,7 +94,7 @@ class Bot(models.Model):
     server_count = models.IntegerField(default=0, null=True)
     avatar = models.CharField(max_length=100, null=True)
     short_desc = models.CharField(max_length=120, null=True)
-    tags = models.ManyToManyField(Tag, related_name="bots", blank=True)
+    tags = models.ManyToManyField(BotTag, related_name="bots", blank=True)
     banner_url = models.URLField(default="https://i.postimg.cc/15TN17rQ/xirprofilback.jpg")
 
     @property
@@ -138,9 +143,48 @@ class BotReport(models.Model):
     reviewed = models.BooleanField(default=False)
 
 
-class Vote(models.Model):
+class BotVote(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True)
     member = models.ForeignKey(Member, related_name="voted_bots", on_delete=models.CASCADE)
     bot = models.ForeignKey(Bot, related_name="all_votes", on_delete=models.CASCADE, null=True)
     creation_time = models.DateTimeField(null=True)
 
+
+class Server(models.Model):
+    VERIFICATION_STATUS = (
+        ("VERIFIED", "Verified"),
+        ("UNVERIFIED", "Unverified"),
+        ("UNDER_REVIEW", "Under Review"),
+        ("REJECTED", "Rejected")
+    )
+    id = models.BigIntegerField(primary_key=True)
+    owner = models.ForeignKey(Member, related_name="servers", on_delete=models.CASCADE)
+    name = models.CharField(max_length=50)
+    invite_link = models.URLField()
+    votes = models.IntegerField(default=0)
+    verification_status = models.CharField(max_length=20, choices=VERIFICATION_STATUS, default="UNVERIFIED")
+    verified = models.BooleanField(default=False)
+    date_added = models.DateTimeField()
+    member_count = models.IntegerField(default=0, null=True)
+    members_online = models.IntegerField(default=0, null=True)
+    icon = models.CharField(max_length=100, null=True)
+    short_desc = models.CharField(max_length=120, null=True)
+    tags = models.ManyToManyField(ServerTag, related_name="bots", blank=True)
+    banner_url = models.URLField(default="https://i.postimg.cc/15TN17rQ/xirprofilback.jpg")
+    admins = models.ForeignKey(Member, related_name="admin_servers", on_delete=models.CASCADE)
+
+
+class ServerVote(models.Model):
+    id = models.UUIDField(default=uuid.uuid4, primary_key=True)
+    member = models.ForeignKey(Member, related_name="voted_servers", on_delete=models.CASCADE)
+    server = models.ForeignKey(Server, related_name="all_votes", on_delete=models.CASCADE, null=True)
+    creation_time = models.DateTimeField(null=True)
+
+
+class ServerReport(models.Model):
+    server = models.ForeignKey(Server, on_delete=models.CASCADE, related_name="reports")
+    reporter = models.ForeignKey(Member, related_name="reported_servers", on_delete=models.CASCADE)
+    reason = models.TextField()
+    creation_date = models.DateTimeField()
+    reviewed = models.BooleanField(default=False)
+    reviewer = models.ForeignKey(Member, null=True, related_name="reports_reviewed", on_delete=models.SET_NULL)

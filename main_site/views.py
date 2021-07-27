@@ -9,7 +9,7 @@ from utils.background import create_user, update_user
 from utils.oauth import Oauth
 from utils.hashing import Hasher
 from utils.mixins import ResponseMixin
-from .models import Bot, Tag, Member, Vote, BotReport
+from .models import Bot, BotTag, Member, BotVote, BotReport
 from django.views.generic.list import ListView
 from utils.api_client import DiscordAPIClient
 from django.conf import settings
@@ -18,7 +18,7 @@ popup_oauth = Oauth()
 normal_oauth = Oauth(redirect_uri=settings.AUTH_HANDLER_URL)
 hasher = Hasher()
 discord_client = DiscordAPIClient()
-TAGS = Tag.objects.all()
+TAGS = BotTag.objects.all()
 RANDOM_BOTS = Bot.objects.filter(verified=True, banned=False, owner__banned=False).order_by("id").distinct()[:8]
 
 
@@ -143,9 +143,9 @@ class BotListView(ListView, ResponseMixin):
         data = QueryDict(request.body)
         if request.user.is_authenticated:
             bot = Bot.objects.get(id=data.get("bot_id"))
-            vote = Vote.objects.filter(member=request.user.member, bot=bot).order_by("-creation_time").first()
+            vote = BotVote.objects.filter(member=request.user.member, bot=bot).order_by("-creation_time").first()
             if vote is None:
-                Vote.objects.create(
+                BotVote.objects.create(
                     member=request.user.member,
                     bot=bot,
                     creation_time=datetime.now(timezone.utc)
@@ -155,7 +155,7 @@ class BotListView(ListView, ResponseMixin):
                 return JsonResponse({"vote_count": bot.votes})
             elif (datetime.now(timezone.utc) - vote.creation_time).total_seconds() >= 43200:
                 vote.delete()
-                Vote.objects.create(
+                BotVote.objects.create(
                     member=request.user.member,
                     bot=bot,
                     creation_time=datetime.now(timezone.utc)
@@ -194,7 +194,7 @@ class BotAddView(LoginRequiredMixin, View):
                                              date_added=datetime.now(timezone.utc),
                                              avatar=resp.get("avatar"),
                                              short_desc=data.get("short_desc"))
-                    bot.tags.set(Tag.objects.filter(name__in=data.getlist('tags')))
+                    bot.tags.set(BotTag.objects.filter(name__in=data.getlist('tags')))
                     bot.meta.support_server = data.get("support_server")
                     bot.meta.prefix = data.get("prefix")
                     bot.meta.github = data.get("github")
@@ -238,7 +238,7 @@ class BotEditView(LoginRequiredMixin, View, ResponseMixin):
                 bot.invite_link = data.get("invite")
                 bot.short_desc = data.get("short_desc")
                 bot.save()
-                bot.tags.set(Tag.objects.filter(name__in=data.getlist('tags')))
+                bot.tags.set(BotTag.objects.filter(name__in=data.getlist('tags')))
                 bot.meta.support_server = data.get("support_server")
                 bot.meta.prefix = data.get("prefix")
                 bot.meta.github = data.get("github")
