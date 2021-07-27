@@ -169,6 +169,7 @@ class Server(models.Model):
     members_online = models.IntegerField(default=0, null=True)
     icon = models.CharField(max_length=100, null=True)
     short_desc = models.CharField(max_length=120, null=True)
+    long_desc = models.TextField(null=True, blank=True)
     tags = models.ManyToManyField(ServerTag, related_name="bots", blank=True)
     banner_url = models.URLField(default="https://i.postimg.cc/15TN17rQ/xirprofilback.jpg")
     admins = models.ForeignKey(Member, related_name="admin_servers", on_delete=models.CASCADE)

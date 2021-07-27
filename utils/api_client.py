@@ -17,6 +17,9 @@ class DiscordAPIClient:
     def get_bot_info(self, bot_id):
         return self.get(f"/users/{bot_id}")
 
+    def get_guild_info(self, guild_id):
+        return self.get(f"/guilds/{guild_id}")
+
     def create_dm_channel(self, user_id):
         resp = self.post("/users/@me/channels", data={"recipient_id": user_id})
         if resp.status_code == 200:

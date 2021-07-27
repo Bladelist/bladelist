@@ -438,13 +438,6 @@ class ServerListView(View, ResponseMixin):
         return render(request, self.template_name)
 
 
-class ServerAddView(View, ResponseMixin):
-    template_name = "server_add.html"
-
-    def get(self, request):
-        return render(request, self.template_name)
-
-
 class ServerEditView(View, ResponseMixin):
     template_name = "server_edit.html"
 
@@ -490,3 +483,45 @@ class ServerSearchView(ListView):
                 ).order_by("-votes")
 
 
+class ServerAddView(LoginRequiredMixin, View):
+    template_name = "server_add.html"
+    context = {}
+
+    def get(self, request):
+        return render(request, self.template_name)
+
+    def post(self, request):
+        data = request.POST
+        server_id = data.get("id")
+        if int(server_id) <= 9223372036854775807:
+            if not Server.objects.filter(id=server_id).exists():
+                self.context["tags"] = TAGS
+                resp = discord_client.get_guild_info(server_id)
+                if resp.status_code == 404:
+                    self.context["error"] = "Server does not exists!"
+                if resp.status_code == 403:
+                    self.context["error"] = "Bot is not added to the server. Please invite our bot and try again."
+                elif resp.status_code == 200:
+                    resp = resp.json()
+                    server = Server.objects.create(id=server_id,
+                                                   name=resp.get("name"),
+                                                   owner=request.user.member,
+                                                   invite_link=data.get("invite"),
+                                                   date_added=datetime.now(timezone.utc),
+                                                   icon=resp.get("icon"),
+                                                   short_desc=data.get("short_desc"),
+                                                   long_desc=data.get("long_desc"))
+                    server.tags.set(ServerTag.objects.filter(name__in=data.getlist('tags')))
+                    request.user.member.send_message(
+                        "<:botadded:652482091971248140> Your server is added and is currently awaiting verification."
+                    )
+                    self.context["success"] = "Server added successfully!"
+                    self.context["member"] = request.user.member
+                    return render(request, "profile_page.html", self.context)
+                else:
+                    self.context["error"] = "Internal Server Error"
+            else:
+                self.context["error"] = "Server record Exists. Please add a new server."
+        else:
+            self.context["error"] = "Enter a valid Server Id"
+        return render(request, self.template_name, self.context)
