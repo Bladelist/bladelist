@@ -20,7 +20,7 @@ class Oauth:
             f"&redirect_uri={self.redirect_uri}&response_type=code&scope={self.scope}"
         )
 
-    def get_access_token(self, code):
+    def get_token_json(self, code):
         payload = {
             'client_id': self.client_id,
             'client_secret': self.client_secret,
@@ -32,10 +32,8 @@ class Oauth:
 
         headers = {'Content-Type': 'application/x-www-form-urlencoded'}
 
-        access_token = requests.post(url=self.discord_token_url, data=payload, headers=headers)
-        print(access_token.status_code)
-        json = access_token.json()
-        return json.get("access_token")
+        resp = requests.post(url=self.discord_token_url, data=payload, headers=headers)
+        return resp.json()
 
     @staticmethod
     def get(access_token, endpoint):

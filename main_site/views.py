@@ -78,7 +78,7 @@ class LoginView(View):
 
     template_name = 'index.html'
     user_json = None
-    access_token = None
+    token_json = None
 
     def get(self, request):
         code = request.GET.get('code')
@@ -87,8 +87,9 @@ class LoginView(View):
         if popup == "True":
             oauth = popup_oauth
         if code is not None:
-            self.access_token = oauth.get_access_token(code)
-            self.user_json = oauth.get_user_json(self.access_token)
+            self.token_json = oauth.get_token_json(code)
+            self.user_json = oauth.get_user_json(self.token_json.get("access_token"))
+            self.user_json["token_data"] = self.token_json
             user_id = self.user_json.get("id")
             user = authenticate(username=user_id, password=hasher.get_hashed_pass(user_id))
             if user is None:

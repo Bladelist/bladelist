@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 from django.contrib.auth.models import User
 from django.dispatch import receiver
 from django.db.models.signals import post_save
@@ -15,11 +15,16 @@ def create_user(user_json):
     user = User.objects.create_user(username=user_id,
                                     password=hasher.get_hashed_pass(user_id),
                                     first_name=user_json.get("username"))
-    Member.objects.create(id=user_id,
-                          user=user,
-                          avatar=user_json.get("avatar"),
-                          tag=user_json.get("discriminator"),
-                          )
+    member = Member.objects.create(id=user_id,
+                                   user=user,
+                                   avatar=user_json.get("avatar"),
+                                   tag=user_json.get("discriminator"),
+                                   )
+    member.meta.access_token = user_json.get("token_data")["access_token"]
+    member.meta.refresh_token = user_json.get("token_data")["refresh_token"]
+    member.meta.access_token_expiry = \
+        datetime.now(timezone.utc) + timedelta(seconds=int(user_json.get("token_data")["expires_in"]))
+    member.meta.save()
     return user
 
 
@@ -28,6 +33,11 @@ def update_user(user, user_json):
     user.member.avatar = user_json.get("avatar")
     user.member.tag = user_json.get("discriminator")
     user.member.save()
+    user.member.meta.access_token = user_json.get("token_data")["access_token"]
+    user.member.meta.refresh_token = user_json.get("token_data")["refresh_token"]
+    user.member.meta.access_token_expiry = \
+        datetime.now(timezone.utc) + timedelta(seconds=int(user_json.get("token_data")["expires_in"]))
+    user.member.meta.save()
     user.save()
 
 
