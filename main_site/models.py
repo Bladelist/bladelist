@@ -1,4 +1,5 @@
 import uuid
+from datetime import datetime, timezone, timedelta
 from django.db import models
 from django.contrib.auth.models import User
 from utils.oauth import Oauth
@@ -52,6 +53,24 @@ class Member(models.Model):
     def api_token(self):
         return Token.objects.get(user=self.user)
 
+    def refresh_access_token(self):
+        token_json = oauth.refresh_access_token(self.meta.refresh_token)
+        self.meta.access_token = token_json.get("access_token")
+        self.meta.refresh_token = token_json.get("refresh_token")
+        self.meta.access_token_expiry = \
+            datetime.now(timezone.utc) + timedelta(seconds=int(token_json.get("expires_in")))
+        self.meta.save()
+
+    def refresh_admin_servers(self):
+        if self.meta.access_token_expiry > datetime.now(timezone.utc):
+            self.refresh_access_token()
+        admin_servers = [
+            guild for guild in oauth.get_guild_info_json(self.meta.access_token) if int(guild.get("permissions")) & 8
+            ]
+        self.meta.admin_servers = admin_servers
+        self.meta.save()
+        return admin_servers
+
 
 class MemberMeta(models.Model):
     member = models.OneToOneField(Member, on_delete=models.CASCADE, related_name="meta")
@@ -65,6 +84,7 @@ class MemberMeta(models.Model):
     access_token = models.CharField(max_length=32, null=True, blank=True)
     refresh_token = models.CharField(max_length=32, null=True, blank=True)
     access_token_expiry = models.DateTimeField(null=True, blank=True)
+    admin_servers = models.JSONField(null=True, blank=True)
 
 
 class BotTag(models.Model):

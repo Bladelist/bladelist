@@ -39,6 +39,11 @@ def discord_login_view(request):
     return redirect(popup_oauth.discord_login_url)
 
 
+def server_refresh(request):
+    admin_guilds = [(guild.get("id"), guild.get("name")) for guild in request.user.member.refresh_admin_servers()]
+    return render(request, "refresh_pages/server_select.html", {"admin_guilds": admin_guilds})
+
+
 class BotView(View, ResponseMixin):
     template_name = "bot_page.html"
     model = Bot
@@ -489,7 +494,10 @@ class ServerAddView(LoginRequiredMixin, View):
     context = {}
 
     def get(self, request):
-        return render(request, self.template_name)
+        if not request.user.member.meta.admin_servers:
+            request.user.member.refresh_admin_servers()
+        admin_guilds = [(guild.get("id"), guild.get("name")) for guild in request.user.member.meta.admin_servers]
+        return render(request, self.template_name, {"admin_guilds": admin_guilds})
 
     def post(self, request):
         data = request.POST

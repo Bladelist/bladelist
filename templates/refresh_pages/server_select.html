@@ -1,0 +1,9 @@
+<select class="form-select form-select-lg bg-customdark text-white" name="serverID" id="server_id">
+<option disabled="disabled" selected>Select one server.</option>
+{% for id, name in admin_guilds %}
+<option value="{{ id }}">{{ name }}</option>
+{% endfor %}
+</select>
+<div class="input-group-prepend ml-3">
+    &nbsp&nbsp&nbsp&nbsp<button class="btn-lg btn-info" id="refreshAdminServers"  type="button"><i class="fas fa-sync-alt"></i> Sync</button>
+</div>
