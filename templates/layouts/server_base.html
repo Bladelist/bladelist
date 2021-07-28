@@ -180,4 +180,19 @@
         <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="{% static 'js/script.js' %}"></script>
+        {% if error %}
+            <script>
+                notyf.error("{{error}}");
+            </script>
+        {% endif %}
+        {% if success %}
+            <script>
+                notyf.success("{{success}}");
+            </script>
+        {% endif %}
+
+        {% if banned %}
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+        <script>swal("You are banned!", "Contact administrator if this was a mistake", "error");</script>
+        {% endif %}
 </html>

@@ -71,6 +71,11 @@ class Member(models.Model):
         self.meta.save()
         return admin_servers
 
+    def get_admin_server_data(self, server_id):
+        for server in self.meta.admin_servers:
+            if server.get("id") == server_id:
+                return server
+
 
 class MemberMeta(models.Model):
     member = models.OneToOneField(Member, on_delete=models.CASCADE, related_name="meta")
@@ -194,9 +199,9 @@ class Server(models.Model):
     icon = models.CharField(max_length=100, null=True)
     short_desc = models.CharField(max_length=120, null=True)
     long_desc = models.TextField(null=True, blank=True)
-    tags = models.ManyToManyField(ServerTag, related_name="bots", blank=True)
+    tags = models.ManyToManyField(ServerTag, related_name="attached_servers", blank=True)
     banner_url = models.URLField(default="https://i.postimg.cc/15TN17rQ/xirprofilback.jpg")
-    admins = models.ForeignKey(Member, related_name="admin_servers", on_delete=models.CASCADE)
+    admins = models.ForeignKey(Member, related_name="admin_servers",null=True, on_delete=models.SET_NULL)
 
 
 class ServerVote(models.Model):

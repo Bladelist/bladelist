@@ -18,16 +18,31 @@
                     </div>
                   </div>
 
+                <div class="form-group bg-dark rounded p-2 m-3">
+                 <h3>Select your Server <a class="text-decoration-none text-danger">*</a></h3>
+                <select class="form-select form-select bg-customdark text-white" name="server_tags" id="server_tags" required multiple>
+                    <option disabled selected>Select tags</option>
+                    {% for tag in tags %}
+                        <option value="{{ tag.name }}">{{ tag.name }}</option>
+                    {% endfor %}
+                </select>
+                </div>
+
                   <div class="form-group bg-dark rounded p-2 m-3">
                     <h3>Short description of your server <a class="text-decoration-none text-danger">*</a></h3>
-                        <input type="text" class="form-control bg-customdark text-white" name="short_desc" id="shortDesc" aria-describedby="helpId" placeholder="300 characters max">
+                        <input type="text" class="form-control bg-customdark text-white" name="short_desc" id="shortDesc" aria-describedby="helpId" placeholder="300 characters max" required>
+                  </div>
+
+                  <div class="form-group bg-dark rounded p-2 m-3">
+                    <h3>Server Invite Link <a class="text-decoration-none text-danger">*</a></h3>
+                        <input type="text" class="form-control bg-customdark text-white" name="invite" id="server_invite" aria-describedby="helpId" placeholder="https://discord.gg/bbl" required>
                   </div>
 
                   <div class="form-group bg-dark rounded p-2 m-3">
                     <h3>Long description of your server <a class="text-decoration-none text-danger">*</a></h3>
                     <p class="text-danger">Markdown, HTML and CSS are supported.</p>
                     <div onkeyup="monacoToField();" id="longDescEditor" class="editorBackdrop"></div>
-                    <textarea id="longDesc" name="long_desc" hidden style="display: none;"></textarea>
+                    <textarea id="longDesc" name="long_desc" hidden style="display: none;" required></textarea>
                     <p><span id="BotLongDescCounter"></span></p>
                   </div>
 
@@ -52,7 +67,7 @@
 <script>
 
 
-  require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs' } });
+require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs' } });
 
 require(['vs/editor/editor.main'], function () {
  window.editor = monaco.editor.create(document.getElementById("longDescEditor"),{

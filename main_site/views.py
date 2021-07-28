@@ -18,7 +18,8 @@ popup_oauth = Oauth()
 normal_oauth = Oauth(redirect_uri=settings.AUTH_HANDLER_URL)
 hasher = Hasher()
 discord_client = DiscordAPIClient()
-TAGS = BotTag.objects.all()
+BOT_TAGS = BotTag.objects.all()
+SERVER_TAGS = ServerTag.objects.all()
 RANDOM_BOTS = Bot.objects.filter(verified=True, banned=False, owner__banned=False).order_by("id").distinct()[:8]
 
 
@@ -40,7 +41,10 @@ def discord_login_view(request):
 
 
 def server_refresh(request):
-    admin_guilds = [(guild.get("id"), guild.get("name")) for guild in request.user.member.refresh_admin_servers()]
+    admin_guilds = [
+        (guild.get("id"), guild.get("name")) for guild in request.user.member.refresh_admin_servers()
+        if not Server.objects.filter(id=guild.get("id")).exists()
+    ]
     return render(request, "refresh_pages/server_select.html", {"admin_guilds": admin_guilds})
 
 
@@ -187,7 +191,7 @@ class BotAddView(LoginRequiredMixin, View):
         bot_id = data.get("id")
         if int(bot_id) <= 9223372036854775807:
             if not Bot.objects.filter(id=bot_id).exists():
-                self.context["tags"] = TAGS
+                self.context["tags"] = BOT_TAGS
                 resp = discord_client.get_bot_info(bot_id)
                 if resp.status_code == 404:
                     self.context["error"] = "Bot account does not exists!"
@@ -233,7 +237,7 @@ class BotEditView(LoginRequiredMixin, View, ResponseMixin):
 
     def get(self, request, bot_id):
         bot = Bot.objects.get(id=bot_id)
-        return render(request, self.template_name, {"bot": bot, "tags": TAGS})
+        return render(request, self.template_name, {"bot": bot, "tags": BOT_TAGS})
 
     def post(self, request):
         data = request.POST
@@ -257,7 +261,7 @@ class BotEditView(LoginRequiredMixin, View, ResponseMixin):
                 bot.meta.long_desc = data.get("long_desc")
                 bot.meta.save()
                 return render(request, self.template_name,
-                              {"bot": bot, "tags": TAGS, "success": "Bot edited successfully!"})
+                              {"bot": bot, "tags": BOT_TAGS, "success": "Bot edited successfully!"})
         else:
             return ProfileView.as_view(self.request, {"error": "Internal Server error"})
 
@@ -496,41 +500,30 @@ class ServerAddView(LoginRequiredMixin, View):
     def get(self, request):
         if not request.user.member.meta.admin_servers:
             request.user.member.refresh_admin_servers()
-        admin_guilds = [(guild.get("id"), guild.get("name")) for guild in request.user.member.meta.admin_servers]
-        return render(request, self.template_name, {"admin_guilds": admin_guilds})
+        admin_guilds = [
+            (guild.get("id"), guild.get("name")) for guild in request.user.member.meta.admin_servers
+            if not Server.objects.filter(id=guild.get("id")).exists()
+        ]
+        return render(request, self.template_name, {"admin_guilds": admin_guilds, "tags": SERVER_TAGS})
 
     def post(self, request):
         data = request.POST
-        server_id = data.get("id")
-        if int(server_id) <= 9223372036854775807:
-            if not Server.objects.filter(id=server_id).exists():
-                self.context["tags"] = TAGS
-                resp = discord_client.get_guild_info(server_id)
-                if resp.status_code == 404:
-                    self.context["error"] = "Server does not exists!"
-                if resp.status_code == 403:
-                    self.context["error"] = "Bot is not added to the server. Please invite our bot and try again."
-                elif resp.status_code == 200:
-                    resp = resp.json()
-                    server = Server.objects.create(id=server_id,
-                                                   name=resp.get("name"),
-                                                   owner=request.user.member,
-                                                   invite_link=data.get("invite"),
-                                                   date_added=datetime.now(timezone.utc),
-                                                   icon=resp.get("icon"),
-                                                   short_desc=data.get("short_desc"),
-                                                   long_desc=data.get("long_desc"))
-                    server.tags.set(ServerTag.objects.filter(name__in=data.getlist('tags')))
-                    request.user.member.send_message(
-                        "<:botadded:652482091971248140> Your server is added and is currently awaiting verification."
-                    )
-                    self.context["success"] = "Server added successfully!"
-                    self.context["member"] = request.user.member
-                    return render(request, "profile_page.html", self.context)
-                else:
-                    self.context["error"] = "Internal Server Error"
-            else:
-                self.context["error"] = "Server record Exists. Please add a new server."
-        else:
-            self.context["error"] = "Enter a valid Server Id"
-        return render(request, self.template_name, self.context)
+        server_id = data.get("server_id")
+        server_data = request.user.member.get_admin_server_data(server_id)
+        server = Server.objects.create(id=server_id,
+                                       name=server_data.get("name"),
+                                       owner=request.user.member,
+                                       invite_link=data.get("invite"),
+                                       date_added=datetime.now(timezone.utc),
+                                       icon=server_data.get("icon"),
+                                       short_desc=data.get("short_desc"),
+                                       long_desc=data.get("long_desc"),
+                                       is_nsfw=data.get('nsfw') == 'checkedValue'
+                                       )
+        server.tags.set(ServerTag.objects.filter(name__in=data.getlist('server_tags')))
+        request.user.member.send_message(
+            "<:botadded:652482091971248140> Your server is added and is currently awaiting verification."
+        )
+        self.context["success"] = "Server added successfully!"
+        self.context["member"] = request.user.member
+        return render(request, "profile_page.html", self.context)

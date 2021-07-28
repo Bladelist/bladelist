@@ -34,7 +34,7 @@
         {% if request.user.member == member %}
         <div class=ManageButtons>
             <a href="{% url 'edit_profile' %}"><button class="btn btn-primary"><i class="fas fa-user-edit"></i> Edit</button></a>
-            <a href={% url 'add' %}><button class="btn btn-success"><i class="fas fa-plus"></i> New Bot</button></a>
+            <a href={% url 'bot_add' %}><button class="btn btn-success"><i class="fas fa-plus"></i> New Bot</button></a>
             <a href="{% url 'logout' %}"><button class="btn btn-danger"><i class="fas fa-sign-out-alt"></i> Logout</button></a>
         </div>
         {% endif %}

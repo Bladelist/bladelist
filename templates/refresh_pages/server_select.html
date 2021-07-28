@@ -1,5 +1,5 @@
-<select class="form-select form-select-lg bg-customdark text-white" name="serverID" id="server_id">
-<option disabled="disabled" selected>Select one server.</option>
+<select class="form-select form-select-lg bg-customdark text-white" name="server_id" id="server_id" required>
+<option disabled selected>Select one server</option>
 {% for id, name in admin_guilds %}
 <option value="{{ id }}">{{ name }}</option>
 {% endfor %}
