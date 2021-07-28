@@ -201,7 +201,11 @@ class Server(models.Model):
     long_desc = models.TextField(null=True, blank=True)
     tags = models.ManyToManyField(ServerTag, related_name="attached_servers", blank=True)
     banner_url = models.URLField(default="https://i.postimg.cc/15TN17rQ/xirprofilback.jpg")
-    admins = models.ForeignKey(Member, related_name="admin_servers",null=True, on_delete=models.SET_NULL)
+    admins = models.ForeignKey(Member, related_name="admin_servers", null=True, on_delete=models.SET_NULL)
+
+    @property
+    def icon_url(self):
+        return f"https://cdn.discordapp.com/icons/{self.id}/{self.icon}.png"
 
 
 class ServerVote(models.Model):

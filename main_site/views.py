@@ -441,11 +441,14 @@ class BotSearchView(ListView):
                 ).order_by("-votes")
 
 
-class ServerListView(View, ResponseMixin):
+class ServerListView(ListView, ResponseMixin):
     template_name = "server_list.html"
+    model = Server
+    paginate_by = 40
+    extra_context = {"search": True, "logo_off": True}
 
-    def get(self, request):
-        return render(request, self.template_name)
+    def get_queryset(self):
+        return self.model.objects.filter(verified=True, owner__banned=False).order_by('-votes')
 
 
 class ServerEditView(View, ResponseMixin):
