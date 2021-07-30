@@ -533,16 +533,15 @@ class ServerEditView(View, ResponseMixin):
         server = Server.objects.get(id=server_id)
         return render(request, self.template_name, {"server": server, "tags": SERVER_TAGS})
 
-    def post(self, request):
+    def post(self, request, server_id):
         data = request.POST
-        server_id = data.get("server_id")
         if server_id is not None:
             server = Server.objects.get(id=server_id)
             if request.user.member == server.owner or request.user.member in server.admins.all():
                 server.invite_link = data.get("invite")
                 server.short_desc = data.get("short_desc")
                 server.save()
-                server.tags.set(BotTag.objects.filter(name__in=data.getlist('tags')))
+                server.tags.set(ServerTag.objects.filter(name__in=data.getlist('server_tags')))
                 server.meta.long_desc = data.get("long_desc")
                 server.meta.save()
                 return render(request, self.template_name,
