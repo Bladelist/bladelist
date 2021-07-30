@@ -4,7 +4,7 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 from rest_framework.authtoken.models import Token
 
-from main_site.models import Member, Bot, BotMeta, MemberMeta
+from main_site.models import Member, Bot, BotMeta, MemberMeta, Server, ServerMeta
 from utils.hashing import Hasher
 
 hasher = Hasher()
@@ -45,6 +45,12 @@ def update_user(user, user_json):
 def create_bot_meta(sender, instance, created, **kwargs):
     if created:
         BotMeta.objects.create(bot=instance)
+
+
+@receiver(post_save, sender=Server)
+def create_server_meta(sender, instance, created, **kwargs):
+    if created:
+        ServerMeta.objects.create(server=instance)
 
 
 @receiver(post_save, sender=Member)

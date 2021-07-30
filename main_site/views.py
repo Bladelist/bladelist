@@ -546,6 +546,6 @@ class ServerEditView(View, ResponseMixin):
                 server.meta.long_desc = data.get("long_desc")
                 server.meta.save()
                 return render(request, self.template_name,
-                              {"bot": server, "tags": BOT_TAGS, "success": "Server edited successfully!"})
+                              {"server": server, "tags": SERVER_TAGS, "success": "Server edited successfully!"})
         else:
             return ProfileView.as_view(self.request, {"error": "Internal Server error"})

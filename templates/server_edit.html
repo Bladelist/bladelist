@@ -2,46 +2,64 @@
 {% load static %}
 
 {% block content %}
+      <input type="hidden" id="old_long_desc" value="{{ server.meta.long_desc }}">
 
       <div class="container text-white">
 
         <div class="bg-customdark m-5 rounded p-5">
 
-          <h1><i class="fa fa-server" aria-hidden="true"></i> Edit HelloWorld Community</h1>
+          <h1><i class="fa fa-server" aria-hidden="true"></i> New server</h1>
 
-          <form action="/api/editServer" method="POST">
+              <form method="post" action="{% url 'server_edit_view' server_id=server.id %}" id="serverEditForm">
+              {% csrf_token %}
+                <div class="form-group bg-dark rounded p-2 m-3">
+                 <h3>Select your server tags <a class="text-decoration-none text-danger">*</a></h3>
+                <select class="form-select form-select bg-customdark text-white" name="server_tags" id="server_tags" required multiple>
+                    {% for tag in tags %}
+                        <option value="{{ tag.name }}" {% if tag in server.tags.all %}selected{% endif %}>{{ tag.name }}</option>
+                    {% endfor %}
+                </select>
+                </div>
 
-          <div class="form-group bg-dark rounded p-2 m-3">
-            <h3>Short description of your server <a class="text-decoration-none text-danger">*</a></h3>
-            <input type="text" class="form-control bg-customdark text-white" value="OldValueHere" name="shortDesc" id="shortDesc" aria-describedby="helpId" placeholder="300 characters max">
-          </div>
+                  <div class="form-group bg-dark rounded p-2 m-3">
+                    <h3>Short description of your server <a class="text-decoration-none text-danger">*</a></h3>
+                        <input type="text" class="form-control bg-customdark text-white" name="short_desc" value="{{ server.short_desc }}" id="shortDesc" aria-describedby="helpId" placeholder="300 characters max" required>
+                  </div>
 
-          <div class="form-group bg-dark rounded p-2 m-3">
-            <h3>Long description of your server <a class="text-decoration-none text-danger">*</a></h3>
-            <p class="text-danger">Markdown, HTML and CSS are supported.</p>
-            <div onkeyup="monacoToField();" id="longDescEditor" class="editorBackdrop"></div>
-            <textarea id="longDesc" name="longDesc" hidden style="display: none;"></textarea>
-            <p><span id="BotLongDescCounter"></span></p>
-          </div>
+                  <div class="form-group bg-dark rounded p-2 m-3">
+                    <h3>Server Invite Link <a class="text-decoration-none text-danger">*</a></h3>
+                        <input type="text" class="form-control bg-customdark text-white" name="invite" id="server_invite" value="{{ server.invite_link }}" aria-describedby="helpId" placeholder="https://discord.gg/bbl" required>
+                  </div>
 
+                  <div class="form-group bg-dark rounded p-2 m-3">
+                    <h3>Long description of your server <a class="text-decoration-none text-danger">*</a></h3>
+                    <p class="text-danger">Markdown, HTML and CSS are supported.</p>
+                    <div onkeyup="monacoToField();" id="longDescEditor" class="editorBackdrop"></div>
+                    <textarea id="longDesc" name="long_desc" hidden style="display: none;" required></textarea>
+                    <p><span id="BotLongDescCounter"></span></p>
+                    <button class="btn-sm btn-warning ml-3" type="button" onclick="importValue();">Import old</button><br><br>
+                  </div>
 
+                  <div class="form-group bg-dark form-check-inline rounded p-2 m-3">
+                    <label class="fs-5"> Should server be marked as NSFW?</label>
+                    <input type="checkbox" name="nsfw" id="" value="checkedValue" class="custom-control-input form-check-input p-2 m-2" {% if server.is_nsfw %}checked{% endif %}>
+                  </div>
 
-          <div class="form-group bg-dark rounded p-2 m-3">
-            <div class="row">
-            <button type="submit" class="btn btn-success col m-5"><i class="fas fa-edit"></i> Edit</button>
-          </div>
-          </div>
-      </form>
+                  <div class="form-group bg-dark rounded p-2 m-3">
+                    <div class="row">
+                        <button type="submit" class="btn btn-success col m-5" form="serverEditForm"><i class="fas fa-edit" aria-hidden="true"></i> Edit</button>
+                    </div>
+                  </div>
+              </form>
+        </div>
     </div>
-
-</div>
 {% endblock content %}
 
 {% block script %}
 <script>
 
 
-  require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs' } });
+require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.20.0/min/vs' } });
 
 require(['vs/editor/editor.main'], function () {
  window.editor = monaco.editor.create(document.getElementById("longDescEditor"),{
@@ -80,6 +98,10 @@ require(['vs/editor/editor.main'], function () {
   document.getElementById("BotLongDescCounter").innerHTML = lng + '/15000';
 
 
+}
+function importValue(){
+let old_desc = document.getElementById("old_long_desc").value;
+window.editor.setValue(old_desc);
 }
 
 

@@ -19,9 +19,8 @@
                   </div>
 
                 <div class="form-group bg-dark rounded p-2 m-3">
-                 <h3>Select your Server <a class="text-decoration-none text-danger">*</a></h3>
+                 <h3>Select your server tags <a class="text-decoration-none text-danger">*</a></h3>
                 <select class="form-select form-select bg-customdark text-white" name="server_tags" id="server_tags" required multiple>
-                    <option disabled selected>Select tags</option>
                     {% for tag in tags %}
                         <option value="{{ tag.name }}">{{ tag.name }}</option>
                     {% endfor %}

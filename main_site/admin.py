@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import (
     Member, Bot, BotMeta, BotTag, MemberMeta, BotVote, BotReport,
-    Server, ServerVote, ServerTag, ServerReport
+    Server, ServerVote, ServerTag, ServerReport, ServerMeta
 )
 
 admin.site.register(Member)
@@ -15,3 +15,4 @@ admin.site.register(Server)
 admin.site.register(ServerTag)
 admin.site.register(ServerReport)
 admin.site.register(ServerVote)
+admin.site.register(ServerMeta)

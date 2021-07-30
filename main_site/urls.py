@@ -20,9 +20,9 @@ urlpatterns = [
     url(r'^bots', BotListView.as_view(), name="bots"),
 
     url(r'^servers/(?P<server_id>[0-9]{18})/edit/', ServerEditView.as_view(), name="server_edit_view"),
+    # url(r'^servers/add/', ServerEditView.as_view(), name="server_add"),
     url(r'^servers/(?P<server_id>[0-9]{18})', ServerView.as_view(), name="server_single"),
     url(r'^servers/search/', ServerSearchView.as_view(), name="server_search"),
-    url(r'^servers/edit/', ServerEditView.as_view(), name="server_edit"),
     url(r'^servers/add/', ServerAddView.as_view(), name="server_add"),
     url(r'^servers/refresh/', server_refresh, name="server_refresh"),
     url(r'^servers', ServerListView.as_view(), name="servers"),
