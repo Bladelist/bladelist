@@ -451,13 +451,6 @@ class ServerListView(ListView, ResponseMixin):
         return self.model.objects.filter(verified=True, owner__banned=False).order_by('-votes')
 
 
-class ServerEditView(View, ResponseMixin):
-    template_name = "server_edit.html"
-
-    def get(self, request):
-        return render(request, self.template_name)
-
-
 class ServerView(View, ResponseMixin):
     template_name = "server_page.html"
     model = Server
@@ -520,13 +513,39 @@ class ServerAddView(LoginRequiredMixin, View):
                                        date_added=datetime.now(timezone.utc),
                                        icon=server_data.get("icon"),
                                        short_desc=data.get("short_desc"),
-                                       long_desc=data.get("long_desc"),
                                        is_nsfw=data.get('nsfw') == 'checkedValue'
                                        )
         server.tags.set(ServerTag.objects.filter(name__in=data.getlist('server_tags')))
+        server.meta.long_desc = data.get("long_desc")
+        server.meta.save()
         request.user.member.send_message(
             "<:botadded:652482091971248140> Your server is added and is currently awaiting verification."
         )
         self.context["success"] = "Server added successfully!"
         self.context["member"] = request.user.member
         return render(request, "profile_page.html", self.context)
+
+
+class ServerEditView(View, ResponseMixin):
+    template_name = "server_edit.html"
+
+    def get(self, request, server_id):
+        server = Server.objects.get(id=server_id)
+        return render(request, self.template_name, {"server": server, "tags": SERVER_TAGS})
+
+    def post(self, request):
+        data = request.POST
+        server_id = data.get("server_id")
+        if server_id is not None:
+            server = Server.objects.get(id=server_id)
+            if request.user.member == server.owner or request.user.member in server.admins.all():
+                server.invite_link = data.get("invite")
+                server.short_desc = data.get("short_desc")
+                server.save()
+                server.tags.set(BotTag.objects.filter(name__in=data.getlist('tags')))
+                server.meta.long_desc = data.get("long_desc")
+                server.meta.save()
+                return render(request, self.template_name,
+                              {"bot": server, "tags": BOT_TAGS, "success": "Server edited successfully!"})
+        else:
+            return ProfileView.as_view(self.request, {"error": "Internal Server error"})

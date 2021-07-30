@@ -194,11 +194,9 @@ class Server(models.Model):
     verified = models.BooleanField(default=False)
     date_added = models.DateTimeField()
     is_nsfw = models.BooleanField(default=False)
-    member_count = models.IntegerField(default=0, null=True)
     members_online = models.IntegerField(default=0, null=True)
     icon = models.CharField(max_length=100, null=True)
     short_desc = models.CharField(max_length=120, null=True)
-    long_desc = models.TextField(null=True, blank=True)
     tags = models.ManyToManyField(ServerTag, related_name="attached_servers", blank=True)
     banner_url = models.URLField(default="https://i.postimg.cc/15TN17rQ/xirprofilback.jpg")
     banned = models.BooleanField(default=False)
@@ -211,7 +209,9 @@ class Server(models.Model):
 
 class ServerMeta(models.Model):
     server = models.OneToOneField(Server, on_delete=models.CASCADE, related_name="meta")
+    long_desc = models.TextField(null=True, blank=True)
     ban_reason = models.TextField(null=True, blank=True)
+    member_count = models.IntegerField(default=0, null=True)
     moderator = models.ForeignKey(Member, on_delete=models.SET_NULL, null=True, blank=True)
 
 
