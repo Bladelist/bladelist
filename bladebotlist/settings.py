@@ -6,7 +6,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # reading .env file
 env = environ.Env(
-DEBUG=(bool, False)
+    DEBUG=(bool, False)
 )
 
 env_path = environ.Path(__file__) - 2
@@ -112,17 +112,14 @@ AUTH_PASSWORD_VALIDATORS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
-
         'rest_framework.permissions.IsAuthenticated',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
-
         'rest_framework.authentication.TokenAuthentication',
     ),
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
     )
-
 }
 
 # Internationalization
@@ -138,7 +135,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
@@ -150,8 +146,6 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-
 OAUTH_CLIENT_ID = env('OAUTH_CLIENT_ID')
 OAUTH_CLIENT_SECRET = env('OAUTH_CLIENT_SECRET')
 ENCRYPTION_SALT = env('ENCRYPTION_SALT')

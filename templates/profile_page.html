@@ -54,7 +54,7 @@
     <div class=row>
       {% if request.user.member == member %}
       {% for bot in member.bots.all %}
-        <div class="col-xs-6 col-md-3">
+        <div class="col-xs-6 col-md-3 d-flex align-items-stretch">
             <div class="card center hoverable"><img class="banner lazyload" height="75px" width="100%" src="{{ bot.banner_url }}">
                 <img class="roundpic lazyload cardavatar {% if bot.online %}presence-online{% else %}presence-offline{% endif %} avatarbroadcasting" width=128 height=128 src="{{ bot.avatar_url }}">
                 <h2><a class="poponHover" data-toggle="popover" title="Certified Bot" data-trigger="hover" data-content="mod">{{ bot.name }}</a></h2>
@@ -81,7 +81,7 @@
       {% endfor %}
       {% else %}
       {% for bot in member.verified_bots %}
-        <div class="col-xs-6 col-md-3">
+        <div class="col-xs-6 col-md-3 d-flex align-items-stretch">
             <div class="card center hoverable"><img class="banner lazyload" height="75px" width="100%" src="{{ bot.banner_url }}">
                 <img class="roundpic lazyload cardavatar {% if bot.online %}presence-online{% else %}presence-offline{% endif %} avatarbroadcasting" width=128 height=128 src="{{ bot.avatar_url }}">
                 <h2><a class="poponHover" data-toggle="popover" title="Certified Bot" data-trigger="hover" data-content="mod">{{ bot.name }}</a></h2>
