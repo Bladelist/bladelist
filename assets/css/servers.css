@@ -79,6 +79,13 @@ body {
 .text-decoration-none a{
     text-decoration: none !important;
 }
+.pagination {
+  background-color: transparent;
+  margin: auto;
+}
+.pagination a {
+ margin: auto;
+}
   .bblsearchbar {
     display:inline-block;
     background-color: #000000 !important;

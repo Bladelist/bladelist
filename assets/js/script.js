@@ -224,7 +224,7 @@ $(document).on('click', '.deleteServerBtn', function(e){
     });
 })
 
-$(document).on('click', '.reapplyBtn', function(e){
+$(document).on('click', '.reapplyBotBtn', function(e){
     let bot_id = $(this).attr("bot_id")
     $.ajax({
         url: `/bots/${bot_id}`,
@@ -245,6 +245,39 @@ $(document).on('click', '.reapplyBtn', function(e){
                     break;
                 case 404:
                     notyf.error("Bot object not found!");
+                    break;
+                case 503:
+                    notyf.error("You have already reapplied for verification");
+                    break;
+                default:
+                    notyf.error("Something went wrong.");
+            }
+        },
+    });
+})
+
+
+$(document).on('click', '.reapplyServerBtn', function(e){
+    let server_id = $(this).attr("server_id")
+    $.ajax({
+        url: `/servers/${server_id}`,
+        headers: {'X-CSRFToken': csrftoken},
+        type: 'PUT',
+        data: {server_id: server_id},
+        success:function (data)
+        {
+          notyf.success("Successfully reapplied for review");
+        },
+        error:function (response) {
+            switch (response.status) {
+                case 401:
+                    notyf.error("You need to be logged in to reapply");
+                    break;
+                case 403:
+                    notyf.error("This server is banned and cannot apply for verification");
+                    break;
+                case 404:
+                    notyf.error("Server object not found!");
                     break;
                 case 503:
                     notyf.error("You have already reapplied for verification");
