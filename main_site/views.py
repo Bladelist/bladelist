@@ -507,10 +507,10 @@ class ServerAddView(LoginRequiredMixin, View):
     template_name = "server_add.html"
     context = {"search_off": True, "logo_off": True}
 
-
     def get(self, request):
         if not request.user.member.meta.admin_servers:
-            request.user.member.refresh_admin_servers()
+            if not request.user.member.refresh_admin_servers():
+                logout(request.user)
         admin_guilds = [
             (guild.get("id"), guild.get("name")) for guild in request.user.member.meta.admin_servers
             if not Server.objects.filter(id=guild.get("id")).exists()

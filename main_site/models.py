@@ -62,14 +62,17 @@ class Member(models.Model):
         self.meta.save()
 
     def refresh_admin_servers(self):
-        if self.meta.access_token_expiry > datetime.now(timezone.utc):
-            self.refresh_access_token()
-        admin_servers = [
-            guild for guild in oauth.get_guild_info_json(self.meta.access_token) if int(guild.get("permissions")) & 8
-            ]
-        self.meta.admin_servers = admin_servers
-        self.meta.save()
-        return admin_servers
+        if self.meta.access_token:
+            if self.meta.access_token_expiry > datetime.now(timezone.utc):
+                self.refresh_access_token()
+            admin_servers = [
+                guild for guild in oauth.get_guild_info_json(self.meta.access_token) if int(guild.get("permissions")) & 8
+                ]
+            self.meta.admin_servers = admin_servers
+            self.meta.save()
+            return admin_servers
+        else:
+            return
 
     def get_admin_server_data(self, server_id):
         for server in self.meta.admin_servers:
