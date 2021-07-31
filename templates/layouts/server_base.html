@@ -54,35 +54,42 @@
             </li>
         </ul>
           <ul class="nav navbar-nav navbar-right">
+              {% if request.user.is_authenticated %}
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="https://cdn.discordapp.com/embed/avatars/0.png" class="rounded-circle" width="32px" height="32px">
-                    User#0001
+                    <img src="{{ request.user.member.avatar_url }}" class="rounded-circle" width="32px" height="32px">
+                    {{ request.user.first_name }}#{{ request.user.member.tag }}
                   </a>
                   <ul class="dropdown-menu dropdown-menu-dark bg-customdark border border-white rounded m-3" aria-labelledby="navbarDropdown">
-                    <li><a class="dropdown-item p-4" href="#"><i aria-hidden="true" class="fas fa-user-circle"></i>&nbsp;Profile</a></li>
-                    <li><a class="dropdown-item p-4" href="#"><i aria-hidden="true" class="fas fa-plus"></i>&nbsp;New Bot</a></li>
-                    <li><a class="dropdown-item p-4" href="#"><i aria-hidden="true" class="fas fa-plus"></i>&nbsp;New Server</a></li>
+                    <li><a class="dropdown-item p-4" href="{% url 'profile' user_id=request.user.username %}"><i aria-hidden="true" class="fas fa-user-circle"></i>&nbsp;Profile</a></li>
+                    <li><a class="dropdown-item p-4" href="{% url 'bot_add' %}"><i aria-hidden="true" class="fas fa-plus"></i>&nbsp;New Bot</a></li>
+                    <li><a class="dropdown-item p-4" href="{% url 'server_add' %}"><i aria-hidden="true" class="fas fa-plus"></i>&nbsp;New Server</a></li>
+                    {% if request.user.is_staff %}
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item p-4" href="#"><i aria-hidden="true" class="fas fa-gavel"></i>&nbsp;Staff panel</a></li>
-                    <li><a class="dropdown-item p-4" href="#"><i aria-hidden="true" class="fas fa-cogs"></i>&nbsp;Admin panel</a></li>
+                    <li><a class="dropdown-item p-4" href="{% url 'staff_panel' %}"><i aria-hidden="true" class="fas fa-gavel"></i>&nbsp;Staff panel</a></li>
+{#                    <li><a class="dropdown-item p-4" href="{% url 'admin_panel' %}"><i aria-hidden="true" class="fas fa-cogs"></i>&nbsp;Admin panel</a></li>#}
                     <div class="dropdown-divider"></div>
-                    <li><a class="dropdown-item text-danger p-4" href="#"><i aria-hidden="true" class="fas fa-sign-in-alt"></i>&nbsp;Logout</a></li>
+                    {% endif %}
+                    <li><a class="dropdown-item text-danger p-4" href="{% url 'logout' %}"><i aria-hidden="true" class="fas fa-sign-in-alt"></i>&nbsp;Logout</a></li>
                   </ul>
                 </li>
-                <li class="nav-item active" href="/auth/login">
-                  <a class="nav-link" href="#"><i class="fas fa-sign-in-alt"></i> Login</a>
-                  </li>
+              {% else %}
+                <li class="nav-item active">
+                  <a class="nav-link" href="#!" onclick="popupCenter({url: '{% url "login" %}', title: 'Discord', w: 500, h: 750});"><i class="fas fa-sign-in-alt"></i> Login</a>
+                </li>
+              {% endif %}
             </ul>
         </div>
       </div>
     </div>
   </nav>
   <div class="bg-customdark text-white text-center p-5">
-    <img src="https://bladebotlist.xyz/img/logo.svg" class="logo rounded-circle" width="256" height="256">
+    {% if not logo_off %}
+    <img src="https://bladebotlist.xyz/img/logo.svg" class="logo rounded-circle" width="256" height="256">{% endif %}
+    {% if not search_off %}
     <h1 class="brand-title">BladeList</h1>
     <h5>Need to fill your server list? Search in <a class="text-primary text-decoration-none">400+</a> Discord servers!</h5>
-    <form action="/search" method="GET">
+    <form action="{% url 'server_search' %}" method="GET">
           <div>
             <div class="beforeicon">
             <i class="fas fa-search"></i>
@@ -90,7 +97,8 @@
             <input autocomplete="off" name="q" id="searchbox" type="text" value="" class="bblsearchbar" placeholder="Search a server" >
           </div>
     </form>
-      </div>
+  {% endif %}
+  </div>
       <div class="wave wave-top"></div>
   {% block content %} {% endblock content %}
 
@@ -116,19 +124,19 @@
         <h3>Important Links</h3>
           <ul class="list-unstyled">
             <li>
-              <a href="/" class="text-white text-decoration-none"><i class="fas fa-home"></i> Home</a>
+              <a href="{% url 'home' %}" class="text-white text-decoration-none"><i class="fas fa-home"></i> Home</a>
             </li>
             <li>
-              <a href="/" class="text-white text-decoration-none"><i class="fas fa-robot"></i> Browse bots</a>
+              <a href="{% url 'bots' %}" class="text-white text-decoration-none"><i class="fas fa-robot"></i> Browse bots</a>
             </li>
             <li>
-              <a href="/" class="text-white text-decoration-none"><i class="fas fa-server"></i> Browse servers</a>
+              <a href="{% url 'servers' %}" class="text-white text-decoration-none"><i class="fas fa-server"></i> Browse servers</a>
             </li>
+{#            <li>#}
+{#              <a href="{% url '' %}" class="text-white text-decoration-none"><i class="fas fa-certificate"></i> Certification</a>#}
+{#            </li>#}
             <li>
-              <a href="/" class="text-white text-decoration-none"><i class="fas fa-certificate"></i> Certification</a>
-            </li>
-            <li>
-              <a class="text-white text-decoration-none"><i class="fas fa-balance-scale-right"></i> <a class="text-decoration-none text-white" href="/terms">Terms</a> & <a class="text-decoration-none text-white" href="/privacy">Privacy</a></a>
+              <a class="text-white text-decoration-none"><i class="fas fa-balance-scale-right"></i> <a class="text-decoration-none text-white" href="{% url 'terms' %}">Terms</a> & <a class="text-decoration-none text-white" href="{% url 'privacy' %}">Privacy</a></a>
             </li>
           </ul>
       </div>
@@ -136,13 +144,13 @@
         <h3>Useful stuff</h3>
         <ul class="list-unstyled">
           <li>
-            <a href="/about" class="text-white text-decoration-none"><i class="fas fa-lightbulb"></i> About</a>
+            <a href="{% url 'about' %}" class="text-white text-decoration-none"><i class="fas fa-lightbulb"></i> About</a>
           </li>
           <li>
             <a href="https://discordjs.guide/" class="text-white text-decoration-none"><i class="fas fa-robot"></i> Create your own bot</a>
           </li>
           <li>
-            <a href="https://discord.com/developers/applications/me" class="text-white text-decoration-none"><i class="fab fa-discord"></i> Discord Developers portail</a>
+            <a href="https://discord.com/developers/applications/me" class="text-white text-decoration-none"><i class="fab fa-discord"></i> Discord Developers portal</a>
           </li>
         </ul>
       </div>
@@ -150,28 +158,31 @@
         <h3>Partners</h3>
         <ul class="list-unstyled">
           <li>
-            <a href="/about" class="text-white text-decoration-none">PornHub Community</a>
+            <a class="text-light" href="https://infinitybotlist.com">Infinity Bot List</a>
           </li>
         </ul>
       </div>
       <div class='col-xs-6 col-md-2'>
         <h3>Dashboard</h3>
         <ul class="list-unstyled">
+          {% if not request.user.is_authenticated %}
           <li>
-            <a href="/auth/login" class="text-white text-decoration-none"><i class="fas fa-sign-in-alt"></i> Login</a>
+            <a href="{% url 'login' %}" class="text-white text-decoration-none"><i class="fas fa-sign-in-alt"></i> Login</a>
+          </li>
+          {% else %}
+          <li>
+            <a href="{% url 'profile' user_id=request.user.username %}" class="text-white text-decoration-none"><i class="fas fa-user"></i> Profile</a>
           </li>
           <li>
-            <a href="/me" class="text-white text-decoration-none"><i class="fas fa-user"></i> Profile</a>
+            <a href="{% url 'bot_add' %}" class="text-white text-decoration-none"><i class="fas fa-plus "></i> New Bot</a>
           </li>
           <li>
-            <a href="/bots/new" class="text-white text-decoration-none"><i class="fas fa-plus "></i> New Bot</a>
+            <a href="{% url 'server_add' %}" class="text-white text-decoration-none"><i class="fas fa-plus "></i> New Server</a>
           </li>
           <li>
-            <a href="/servers/new" class="text-white text-decoration-none"><i class="fas fa-plus "></i> New Server</a>
+            <a href="{% url 'logout' %}" class="text-white text-decoration-none"><i class="fas fa-sign-out-alt"></i> Log out</a>
           </li>
-          <li>
-            <a href="/auth/logout" class="text-white text-decoration-none"><i class="fas fa-sign-out-alt"></i> Log out</a>
-          </li>
+          {% endif %}
         </ul>
       </div>
     </div>

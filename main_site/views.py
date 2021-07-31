@@ -428,16 +428,23 @@ class BotSearchView(ListView):
         query = self.request.GET.get("q")
         tag = self.request.GET.get("tag")
         if tag:
-            return Bot.objects.filter(tags__name__contains=tag).order_by("-votes")
+            return Bot.objects.filter(tags__name__contains=tag,
+                                      owner__banned=False,
+                                      verified=True,
+                                      banned=False
+                                      ).order_by("-votes")
         if query:
             if query.isdigit():
                 return Bot.objects.filter(
-                    id__exact=query
+                    id__exact=query,
+                    verified=True,
+                    banned=False,
+                    owner__banned=False
                 ).order_by("-votes")
             else:
                 return Bot.objects.filter(
                     Q(name__contains=query) | Q(tags__name__contains=query),
-                    banned=False, owner__banned=False
+                    banned=False, owner__banned=False, verified=True
                 ).order_by("-votes")
 
 
@@ -448,7 +455,7 @@ class ServerListView(ListView, ResponseMixin):
     extra_context = {"search": True, "logo_off": True}
 
     def get_queryset(self):
-        return self.model.objects.filter(verified=True, owner__banned=False).order_by('-votes')
+        return self.model.objects.filter(verified=True, owner__banned=False, banned=False).order_by('-votes')
 
 
 class ServerView(View, ResponseMixin):
@@ -476,22 +483,30 @@ class ServerSearchView(ListView):
         query = self.request.GET.get("q")
         tag = self.request.GET.get("tag")
         if tag:
-            return Server.objects.filter(tags__name__contains=tag).order_by("-votes")
+            return Server.objects.filter(tags__name__contains=tag,
+                                         verified=True,
+                                         banned=False,
+                                         owner__banned=False
+                                         ).order_by("-votes")
         if query:
             if query.isdigit():
                 return Server.objects.filter(
-                    id__exact=query
+                    id__exact=query,
+                    verified=True,
+                    banned=False,
+                    owner__banned=False
                 ).order_by("-votes")
             else:
                 return Server.objects.filter(
                     Q(name__contains=query) | Q(tags__name__contains=query),
-                    banned=False, owner__banned=False
+                    banned=False, owner__banned=False, verified=True
                 ).order_by("-votes")
 
 
 class ServerAddView(LoginRequiredMixin, View):
     template_name = "server_add.html"
-    context = {}
+    context = {"search_off": True, "logo_off": True}
+
 
     def get(self, request):
         if not request.user.member.meta.admin_servers:
@@ -500,51 +515,67 @@ class ServerAddView(LoginRequiredMixin, View):
             (guild.get("id"), guild.get("name")) for guild in request.user.member.meta.admin_servers
             if not Server.objects.filter(id=guild.get("id")).exists()
         ]
-        return render(request, self.template_name, {"admin_guilds": admin_guilds, "tags": SERVER_TAGS})
+        return render(request, self.template_name, {"admin_guilds": admin_guilds, "tags": SERVER_TAGS,
+                                                    "search_off": True, "logo_off": True})
 
     def post(self, request):
         data = request.POST
         server_id = data.get("server_id")
-        server_data = request.user.member.get_admin_server_data(server_id)
-        server = Server.objects.create(id=server_id,
-                                       name=server_data.get("name"),
-                                       owner=request.user.member,
-                                       invite_link=data.get("invite"),
-                                       date_added=datetime.now(timezone.utc),
-                                       icon=server_data.get("icon"),
-                                       short_desc=data.get("short_desc"),
-                                       is_nsfw=data.get('nsfw') == 'checkedValue'
-                                       )
-        server.tags.set(ServerTag.objects.filter(name__in=data.getlist('server_tags')))
-        server.meta.long_desc = data.get("long_desc")
-        server.meta.save()
-        request.user.member.send_message(
-            "<:botadded:652482091971248140> Your server is added and is currently awaiting verification."
-        )
-        self.context["success"] = "Server added successfully!"
-        self.context["member"] = request.user.member
-        return render(request, "profile_page.html", self.context)
+        if server_id is not None:
+            server = Server.objects.get(id=server_id)
+            if server:
+                server_data = request.user.member.get_admin_server_data(server_id)
+                server = Server.objects.create(id=server_id,
+                                               name=server_data.get("name"),
+                                               owner=request.user.member,
+                                               invite_link=data.get("invite"),
+                                               date_added=datetime.now(timezone.utc),
+                                               icon=server_data.get("icon"),
+                                               short_desc=data.get("short_desc"),
+                                               is_nsfw=data.get('nsfw') == 'checkedValue'
+                                               )
+                server.tags.set(ServerTag.objects.filter(name__in=data.getlist('server_tags')))
+                server.meta.long_desc = data.get("long_desc")
+                server.meta.save()
+                request.user.member.send_message(
+                    "<:botadded:652482091971248140> Your server is added and is currently awaiting verification."
+                )
+                self.context["success"] = "Server added successfully!"
+                self.context["member"] = request.user.member
+                return render(request, "profile_page.html", self.context)
+            else:
+                return ProfileView.as_view(self.request, {"error": "Server not found"})
+        else:
+            return ProfileView.as_view(self.request, {"error": "Internal Server error"})
 
 
 class ServerEditView(View, ResponseMixin):
     template_name = "server_edit.html"
+    context = {"search_off": True, "logo_off": True}
 
     def get(self, request, server_id):
         server = Server.objects.get(id=server_id)
-        return render(request, self.template_name, {"server": server, "tags": SERVER_TAGS})
+        self.context["server"] = server
+        self.context['tags'] = SERVER_TAGS
+        return render(request, self.template_name, self.context)
 
     def post(self, request, server_id):
         data = request.POST
         if server_id is not None:
             server = Server.objects.get(id=server_id)
-            if request.user.member == server.owner or request.user.member in server.admins.all():
-                server.invite_link = data.get("invite")
-                server.short_desc = data.get("short_desc")
-                server.save()
-                server.tags.set(ServerTag.objects.filter(name__in=data.getlist('server_tags')))
-                server.meta.long_desc = data.get("long_desc")
-                server.meta.save()
-                return render(request, self.template_name,
-                              {"server": server, "tags": SERVER_TAGS, "success": "Server edited successfully!"})
+            if server:
+                if request.user.member == server.owner or request.user.member in server.admins.all():
+                    server.invite_link = data.get("invite")
+                    server.short_desc = data.get("short_desc")
+                    server.save()
+                    server.tags.set(ServerTag.objects.filter(name__in=data.getlist('server_tags')))
+                    server.meta.long_desc = data.get("long_desc")
+                    server.meta.save()
+                    self.context["server"] = server
+                    self.context["tags"] = SERVER_TAGS
+                    self.context["success"] = "Server edited successfully!"
+                    return render(request, self.template_name, self.context)
+            else:
+                return ProfileView.as_view(self.request, {"error": "Server not found"})
         else:
             return ProfileView.as_view(self.request, {"error": "Internal Server error"})

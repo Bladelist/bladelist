@@ -71,7 +71,7 @@
 
     <div class="topnav">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-collapse">
-            <a class="navbar-brand" href="/"><img src="{% static 'img/logo.png' %}" alt="bbl's logo" class="roundpic" width="32px" height="32px"> BladeList</a>
+            <a class="navbar-brand" href="{% url 'home' %}"><img src="{% static 'img/logo.png' %}" alt="bbl's logo" class="roundpic" width="32px" height="32px"> BladeList</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -107,14 +107,14 @@
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a href="{% url 'profile' user_id=request.user.username %}"><button class="dropdown-item nav-item"><i aria-hidden="true" class="fas fa-user-circle"></i>&nbsp;Profile</button></a>
                             <a href="{% url 'bot_add' %}"><button class="dropdown-item nav-item"><i aria-hidden="true" class="fas fa-plus"></i>&nbsp;New Bot</button></a>
-                            <a href="{% url 'server_add' %}"><button class="dropdown-item nav-item"><i aria-hidden="true" class="fas fa-plus"></i>&nbsp;New Bot</button></a>
+                            <a href="{% url 'server_add' %}"><button class="dropdown-item nav-item"><i aria-hidden="true" class="fas fa-plus"></i>&nbsp;New Server</button></a>
                             {% if request.user.is_staff %}
                             <div class="dropdown-divider"></div>
-                            <a href="/staff"><button class="dropdown-item nav-item"><i aria-hidden="true" class="fas fa-gavel"></i>&nbsp;Staff panel</button></a>
-                            <a href="/admin"><button class="dropdown-item nav-item"><i aria-hidden="true" class="fas fa-cogs"></i>&nbsp;Stats</button></a>
+                            <a href="{% url 'staff_panel' %}"><button class="dropdown-item nav-item"><i aria-hidden="true" class="fas fa-gavel"></i>&nbsp;Staff panel</button></a>
+{#                            <a href="/admin"><button class="dropdown-item nav-item"><i aria-hidden="true" class="fas fa-cogs"></i>&nbsp;Stats</button></a>#}
                             {% endif %}
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="{% url 'logout' %}"><i aria-hidden="true" class="fas fa-sign-in-alt text-danger"></i>&nbsp;Logout</a>
+                            <a href="{% url 'logout' %}"><button class="dropdown-item nav-item"><i aria-hidden="true" class="fas fa-sign-in-alt text-danger"></i>&nbsp;Logout</button></a>
                         </div>
                     </li>
                     {% else %}
