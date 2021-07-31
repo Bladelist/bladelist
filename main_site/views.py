@@ -596,7 +596,7 @@ class ServerIndexView(View, ResponseMixin):
 class ServerListView(ListView, ResponseMixin):
     template_name = "server_list.html"
     model = Server
-    paginate_by = 40
+    paginate_by = 1
     extra_context = {"search": True, "logo_off": True}
 
     def get_queryset(self):
