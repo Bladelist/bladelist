@@ -257,17 +257,17 @@ $(document).on('click', '.reapplyBtn', function(e){
 })
 
 
-$(document).on('click', '.reviewBtn', function(e){
+$(document).on('click', '.botReviewBtn', function(e){
     e.preventDefault();
     let bot_id = $(this).attr("bot_id")
     $.ajax({
-        url: '/staff/',
+        url: '/staff/bots/',
         headers: {'X-CSRFToken': csrftoken},
         type: 'POST',
         data: {bot_id: bot_id},
         success:function (data)
         {
-          $('#verificationQueue').html(data)
+          $('#botVerificationQueue').html(data)
           notyf.success("Queued for review");
         },
         error:function (response) {
@@ -283,6 +283,40 @@ $(document).on('click', '.reviewBtn', function(e){
                     break;
                 case 503:
                     notyf.error("Bot is being reviewed by another moderator");
+                    break;
+                default:
+                    notyf.error("Something went wrong.");
+            }
+        },
+    });
+})
+
+$(document).on('click', '.serverReviewBtn', function(e){
+    e.preventDefault();
+    let server_id = $(this).attr("server_id")
+    $.ajax({
+        url: '/staff/servers/',
+        headers: {'X-CSRFToken': csrftoken},
+        type: 'POST',
+        data: {server_id: server_id},
+        success:function (data)
+        {
+          $('#serverVerificationQueue').html(data)
+          notyf.success("Queued for review");
+        },
+        error:function (response) {
+            switch (response.status) {
+                case 401:
+                    notyf.error("You need to be logged in to review");
+                    break;
+                case 403:
+                    notyf.error("You already have 1 server awaiting review.");
+                    break;
+                case 404:
+                    notyf.error("Server object not found!");
+                    break;
+                case 503:
+                    notyf.error("Server is being reviewed by another moderator");
                     break;
                 default:
                     notyf.error("Something went wrong.");
@@ -313,11 +347,11 @@ $(document).on('click', '#refreshAdminServers', function (e){
 
 $(document).ready(function (){
     $.ajaxSetup({
-        url: '/staff/',
+        url: '/staff/bots/',
         headers: {'X-CSRFToken': csrftoken},
         type : 'PUT',
         success: function (data) {
-            $('#verificationQueue').html(data)
+            $('#botVerificationQueue').html(data)
             notyf.success("Action completed successfully!")
         },
         error: function (response) {
@@ -353,4 +387,50 @@ $(document).ready(function (){
             let reason = $('#banBotReason').val()
             $.ajax({data: {action: "ban", bot_id: bot_id, ban_reason: reason}});
     });
+});
+
+
+$(document).ready(function (){
+    $.ajaxSetup({
+        url: '/staff/servers/',
+        headers: {'X-CSRFToken': csrftoken},
+        type : 'PUT',
+        success: function (data) {
+            $('#serverVerificationQueue').html(data)
+            notyf.success("Action completed successfully!")
+        },
+        error: function (response) {
+            switch (response.status) {
+                case 401:
+                    notyf.error("You need to be logged in to review");
+                    break;
+                case 404:
+                    notyf.error("Server object not found!");
+                    break;
+                case 503:
+                    notyf.error("Server is being reviewed by another moderator");
+                    break;
+                default:
+                    notyf.error("Something went wrong.");
+            }
+        }
+    });
+
+    $('.verifyServerBtn').on('click',function() {
+            let server_id = $('#verifyServerId').val()
+            $.ajax({data: {action: "verify", server_id: server_id}});
+    });
+
+    $('.rejectServerBtn').on('click',function() {
+            let server_id = $('#rejectServerId').val()
+            let reason = $('#rejectServerReason').val()
+            $.ajax({data: {action: "reject", server_id: server_id, rejection_reason: reason}});
+    });
+
+    $('.banServerBtn').on('click',function() {
+            let server_id = $('#banServerId').val()
+            let reason = $('#banServerReason').val()
+            $.ajax({data: {action: "ban", server_id: server_id, ban_reason: reason}});
+    });
+
 });
