@@ -462,6 +462,35 @@ class ServerIndexView(View, ResponseMixin):
                        "recent_servers": recent_servers,
                        "trending_servers": trending_servers})
 
+    def put(self, request):
+        data = QueryDict(request.body)
+        if request.user.is_authenticated:
+            server = Server.objects.get(id=data.get("server_id"))
+            vote = ServerVote.objects.filter(member=request.user.member, server=server).order_by("-creation_time").first()
+            if vote is None:
+                ServerVote.objects.create(
+                    member=request.user.member,
+                    server=server,
+                    creation_time=datetime.now(timezone.utc)
+                )
+                server.votes += 1
+                server.save()
+                return JsonResponse({"vote_count": server.votes})
+            elif (datetime.now(timezone.utc) - vote.creation_time).total_seconds() >= 43200:
+                vote.delete()
+                ServerVote.objects.create(
+                    member=request.user.member,
+                    server=server,
+                    creation_time=datetime.now(timezone.utc)
+                )
+                server.votes += 1
+                server.save()
+                return JsonResponse({"vote_count": server.votes})
+            else:
+                return self.json_response_403()
+        else:
+            return self.json_response_401()
+
 
 class ServerListView(ListView, ResponseMixin):
     template_name = "server_list.html"
@@ -589,3 +618,32 @@ class ServerEditView(View, ResponseMixin):
                 return ProfileView.as_view(self.request, {"error": "Server not found"})
         else:
             return ProfileView.as_view(self.request, {"error": "Internal Server error"})
+
+    def put(self, request):
+        if request.user.is_authenticated:
+            data = QueryDict(request.body)
+            server_id = data.get("server_id")
+            if ServerReport.objects.filter(
+                    server_id=server_id, reporter=self.request.user.member, reviewed=False
+            ).exists():
+                return self.json_response_403()
+            ServerReport.objects.create(
+                server_id=server_id,
+                reporter=request.user.member,
+                reason=data.get("reason"),
+                creation_date=datetime.now(timezone.utc)
+            )
+            return self.json_response_200()
+        return self.json_response_401()
+
+    def delete(self, request):
+        if request.user.is_authenticated:
+            server_id = request.GET.get("server_id")
+            try:
+                server = Server.objects.get(id=server_id)
+                if server.owner == request.user.member or request.user.member in server.admins.all():
+                    server.delete()
+                    return self.json_response_200()
+            except Server.DoesNotExist:
+                return self.json_response_404()
+        return self.json_response_401()
