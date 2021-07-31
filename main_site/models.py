@@ -219,12 +219,18 @@ class Server(models.Model):
     def icon_url(self):
         return f"https://cdn.discordapp.com/icons/{self.id}/{self.icon}.png"
 
+    @property
+    def verification_attempt(self):
+        return self.meta.rejection_count + 1
+
 
 class ServerMeta(models.Model):
     server = models.OneToOneField(Server, on_delete=models.CASCADE, related_name="meta")
     long_desc = models.TextField(null=True, blank=True)
     ban_reason = models.TextField(null=True, blank=True)
     member_count = models.IntegerField(default=0, null=True)
+    rejection_count = models.IntegerField(default=0)
+    rejection_reason = models.TextField(null=True, blank=True)
     moderator = models.ForeignKey(Member, on_delete=models.SET_NULL, null=True, blank=True)
 
 
