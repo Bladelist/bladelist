@@ -88,23 +88,22 @@
                     <p class=mb-10>{{ server.short_desc }}</p>
                     <div class="botButtons">
                         {% if not server.banned %}
-                            <a href="#!"><button class="btn btn-success voteServerBtn" server_id="{{ server.id }}"><i class="fas fa-chevron-up"></i> Vote</button></a>
-                            <a href="#!"><button class="btn btn-danger" {% if not request.user.is_authenticated %}disabled data-toggle="tooltip" data-placement="bottom" title="Login to report"{% else %}data-toggle="modal" data-target="#reportServerModalCenter" {% endif %}><i class="far fa-flag"></i> Report</button></a>
+                            <a href="#!"><button class="btn btn-success voteServerBtn m-1" server_id="{{ server.id }}"><i class="fas fa-chevron-up"></i> Vote</button></a>
+                            <a href="#!"><button class="btn btn-danger m-1" {% if not request.user.is_authenticated %}disabled data-toggle="tooltip" data-placement="bottom" title="Login to report"{% else %}data-toggle="modal" data-target="#reportServerModalCenter" {% endif %}><i class="far fa-flag"></i> Report</button></a>
                             <a href="{{ server.invite_url }}"><button class="btn btn-warning"><i class="fas fa-plus"></i> Join</button></a>
                         {% endif %}
-                            <br><br>
                             {% if request.user.is_staff  %}
-                                <a href="#!"><button class="btn-sm btn-danger" data-toggle="modal" data-target="#banServerModalCenter" onclick="setServerId('banServerId', '{{ server.id }}');"><i class="fas fa-ban"></i> Ban</button></a>
+                                <a href="#!"><button class="btn btn-danger m-1" data-toggle="modal" data-target="#banServerModalCenter" onclick="setServerId('banServerId', '{{ server.id }}');"><i class="fas fa-ban"></i> Ban</button></a>
                                 {% if not server.verified %}
-                                    <a href="#!"><button class="btn-sm btn-warning" data-toggle="modal" data-target="#rejectServerModalCenter" onclick="setServerId('rejectServerId', '{{ server.id }}');"><i class="fa fa-times-circle"></i> Reject</button></a>
-                                    <a href="#!"><button class="btn-sm btn-success" onclick="setServerId('verifyServerId', '{{ server.id }}');" data-toggle="modal" data-target="#verifyServerModalCenter"><i class="fas fa-check-circle"></i> Accept</button></a>
+                                    <a href="#!"><button class="btn btn-warning m-1" data-toggle="modal" data-target="#rejectServerModalCenter" onclick="setServerId('rejectServerId', '{{ server.id }}');"><i class="fa fa-times-circle"></i> Reject</button></a>
+                                    <a href="#!"><button class="btn btn-success m-1" onclick="setServerId('verifyServerId', '{{ server.id }}');" data-toggle="modal" data-target="#verifyServerModalCenter"><i class="fas fa-check-circle"></i> Accept</button></a>
                                 {% endif %}
                             {% elif request.user.member == server.owner%}
                                 {% if not server.banned %}
-                                    <a href="#!"><button class="btn-sm btn-danger" onclick="setServerId('deleteServerId', '{{ server.id }}');" data-toggle="modal" data-target="#deleteServerModalCenter"><i class="far fa-trash-alt"></i> Delete</button></a>
-                                    <a href="{% url 'server_edit_view' server_id=server.id %}"><button class="btn-sm btn-warning float-right"><i class="far fa-edit"></i> Edit</button></a>
+                                    <a href="#!"><button class="btn btn-danger m-1" onclick="setServerId('deleteServerId', '{{ server.id }}');" data-toggle="modal" data-target="#deleteServerModalCenter"><i class="far fa-trash-alt"></i> Delete</button></a>
+                                    <a href="{% url 'server_edit_view' server_id=server.id %}"><button class="btn btn-warning m-1"><i class="far fa-edit"></i> Edit</button></a>
                                     {% if server.rejected %}
-                                        <a href="#!"><button class="btn-sm btn-info reapplyServerBtn" server_id="{{ server.id }}"><i class="fas fa-redo"></i> Reapply</button></a>
+                                        <a href="#!"><button class="btn btn-info reapplyServerBtn" server_id="{{ server.id }}"><i class="fas fa-redo"></i> Reapply</button></a>
                                     {% endif %}
                                 {% endif %}
                             {% endif %}

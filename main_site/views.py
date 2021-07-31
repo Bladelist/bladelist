@@ -483,9 +483,9 @@ class ServerView(View, ResponseMixin):
             if server.banned or not server.verified:
                 if request.user.is_authenticated:
                     if request.user.member == server.owner or request.user.is_staff:
-                        return render(request, self.template_name, {"server": server})
+                        return render(request, self.template_name, {"server": server, "search_off": True})
                 return render(request, "404.html")
-            return render(request, self.template_name, {"server": server})
+            return render(request, self.template_name, {"server": server, "search_off": True})
         except self.model.DoesNotExist:
             return render(request, "404.html")
 

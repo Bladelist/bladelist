@@ -101,8 +101,8 @@ class BotTag(models.Model):
 
 
 class ServerTag(models.Model):
-    name = models.CharField(max_length=15, primary_key=True)
-    icon = models.CharField(max_length=25)
+    name = models.CharField(max_length=25, primary_key=True)
+    icon = models.CharField(max_length=30)
 
 
 class Bot(models.Model):

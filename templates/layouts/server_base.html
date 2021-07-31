@@ -86,9 +86,9 @@
     </div>
   </nav>
   <div class="bg-customdark text-white text-center p-5">
+    {% if not search_off %}
     {% if not logo_off %}
     <img src="https://bladebotlist.xyz/img/logo.svg" class="logo rounded-circle" width="256" height="256">{% endif %}
-    {% if not search_off %}
     <h1 class="brand-title">BladeList</h1>
     <h5>Need to fill your server list? Search in <a class="text-primary text-decoration-none">400+</a> Discord servers!</h5>
     <form action="{% url 'server_search' %}" method="GET">
