@@ -130,6 +130,7 @@ class IndexView(View):
 
 
 class AboutView(View):
+
     def get(self, request):
         return render(request, "about.html")
 
@@ -335,7 +336,8 @@ class StaffView(View, ResponseMixin):
             bots_under_review = Bot.objects.filter(verification_status="UNDER_REVIEW",
                                                    banned=False, owner__banned=False).order_by('date_added')[:10]
             servers_awaiting_review = Server.objects.filter(verification_status="UNVERIFIED",
-                                                         banned=False, owner__banned=False).order_by("date_added")[:10]
+                                                            banned=False, owner__banned=False
+                                                            ).order_by("date_added")[:10]
             servers_under_review = Server.objects.filter(verification_status="UNDER_REVIEW",
                                                          banned=False, owner__banned=False).order_by("date_added")[:10]
             return render(request, self.template_name, {
@@ -563,7 +565,9 @@ class ServerIndexView(View, ResponseMixin):
         data = QueryDict(request.body)
         if request.user.is_authenticated:
             server = Server.objects.get(id=data.get("server_id"))
-            vote = ServerVote.objects.filter(member=request.user.member, server=server).order_by("-creation_time").first()
+            vote = ServerVote.objects.filter(
+                member=request.user.member, server=server
+            ).order_by("-creation_time").first()
             if vote is None:
                 ServerVote.objects.create(
                     member=request.user.member,
@@ -618,7 +622,7 @@ class ServerView(View, ResponseMixin):
 
 class ServerSearchView(ListView):
     paginate_by = 16
-    template_name = "server_search.html"
+    template_name = "server_list.html"
 
     def get_queryset(self):
         query = self.request.GET.get("q")

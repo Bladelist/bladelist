@@ -25,7 +25,7 @@ urlpatterns = [
     url(r'^servers/search/', ServerSearchView.as_view(), name="server_search"),
     url(r'^servers/add/', ServerAddView.as_view(), name="server_add"),
     url(r'^servers/refresh/', server_refresh, name="server_refresh"),
-    url(r'^servers/list/', ServerListView.as_view(), name="servers"),
+    url(r'^servers/list/', ServerListView.as_view(), name="server_list"),
     url(r'^servers', ServerIndexView.as_view(), name="servers"),
 
     url(r'^about', AboutView.as_view(), name="about"),
