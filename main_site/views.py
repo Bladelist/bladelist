@@ -477,7 +477,8 @@ class ServerModerationView(LoginRequiredMixin, View, ResponseMixin):
                     )
                 elif data.get("action") == "reject":
                     server.meta.rejection_count += 1
-                    server.owner.send_message(f"Your bot got rejected for reason: {data.get('rejection_reason')}")
+                    server.owner.send_message(f"<:botdeclined:652482092499730433> "
+                                              f"Your bot got rejected for reason: {data.get('rejection_reason')}")
                     if server.meta.rejection_count == 3:
                         server.banned = True
                         server.verified = False
