@@ -564,9 +564,10 @@ class ServerEditView(View, ResponseMixin):
 
     def get(self, request, server_id):
         server = Server.objects.get(id=server_id)
-        self.context["server"] = server
-        self.context['tags'] = SERVER_TAGS
-        return render(request, self.template_name, self.context)
+        if server.owner == request.user.member or request.user.member in server.admins:
+            self.context["server"] = server
+            self.context['tags'] = SERVER_TAGS
+            return render(request, self.template_name, self.context)
 
     def post(self, request, server_id):
         data = request.POST
