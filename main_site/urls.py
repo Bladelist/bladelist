@@ -4,7 +4,7 @@ from .views import (IndexView, BotView, LoginView, login_handler_view,
                     logout_view, discord_login_view, server_refresh, AboutView, TemplateView,
                     BotListView, BotAddView, BotEditView, discord_login_normal,
                     ProfileView, ProfileEditView, StaffView, BotSearchView, ServerView,
-                    ServerListView, ServerAddView, ServerEditView, ServerSearchView)
+                    ServerListView, ServerAddView, ServerEditView, ServerSearchView, ServerIndexView)
 
 
 urlpatterns = [
@@ -25,7 +25,8 @@ urlpatterns = [
     url(r'^servers/search/', ServerSearchView.as_view(), name="server_search"),
     url(r'^servers/add/', ServerAddView.as_view(), name="server_add"),
     url(r'^servers/refresh/', server_refresh, name="server_refresh"),
-    url(r'^servers', ServerListView.as_view(), name="servers"),
+    url(r'^servers/list/', ServerListView.as_view(), name="servers"),
+    url(r'^servers', ServerIndexView.as_view(), name="servers"),
 
     url(r'^about', AboutView.as_view(), name="about"),
     url(r'^staff/', StaffView.as_view(), name="staff_panel"),

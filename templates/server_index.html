@@ -1,0 +1,113 @@
+{% extends 'layouts/server_base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container text-white">
+
+        <!-- Most voted servers part -->
+
+        <h2><i class="fas fa-vote-yea"></i> Most voted servers</h2>
+
+        <div class="row text-center">
+
+            <!-- Start of card -->
+            {% for server in trending_servers %}
+            <div class="col-xs-6 col-lg-3 col-md-3 d-flex align-items-stretch">
+                <div class='card bg-dark p-2 m-3'>
+                    <img class="roundpic card-logo m-auto" src="{{server.icon_url}}" width="128" height="128">
+                    <h3 class="card-title">{{ server.name }}</h3>
+                    <div class="tags">
+                        <span class="badge rounded-pill bg-primary">{{ server.votes }} <i class="fas fa-chevron-up"></i></span>
+                        <span class="badge rounded-pill bg-success">{{ server.members_online }} <i class="fas fa-circle"></i></span>
+                    <br>
+                        {% for tag in server.tags.all %}
+                         <span class="badge rounded-pill bg-secondary">#{{ tag.name }}</span>
+                        {% endfor %}
+                    </div>
+                    <p class="card-desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                    <div class="card-buttons m-2 text-center">
+                        <a href="{% url 'server_single' server_id=server.id %}"><button class="m-2 btn btn-secondary"><i class="far fa-eye"></i> View</button></a>
+                        <a href="{{ server.invite_link }}"><button class="m-2 btn btn-primary"><i class="fas fa-user-plus"></i> Join</button></a>
+                    </div>
+
+                </div>
+            </div>
+            {% endfor %}
+
+            <!-- End of card -->
+            <!-- Just make this part as template -->
+
+        </div>
+
+        <!-- Recent servers part -->
+
+        <h2><i class="fas fa-bolt"></i> Recently added servers</h2>
+
+        <div class="row text-center">
+
+            <!-- Start of card -->
+
+            <div class="col-xs-6 col-lg-3 col-md-3">
+                <div class='card bg-dark p-2 m-3'>
+                    <img class="card-logo m-auto" src="https://bladebotlist.xyz/img/logo.svg" width="128" height="128">
+                    <h3 class="card-title">PornHub Community</h3>
+                    <div class="tags">
+                        <span class="badge rounded-pill bg-primary">10 <i class="fas fa-chevron-up"></i></span>
+                        <span class="badge rounded-pill bg-secondary">267 <i class="fas fa-users"></i></span>
+                        <span class="badge rounded-pill bg-danger">18 <i class="fas fa-gem"></i></i></span>
+                    </div>
+                    <p class="card-desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                    <div class="card-buttons m-2 text-center">
+                        <a href="#"><button class="m-2 btn btn-primary"><i class="fas fa-user-plus"></i> Join</button></a>
+                        <a href="#"><button class="m-2 btn btn-success"><i class="fas fa-chevron-up"></i> Vote</button></a>
+                        <a href="#"><button class="m-2 btn btn-secondary"><i class="far fa-eye"></i> View</button></a>
+                        <a href="#"><button class="m-2 btn btn-danger"><i class="far fa-flag"></i> Report</button></a>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- End of card -->
+            <!-- Just make this part as template -->
+
+        </div>
+
+        <!-- Recent servers part -->
+
+        <h2><i class="fas fa-dice"></i> Random servers</h2>
+
+        <div class="row text-center">
+
+            <!-- Start of card -->
+
+            <div class="col-xs-6 col-lg-3 col-md-3">
+                <div class='card bg-dark p-2 m-3'>
+                    <img class="card-logo m-auto" src="https://bladebotlist.xyz/img/logo.svg" width="128" height="128">
+                    <h3 class="card-title">PornHub Community</h3>
+                    <div class="tags">
+                        <span class="badge rounded-pill bg-primary">10 <i class="fas fa-chevron-up"></i></span>
+                        <span class="badge rounded-pill bg-secondary">267 <i class="fas fa-users"></i></span>
+                        <span class="badge rounded-pill bg-danger">18 <i class="fas fa-gem"></i></i></span>
+                    </div>
+                    <p class="card-desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                    <div class="card-buttons m-2 text-center">
+                        <a href="#"><button class="m-2 btn btn-primary"><i class="fas fa-user-plus"></i> Join</button></a>
+                        <a href="#"><button class="m-2 btn btn-success"><i class="fas fa-chevron-up"></i> Vote</button></a>
+                        <a href="#"><button class="m-2 btn btn-secondary"><i class="far fa-eye"></i> View</button></a>
+                        <a href="#"><button class="m-2 btn btn-danger"><i class="far fa-flag"></i> Report</button></a>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- End of card -->
+            <!-- Just make this part as template -->
+
+        </div>
+
+    </div>
+    <div class="d-grid gap-2 col-6 mx-auto m-5">
+        <a href="/servers" class="mx-auto"><button class="btn btn-primary">View more servers</button></a>
+    </div>
+{% endblock content %}
+

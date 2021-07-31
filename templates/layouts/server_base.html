@@ -67,7 +67,9 @@
                     {% if request.user.is_staff %}
                     <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item p-4" href="{% url 'staff_panel' %}"><i aria-hidden="true" class="fas fa-gavel"></i>&nbsp;Staff panel</a></li>
-{#                    <li><a class="dropdown-item p-4" href="{% url 'admin_panel' %}"><i aria-hidden="true" class="fas fa-cogs"></i>&nbsp;Admin panel</a></li>#}
+                    {% if request.user.is_superuser %}
+                    <li><a class="dropdown-item p-4" href="https://admin.bladelist.gg"><i aria-hidden="true" class="fas fa-cogs"></i>&nbsp;Admin panel</a></li>
+                    {% endif %}
                     <div class="dropdown-divider"></div>
                     {% endif %}
                     <li><a class="dropdown-item text-danger p-4" href="{% url 'logout' %}"><i aria-hidden="true" class="fas fa-sign-in-alt"></i>&nbsp;Logout</a></li>

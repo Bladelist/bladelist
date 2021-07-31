@@ -21,6 +21,7 @@ discord_client = DiscordAPIClient()
 BOT_TAGS = BotTag.objects.all()
 SERVER_TAGS = ServerTag.objects.all()
 RANDOM_BOTS = Bot.objects.filter(verified=True, banned=False, owner__banned=False).order_by("id").distinct()[:8]
+RANDOM_SERVERS = Server.objects.filter(verified=True, banned=False, owner__banned=False).order_by("id").distinct()[:8]
 
 
 def login_handler_view(request):
@@ -448,6 +449,20 @@ class BotSearchView(ListView):
                 ).order_by("-votes")
 
 
+class ServerIndexView(View, ResponseMixin):
+    template_name = "server_index.html"
+
+    def get(self, request):
+        recent_servers = Server.objects.filter(
+            verified=True, banned=False, owner__banned=False).order_by('-date_added')[:8]
+        trending_servers = Server.objects.filter(
+            verified=True, banned=False, owner__banned=False).order_by('-votes')[:8]
+        return render(request, self.template_name,
+                      {"random_servers": RANDOM_SERVERS,
+                       "recent_servers": recent_servers,
+                       "trending_servers": trending_servers})
+
+
 class ServerListView(ListView, ResponseMixin):
     template_name = "server_list.html"
     model = Server
@@ -462,9 +477,9 @@ class ServerView(View, ResponseMixin):
     template_name = "server_page.html"
     model = Server
 
-    def get(self, request, bot_id):
+    def get(self, request, server_id):
         try:
-            server = self.model.objects.get(id=bot_id)
+            server = self.model.objects.get(id=server_id)
             if server.banned or not server.verified:
                 if request.user.is_authenticated:
                     if request.user.member == server.owner or request.user.is_staff:
