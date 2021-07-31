@@ -72,9 +72,7 @@
                     <div class="card-manage">
                         <a href="{% url 'bot_single' bot_id=bot.id %}"><button class="btn btn-primary mr-1">View Bot</button></a>
                         <a href="{{ bot.invite_link }}"><button class="btn btn-success">Invite Bot</button></a>
-                        {% if request.user.member == bot.owner %}
                          <a href="{% url 'bot_edit_view' bot_id=bot.id %}"><button class="btn btn-info mt-2"><i class="fa fa-edit"></i> Edit Bot</button></a>
-                        {% endif %}
                     </div>
             </div>
         </div>
@@ -99,9 +97,6 @@
                     <div class="card-manage">
                         <a href="{% url 'bot_single' bot_id=bot.id %}"><button class="btn btn-primary mr-1">View Bot</button></a>
                         <a href="{{ bot.invite_link }}"><button class="btn btn-success">Invite Bot</button></a>
-                        {% if request.user.member == bot.owner %}
-                         <a href="{% url 'bot_edit_view' bot_id=bot.id %}"><button class="btn btn-info mt-2"><i class="fa fa-edit"></i> Edit Bot</button></a>
-                        {% endif %}
                     </div>
             </div>
         </div>
@@ -134,10 +129,8 @@
                     <hr>
                     <div class="card-manage">
                         <a href="{% url 'server_single' server_id=server.id %}"><button class="btn btn-primary mr-1">View</button></a>
-                        <a href="{{ server.invite_link }}"><button class="btn btn-success">Join</button></a>
-                        {% if request.user.member == bot.owner %}
+                        <a href="{{ server.invite_link }}"><button class="btn btn-success">Join</button></a><br>
                          <a href="{% url 'server_edit_view' server_id=server.id %}"><button class="btn btn-info mt-2"><i class="fa fa-edit"></i> Edit</button></a>
-                        {% endif %}
                     </div>
             </div>
         </div>
@@ -162,9 +155,6 @@
                     <div class="card-manage">
                         <a href="{% url 'server_single' server_id=server.id %}"><button class="btn btn-primary mr-1">View</button></a>
                         <a href="{{ server.invite_link }}"><button class="btn btn-success">Join</button></a>
-                        {% if request.user.member == bot.owner %}
-                         <a href="{% url 'server_edit_view' server_id=server.id %}"><button class="btn btn-info mt-2"><i class="fa fa-edit"></i> Edit</button></a>
-                        {% endif %}
                     </div>
             </div>
         </div>

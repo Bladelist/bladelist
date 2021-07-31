@@ -593,7 +593,7 @@ class ServerEditView(View, ResponseMixin):
 
     def get(self, request, server_id):
         server = Server.objects.get(id=server_id)
-        if server.owner == request.user.member or request.user.member in server.admins:
+        if server.owner == request.user.member or request.user.member in server.admins.all():
             self.context["server"] = server
             self.context['tags'] = SERVER_TAGS
             return render(request, self.template_name, self.context)
