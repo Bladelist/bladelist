@@ -47,7 +47,7 @@
         <td>{{ server.verification_attempt }}</td>
         <td>
             <a class="btn-sm btn-primary mr-2" href="{% url 'server_single' server_id=server.id %}"><i class="fa fa-address-card" aria-hidden="true"></i> View Server</a>
-            <a class="btn-sm btn-warning mr-2" href="{{ server.invite_url }}"><i class="fa fa-plus" aria-hidden="true"></i> Join</a>
+            <a class="btn-sm btn-warning mr-2" href="{{ server.invite_link }}"><i class="fa fa-plus" aria-hidden="true"></i> Join</a>
         </td>
     <td>
             {% if request.user.member == server.meta.moderator %}
