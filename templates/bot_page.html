@@ -137,7 +137,7 @@
                                     <a href="#!"><button class="btn-sm btn-danger float-right" onclick="setBotId('deleteBotId', '{{ bot.id }}');" data-toggle="modal" data-target="#deleteBotModalCenter"><i class="far fa-trash-alt"></i> Delete</button></a>
                                     <a href="{% url 'bot_edit_view' bot_id=bot.id %}"><button class="btn-sm btn-warning float-right"><i class="far fa-edit"></i> Edit</button></a>
                                     {% if bot.rejected %}
-                                        <a href="#!"><button class="btn-sm btn-info float-right reapplyBtn" bot_id="{{ bot.id }}"><i class="fas fa-redo"></i> Reapply</button></a>
+                                        <a href="#!"><button class="btn-sm btn-info float-right reapplyBotBtn" bot_id="{{ bot.id }}"><i class="fas fa-redo"></i> Reapply</button></a>
                                     {% else %}
                                     <a href="#!"><button class="btn-sm btn-info float-right" data-toggle="modal" data-target="#viewApiKeyModalCenter"><i class="fas fa-key"></i> API Key</button></a>
                                     {% endif %}

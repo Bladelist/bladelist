@@ -223,6 +223,14 @@ class Server(models.Model):
     def verification_attempt(self):
         return self.meta.rejection_count + 1
 
+    @property
+    def rejected(self):
+        return self.get_verification_status_display() == "Rejected"
+
+    @property
+    def unverified(self):
+        return self.get_verification_status_display() == "Unverified"
+
 
 class ServerMeta(models.Model):
     server = models.OneToOneField(Server, on_delete=models.CASCADE, related_name="meta")

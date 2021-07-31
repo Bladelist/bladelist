@@ -619,7 +619,25 @@ class ServerView(View, ResponseMixin):
         except self.model.DoesNotExist:
             return render(request, "404.html")
 
-
+    def put(self, request, bot_id):
+        try:
+            server = self.model.objects.get(id=bot_id)
+            if request.user.member == server.owner:
+                if not server.banned:
+                    if server.rejected:
+                        server.verification_status = "UNVERIFIED"
+                        server.meta.moderator = None
+                        server.meta.save()
+                        server.save()
+                        return self.json_response_200()
+                    return self.json_response_503()
+                else:
+                    return self.json_response_403()
+            return self.json_response_401()
+        except self.model.DoesNotExist:
+            return self.json_response_404()
+        
+        
 class ServerSearchView(ListView):
     paginate_by = 16
     template_name = "server_list.html"
