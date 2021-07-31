@@ -20,8 +20,18 @@ class Member(models.Model):
     dm_channel = models.BigIntegerField(null=True, blank=True)
 
     @property
+    def all_servers(self):
+        all_servers = list(self.servers.all())
+        all_servers.extend(list(self.admin_servers.all()))
+        return all_servers
+
+    @property
     def has_bots(self):
         return self.bots.first()
+
+    @property
+    def has_servers(self):
+        return self.servers.first()
 
     @property
     def avatar_url(self):
@@ -203,7 +213,7 @@ class Server(models.Model):
     tags = models.ManyToManyField(ServerTag, related_name="attached_servers", blank=True)
     banner_url = models.URLField(default="https://i.postimg.cc/15TN17rQ/xirprofilback.jpg")
     banned = models.BooleanField(default=False)
-    admins = models.ForeignKey(Member, related_name="admin_servers", null=True, on_delete=models.SET_NULL)
+    admins = models.ManyToManyField(Member, related_name="admin_servers")
 
     @property
     def icon_url(self):

@@ -49,9 +49,9 @@
 </div>
 
 {% if member.has_bots %}
-<div class=container>
+<div class="container">
   <h2 class="HomeBotsText"><a><i class="fas fa-robot"></i></a> User's bots </h2>
-    <div class=row>
+    <div class="row">
       {% if request.user.member == member %}
       {% for bot in member.bots.all %}
         <div class="col-xs-6 col-md-3 d-flex align-items-stretch">
@@ -101,6 +101,69 @@
                         <a href="{{ bot.invite_link }}"><button class="btn btn-success">Invite Bot</button></a>
                         {% if request.user.member == bot.owner %}
                          <a href="{% url 'bot_edit_view' bot_id=bot.id %}"><button class="btn btn-info mt-2"><i class="fa fa-edit"></i> Edit Bot</button></a>
+                        {% endif %}
+                    </div>
+            </div>
+        </div>
+      {% endfor %}
+      {% endif %}
+    </div>
+</div>
+{% endif %}
+
+{% if member.has_servers %}
+<div class="container">
+  <h2 class="HomeBotsText"><a><i class="fas fa-server"></i></a> User's servers </h2>
+    <div class="row">
+      {% if request.user.member == member %}
+      {% for server in member.all_servers %}
+        <div class="col-xs-6 col-md-3 d-flex align-items-stretch">
+            <div class="card center hoverable"><img class="banner lazyload" height="75px" width="100%" src="{{ server.banner_url }}">
+                <img class="roundpic lazyload cardavatar avatarbroadcasting" width=128 height=128 src="{{ server.icon_url }}">
+                <h2><a class="poponHover" data-toggle="popover" title="Certified Bot" data-trigger="hover" data-content="mod">{{ server.name }}</a></h2>
+                    <div>
+                        <a class="badge badge-info">{{ server.votes }} votes</a>
+                        <a class="badge badge-warning">{{ server.members_online }} servers</a>
+                            {% for tag in server.tags.all %}
+                            <a class="badge badge-muted">#{{ tag.name }}</a>
+                            {% endfor %}
+                    </div>
+                    <div class="card-desc-container">
+                        <p class="card-desc">{{ server.short_desc }}</p>
+                    </div>
+                    <hr>
+                    <div class="card-manage">
+                        <a href="{% url 'server_single' server_id=server.id %}"><button class="btn btn-primary mr-1">View</button></a>
+                        <a href="{{ server.invite_link }}"><button class="btn btn-success">Join</button></a>
+                        {% if request.user.member == bot.owner %}
+                         <a href="{% url 'server_edit_view' server_id=server.id %}"><button class="btn btn-info mt-2"><i class="fa fa-edit"></i> Edit</button></a>
+                        {% endif %}
+                    </div>
+            </div>
+        </div>
+      {% endfor %}
+      {% else %}
+      {% for server in member.verified_servers %}
+        <div class="col-xs-6 col-md-3 d-flex align-items-stretch">
+            <div class="card center hoverable"><img class="banner lazyload" height="75px" width="100%" src="{{ server.banner_url }}">
+                <img class="roundpic lazyload cardavatar avatarbroadcasting" width=128 height=128 src="{{ server.icon_url }}">
+                <h2><a class="poponHover" data-toggle="popover" title="Certified Bot" data-trigger="hover" data-content="mod">{{ server.name }}</a></h2>
+                    <div>
+                        <a class="badge badge-info">{{ server.votes }} votes</a>
+                        <a class="badge badge-warning">{{ server.members_online }} servers</a>
+                            {% for tag in server.tags.all %}
+                            <a class="badge badge-muted">#{{ tag.name }}</a>
+                            {% endfor %}
+                    </div>
+                    <div class="card-desc-container">
+                        <p class="card-desc">{{ server.short_desc }}</p>
+                    </div>
+                    <hr>
+                    <div class="card-manage">
+                        <a href="{% url 'server_single' server_id=server.id %}"><button class="btn btn-primary mr-1">View</button></a>
+                        <a href="{{ server.invite_link }}"><button class="btn btn-success">Join</button></a>
+                        {% if request.user.member == bot.owner %}
+                         <a href="{% url 'server_edit_view' server_id=server.id %}"><button class="btn btn-info mt-2"><i class="fa fa-edit"></i> Edit</button></a>
                         {% endif %}
                     </div>
             </div>
