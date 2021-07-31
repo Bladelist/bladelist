@@ -537,32 +537,25 @@ class ServerAddView(LoginRequiredMixin, View):
     def post(self, request):
         data = request.POST
         server_id = data.get("server_id")
-        if server_id is not None:
-            server = Server.objects.get(id=server_id)
-            if server:
-                server_data = request.user.member.get_admin_server_data(server_id)
-                server = Server.objects.create(id=server_id,
-                                               name=server_data.get("name"),
-                                               owner=request.user.member,
-                                               invite_link=data.get("invite"),
-                                               date_added=datetime.now(timezone.utc),
-                                               icon=server_data.get("icon"),
-                                               short_desc=data.get("short_desc"),
-                                               is_nsfw=data.get('nsfw') == 'checkedValue'
-                                               )
-                server.tags.set(ServerTag.objects.filter(name__in=data.getlist('server_tags')))
-                server.meta.long_desc = data.get("long_desc")
-                server.meta.save()
-                request.user.member.send_message(
-                    "<:botadded:652482091971248140> Your server is added and is currently awaiting verification."
-                )
-                self.context["success"] = "Server added successfully!"
-                self.context["member"] = request.user.member
-                return render(request, "profile_page.html", self.context)
-            else:
-                return ProfileView.as_view(self.request, {"error": "Server not found"})
-        else:
-            return ProfileView.as_view(self.request, {"error": "Internal Server error"})
+        server_data = request.user.member.get_admin_server_data(server_id)
+        server = Server.objects.create(id=server_id,
+                                       name=server_data.get("name"),
+                                       owner=request.user.member,
+                                       invite_link=data.get("invite"),
+                                       date_added=datetime.now(timezone.utc),
+                                       icon=server_data.get("icon"),
+                                       short_desc=data.get("short_desc"),
+                                       is_nsfw=data.get('nsfw') == 'checkedValue'
+                                       )
+        server.tags.set(ServerTag.objects.filter(name__in=data.getlist('server_tags')))
+        server.meta.long_desc = data.get("long_desc")
+        server.meta.save()
+        request.user.member.send_message(
+            "<:botadded:652482091971248140> Your server is added and is currently awaiting verification."
+        )
+        self.context["success"] = "Server added successfully!"
+        self.context["member"] = request.user.member
+        return render(request, "profile_page.html", self.context)
 
 
 class ServerEditView(View, ResponseMixin):

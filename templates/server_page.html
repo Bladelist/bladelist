@@ -7,44 +7,51 @@
         <div class='row m-5'>
             <div class="col-md-4">
                 <div class="bg-customdark text-center p-3 rounded">
-                    <img src="https://bladebotlist.xyz/img/new/bbl-yellow.png" height="256">
-                    <h3>HiiZun - Community Hub</h3>
+                    <img src="{{ server.icon_url }}" height="256">
+                    <h3>{{ server.name }}</h3>
                     <div class="text-decoration-none">
                         <div class="border-bottom border-white m-2">
                             <h5><i class="fa fa-info-circle" aria-hidden="true"></i> Information</h5>
                         </div>
                         <ul class="texte-decoration-none">
-                            <a class="btn-block btn-icon m-2" href="/join">
+                            <a class="btn-block btn-icon m-2" href="{{ server.invite_link }}">
                                 <div class="btnicon-icon text-info">
                                     <i class="fas fa-plus"></i>
                                 </div>
                                 <span class="btnicon-content text-decoration-none" style="width: calc(100% - 42px);">Join</span>
                             </a>
                             <a class="btn-block btn-icon m-2">
-                                <div class="btnicon-icon text-success">
+                                <div class="btnicon-icon text-info">
                                     <i class="fas fa-user"></i>
                                 </div>
-                                <span class="btnicon-content" style="width: calc(100% - 42px);">Users <span class="badge float-end rounded-badge bg-light text-dark">15 048</span>
+                                <span class="btnicon-content" style="width: calc(100% - 42px);">Total Members <span class="badge float-end rounded-badge bg-light text-dark">{{ server.meta.member_count }}</span>
                                 </span>
                             </a>
                             <a class="btn-block btn-icon m-2">
-                                <div class="btnicon-icon text-danger" href="/report">
+                                <div class="btnicon-icon text-success">
+                                    <i class="fas fa-circle"></i>
+                                </div>
+                                <span class="btnicon-content" style="width: calc(100% - 42px);">Members Online <span class="badge float-end rounded-badge bg-light text-dark">{{ server.members_online }}</span>
+                                </span>
+                            </a>
+                            <a class="btn-block btn-icon m-2" href="#!">
+                                <div class="btnicon-icon text-danger" >
                                     <i class="fa fa-flag" aria-hidden="true"></i>
                                 </div>
                                 <span class="btnicon-content" style="width: calc(100% - 42px);">Report</span>
                             </a>
-                            <a class="btn-block btn-icon m-2">
-                                <div class="btnicon-icon text-warning" href="/edit">
+                            <a class="btn-block btn-icon m-2" href="{% url 'server_edit_view' server_id=server.id %}">
+                                <div class="btnicon-icon text-warning"">
                                     <i class="fas fa-edit    "></i>
                                 </div>
                                 <span class="btnicon-content" style="width: calc(100% - 42px);">Edit</span>
                             </a>
-                            <a class="btn-block btn-icon m-2">
-                                <div class="btnicon-icon text-danger" href="/delete">
-                                    <i class="fa fa-trash" aria-hidden="true"></i>
-                                </div>
-                                <span class="btnicon-content" style="width: calc(100% - 42px);">Delete</span>
-                            </a>
+{#                            <a class="btn-block btn-icon m-2">#}
+{#                                <div class="btnicon-icon text-danger" href="/delete">#}
+{#                                    <i class="fa fa-trash" aria-hidden="true"></i>#}
+{#                                </div>#}
+{#                                <span class="btnicon-content" style="width: calc(100% - 42px);">Delete</span>#}
+{#                            </a>#}
                         </ul>
                     </div>
                 </div>
