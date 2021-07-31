@@ -17,10 +17,10 @@ function getCookie(name) {
 
 const csrftoken = getCookie('csrftoken')
 
-$("#popover").popover({ trigger: "hover" });
-window.FontAwesomeConfig = {
-    searchPseudoElements: true
-}
+// $("#popover").popover({ trigger: "hover" });
+// window.FontAwesomeConfig = {
+//     searchPseudoElements: true
+// }
 
 const popupCenter = ({url, title, w, h}) => {
 // Fixes dual-screen position                             Most browsers      Firefox
@@ -204,8 +204,27 @@ $(document).on('click', '.reviewBtn', function(e){
     });
 })
 
-$(document).ready(function (){
+$(document).on('click', '#refreshAdminServers', function (e){
+    $('#refreshAdminServers').prop('disabled', true);
+    $.ajax({
+        url: '/servers/refresh/',
+        headers: {'X-CSRFToken': csrftoken},
+        type: 'GET',
+        success:function(data)
+        {
+          $('#serverRefreshSection').html(data);
+          notyf.success("Sync successful");
+          $('#refreshAdminServers').prop('disabled', false);
+        },
+        error:function (response) {
+           notyf.error("Something went wrong.");
+           $('#refreshAdminServers').prop('disabled', false);
 
+        },
+    });
+});
+
+$(document).ready(function (){
     $.ajaxSetup({
         url: '/staff/',
         headers: {'X-CSRFToken': csrftoken},

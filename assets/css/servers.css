@@ -47,7 +47,9 @@ body {
 #longDescEditor {
     height: 150px;
 }
-
+.roundpic {
+  border-radius: 50%;
+}
 .beforeicon {
     display: inline-block !important;
     position: absolute !important;
