@@ -619,9 +619,9 @@ class ServerView(View, ResponseMixin):
         except self.model.DoesNotExist:
             return render(request, "404.html")
 
-    def put(self, request, bot_id):
+    def put(self, request, server_id):
         try:
-            server = self.model.objects.get(id=bot_id)
+            server = self.model.objects.get(id=server_id)
             if request.user.member == server.owner:
                 if not server.banned:
                     if server.rejected:
