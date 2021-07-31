@@ -58,7 +58,27 @@ body {
     margin-left: 15px !important;
     color: #7289DA;
   }
-
+.votecase {
+  margin: 5px;
+  border: 1px solid #3c435d;
+  padding: 2px 10px;
+  color: #334dad !important;
+  background-color: transparent;
+  font-family: 'Karla', sans-serif;
+  display: inline;
+}
+.botName {
+  display: inline;
+}
+.botButtons {
+  margin: 10px;
+}
+.float-left{
+    float: left;
+}
+.text-decoration-none a{
+    text-decoration: none !important;
+}
   .bblsearchbar {
     display:inline-block;
     background-color: #000000 !important;
