@@ -74,9 +74,42 @@ $(document).on('click', '.voteBotBtn', function (){
     });
 })
 
+$(document).on('click', '.voteServerBtn', function (){
+    let server_id = $(this).attr("server_id")
+    $.ajax({
+        url: '/servers/',
+        headers: {'X-CSRFToken': csrftoken},
+        type: 'PUT',
+        data: {server_id: server_id},
+        success:function (data)
+        {
+          $("#serverVoteCount").text(data["vote_count"]);
+          notyf.success("Voted successfully!")
+        },
+        error:function (response) {
+            switch (response.status) {
+                case 401:
+                    notyf.error("You need to be logged in to vote");
+                    break;
+                case 403:
+                    notyf.error("You can only vote once in 12 hours per server");
+                    break;
+                default:
+                    notyf.error("Something went wrong.");
+            }
+        },
+    });
+})
+
 $('#report_selector').on('change', ()=>{
     if ($('#report_selector').val() === "Other") {
         $('#customField').css('display', 'block');
+    }
+})
+
+$('#server_report_selector').on('change', ()=>{
+    if ($('#server_report_selector').val() === "Other") {
+        $('#serverReportCustomReasonField').css('display', 'block');
     }
 })
 
@@ -111,6 +144,35 @@ $(document).on('click', '.reportBotBtn', function (){
     });
 })
 
+$(document).on('click', '.reportServerBtn', function (){
+    let server_id = $(this).attr("server_id")
+    let reason = $('#server_report_selector').val()
+    if(reason==="Other"){
+        reason = $('#serverReportCustomReason').val()
+    }
+    $.ajax({
+        url: '/servers/edit/',
+        headers: {'X-CSRFToken': csrftoken},
+        type: 'PUT',
+        data: {server_id: server_id, reason: reason},
+        success:function (data)
+        {
+          notyf.success("Reported successfully!");
+        },
+        error:function (response) {
+            switch (response.status) {
+                case 401:
+                    notyf.error("You need to be logged in to report");
+                    break;
+                case 403:
+                    notyf.error("You already have 1 report awaiting review.");
+                    break;
+                default:
+                    notyf.error("Something went wrong.");
+            }
+        },
+    });
+})
 
 $(document).on('click', '.deleteBotBtn', function(e){
     let bot_id = $('#deleteBotId').val()
@@ -129,6 +191,31 @@ $(document).on('click', '.deleteBotBtn', function(e){
                     break;
                 case 404:
                     notyf.error("Bot object not found!");
+                    break;
+                default:
+                    notyf.error("Something went wrong.");
+            }
+        },
+    });
+})
+
+$(document).on('click', '.deleteServerBtn', function(e){
+    let server_id = $('#deleteServerId').val()
+    $.ajax({
+        url: `/servers/edit/` + '?' + $.param({"server_id": server_id,}) ,
+        headers: {'X-CSRFToken': csrftoken},
+        type: 'DELETE',
+        success:function (data)
+        {
+          notyf.success("Server deleted successfully!");
+        },
+        error:function (response) {
+            switch (response.status) {
+                case 401:
+                    notyf.error("You need to be logged in to delete");
+                    break;
+                case 404:
+                    notyf.error("Server object not found!");
                     break;
                 default:
                     notyf.error("Something went wrong.");
