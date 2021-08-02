@@ -4,12 +4,12 @@
 
 {% block content %}
     <div class="container text-white">
-        {% if server.unverified %}
+        {% if server.unverified and not server.banned %}
         <div class="warnTopBot">
             <span><i class="fas fa-exclamation-triangle"></i> This server is in waiting to be verified and won't show up in search<i class="fas fa-exclamation-triangle"></i></span>
         </div>
         {% endif %}
-        {% if server.rejected %}
+        {% if server.rejected and not server.banned %}
         <div class="warnTopBot">
             <span><i class="fas fa-exclamation-triangle"></i> This server was rejected: {{ server.meta.rejection_reason }}</span>
         </div>
