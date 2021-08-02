@@ -46,6 +46,7 @@ def server_refresh(request):
         (guild.get("id"), guild.get("name")) for guild in request.user.member.refresh_admin_servers()
         if not Server.objects.filter(id=guild.get("id")).exists()
     ]
+    request.user.member.sync_servers()
     return render(request, "refresh_pages/server_select.html", {"admin_guilds": admin_guilds})
 
 
