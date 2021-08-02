@@ -25,6 +25,7 @@ def create_user(user_json):
     member.meta.access_token_expiry = \
         datetime.now(timezone.utc) + timedelta(seconds=int(user_json.get("token_data")["expires_in"]))
     member.meta.save()
+    member.sync_servers()
     return user
 
 
@@ -38,6 +39,7 @@ def update_user(user, user_json):
     user.member.meta.access_token_expiry = \
         datetime.now(timezone.utc) + timedelta(seconds=int(user_json.get("token_data")["expires_in"]))
     user.member.meta.save()
+    user.member.sync_servers()
     user.save()
 
 

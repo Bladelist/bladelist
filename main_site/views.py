@@ -672,7 +672,7 @@ class ServerAddView(LoginRequiredMixin, View):
 
     def get(self, request):
         if not request.user.member.meta.admin_servers:
-            if not request.user.member.refresh_admin_servers():
+            if request.user.member.refresh_admin_servers() is None:
                 logout(request)
                 return redirect("/accounts/login/")
         admin_guilds = [

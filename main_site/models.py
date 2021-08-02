@@ -81,13 +81,24 @@ class Member(models.Model):
             self.meta.admin_servers = admin_servers
             self.meta.save()
             return admin_servers
-        else:
-            return
+        return
 
     def get_admin_server_data(self, server_id):
         for server in self.meta.admin_servers:
             if server.get("id") == server_id:
                 return server
+
+    def sync_servers(self):
+        for server in self.refresh_admin_servers():
+            try:
+                server_obj = Server.objects.get(id=server["id"])
+                if self not in server_obj.admins.all():
+                    server_obj.admins.add(self)
+                if server["owner"] and server_obj.owner != self:
+                    server_obj.owner = self
+                    server_obj.save()
+            except Server.DoesNotExist:
+                pass
 
 
 class MemberMeta(models.Model):
