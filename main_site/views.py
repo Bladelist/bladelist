@@ -696,6 +696,7 @@ class ServerAddView(LoginRequiredMixin, View):
                                        is_nsfw=data.get('nsfw') == 'checkedValue'
                                        )
         server.tags.set(ServerTag.objects.filter(name__in=data.getlist('server_tags')))
+        server.admins.add(request.user.member)
         server.meta.long_desc = data.get("long_desc")
         server.meta.save()
         request.user.member.send_message(
@@ -712,7 +713,7 @@ class ServerEditView(View, ResponseMixin):
 
     def get(self, request, server_id):
         server = Server.objects.get(id=server_id)
-        if server.owner == request.user.member or request.user.member in server.admins.all():
+        if request.user.member in server.admins.all():
             self.context["server"] = server
             self.context['tags'] = SERVER_TAGS
             return render(request, self.template_name, self.context)
@@ -722,7 +723,7 @@ class ServerEditView(View, ResponseMixin):
         if server_id is not None:
             server = Server.objects.get(id=server_id)
             if server:
-                if request.user.member == server.owner or request.user.member in server.admins.all():
+                if request.user.member in server.admins.all():
                     server.invite_link = data.get("invite")
                     server.short_desc = data.get("short_desc")
                     server.save()
@@ -760,7 +761,7 @@ class ServerEditView(View, ResponseMixin):
             server_id = request.GET.get("server_id")
             try:
                 server = Server.objects.get(id=server_id)
-                if server.owner == request.user.member or request.user.member in server.admins.all():
+                if request.user.member in server.admins.all():
                     server.delete()
                     return self.json_response_200()
             except Server.DoesNotExist:

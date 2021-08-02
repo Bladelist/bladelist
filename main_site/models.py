@@ -20,12 +20,6 @@ class Member(models.Model):
     dm_channel = models.BigIntegerField(null=True, blank=True)
 
     @property
-    def all_servers(self):
-        all_servers = list(self.servers.all())
-        all_servers.extend(list(self.admin_servers.all()))
-        return all_servers
-
-    @property
     def has_bots(self):
         return self.bots.first()
 

@@ -111,7 +111,7 @@
   <h2 class="HomeBotsText"><a><i class="fas fa-server"></i></a> User's servers </h2>
     <div class="row">
       {% if request.user.member == member %}
-      {% for server in member.all_servers %}
+      {% for server in member.admin_servers.all %}
         <div class="col-xs-6 col-md-3 d-flex align-items-stretch">
             <div class="card center hoverable"><img class="banner lazyload" height="75px" width="100%" src="{{ server.banner_url }}">
                 <img class="roundpic lazyload cardavatar avatarbroadcasting" width=128 height=128 src="{{ server.icon_url }}">

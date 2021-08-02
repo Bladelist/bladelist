@@ -65,21 +65,15 @@
                             {% endif %}
                         </ul><br>
                         <div class="border-bottom border-white m-2">
-                            <h5 class=""><i class="fa fa-users" aria-hidden="true"></i> Owners</h5>
+                            <h5 class=""><i class="fa fa-users" aria-hidden="true"></i> Admins</h5>
                         </div>
                         <ul class="text-decoration-none">
-                            <a class="btn-block btn-icon m-2" href="{% url 'profile' user_id=server.owner.id %}">
-                                <div class="btnicon-icon text-info">
-                                    <i class="fas fa-user"></i>
-                                </div>
-                                <span class="btnicon-content text-decoration-none" style="width: calc(100% - 42px);">{{ server.owner.user.first_name }}#{{ server.owner.tag }} <i class="fa fa-check-circle text-success mt-1" style="float: right!important;"></i></span>
-                            </a>
                             {% for admin in server.admins.all %}
                             <a class="btn-block btn-icon m-2" href="{% url 'profile' user_id=admin.id %}">
                                 <div class="btnicon-icon text-info">
                                     <i class="fas fa-user"></i>
                                 </div>
-                                <span class="btnicon-content text-decoration-none" style="width: calc(100% - 42px);">{{ admin.user.first_name }}#{{ admin.tag }}</span>
+                                <span class="btnicon-content text-decoration-none" style="width: calc(100% - 42px);">{{ admin.user.first_name }}#{{ admin.tag }} {% if server.owner == admin %}<i class="fa fa-check-circle text-success mt-1" data-bs-toggle="tooltip" data-bs-position="right" title="Owner" style="float: right!important;"></i>{% endif %}</span>
                             </a>
                             {% endfor %}
                         </ul><br>
