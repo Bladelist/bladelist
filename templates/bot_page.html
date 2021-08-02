@@ -127,10 +127,14 @@
                         {% endif %}
                             <br>
                             {% if request.user.is_staff  %}
+                                {% if bot.banned %}
+                                    <a href="#!"><button class="btn-sm btn-warning float-right" onclick="setBotId('unbanBotId', '{{ bot.id }}');" data-toggle="modal" data-target="#unbanBotModalCenter"><i class="fas fa-exclamation-triangle"></i> Unban</button></a>
+                                {% else %}
                                 <a href="#!"><button class="btn-sm btn-danger float-right" data-toggle="modal" data-target="#banBotModalCenter" onclick="setBotId('banBotId', '{{ bot.id }}');"><i class="fas fa-ban"></i> Ban</button></a>
                                 {% if not bot.verified %}
                                     <a href="#!"><button class="btn-sm btn-warning float-right" data-toggle="modal" data-target="#rejectBotModalCenter" onclick="setBotId('rejectBotId', '{{ bot.id }}');"><i class="fa fa-times-circle"></i> Reject</button></a>
                                     <a href="#!"><button class="btn-sm btn-success float-right" onclick="setBotId('verifyBotId', '{{ bot.id }}');" data-toggle="modal" data-target="#verifyBotModalCenter"><i class="fas fa-check-circle"></i> Accept</button></a>
+                                {% endif %}
                                 {% endif %}
                             {% elif request.user.member == bot.owner%}
                                 {% if not bot.banned %}
@@ -201,6 +205,23 @@
     </div>
   </div>
 </div>
+
+<div class="modal fade" id="unbanBotModalCenter" tabindex="-1" role="dialog" aria-labelledby="unbanBotModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content bg-dark">
+      <h5 class="modal-title text-white ml--2" id="unbanBotModalCenterTitle"><i class="fa fa-check"></i> Unban this bot</h5>
+      <div class="modal-body">
+          <p class="text-white">Are you sure you want to unban this bot?</p>
+            <input type="hidden" id="unbanBotId">
+      </div>
+      <div class="modal-footer bg-transparent">
+        <button type="button" class="btn btn-white mr-2" data-dismiss="modal">Close</button>
+        <button type="button" bot_id="{{ bot.id }}" class="btn btn-warning unbanBotBtn" data-dismiss="modal">Unban</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Modal -->
 <div class="modal fade" id="rejectBotModalCenter" tabindex="-1" role="dialog" aria-labelledby="rejectBotModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">

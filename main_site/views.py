@@ -418,6 +418,16 @@ class BotModerationView(LoginRequiredMixin, View, ResponseMixin):
                         f"<:botdeclined:652482092499730433> "
                         f"Your bot got banned for the reason: {data.get('ban_reason')}"
                     )
+                elif data.get("action") == "unban":
+                    bot.banned = False
+                    bot.verified = True
+                    bot.save()
+                    bot.meta.moderator = request.user.member
+                    bot.meta.save()
+                    bot.owner.send_message(
+                        f"<:botadded:652482091971248140> "
+                        f"Your bot is unbanned"
+                    )
                 else:
                     return self.json_response_500()
                 awaiting_review = Bot.objects.filter(verification_status="UNVERIFIED",
@@ -504,6 +514,16 @@ class ServerModerationView(LoginRequiredMixin, View, ResponseMixin):
                     server.owner.send_message(
                         f"<:botdeclined:652482092499730433> "
                         f"Your server got banned for the reason: {data.get('ban_reason')}"
+                    )
+                elif data.get("action") == "unban":
+                    server.banned = False
+                    server.verified = True
+                    server.save()
+                    server.meta.moderator = request.user.member
+                    server.meta.save()
+                    server.owner.send_message(
+                        f"<:botadded:652482091971248140> "
+                        f"Your server is unbanned"
                     )
                 else:
                     return self.json_response_500()

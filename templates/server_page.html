@@ -6,7 +6,7 @@
     <div class="container text-white">
         {% if server.unverified and not server.banned %}
         <div class="warnTopBot">
-            <span><i class="fas fa-exclamation-triangle"></i> This server is in waiting to be verified and won't show up in search<i class="fas fa-exclamation-triangle"></i></span>
+            <span><i class="fas fa-exclamation-triangle"></i> This server is in waiting to be verified and won't show up in search <i class="fas fa-exclamation-triangle"></i></span>
         </div>
         {% endif %}
         {% if server.rejected and not server.banned %}
@@ -57,7 +57,7 @@
                             </a>
                             {% if server.owner == request.user.member or request.user.member in server.admins.all%}
                             <a class="btn-block btn-icon m-2" href="{% url 'server_edit_view' server_id=server.id %}">
-                                <div class="btnicon-icon text-warning"">
+                                <div class="btnicon-icon text-warning">
                                     <i class="fas fa-edit    "></i>
                                 </div>
                                 <span class="btnicon-content" style="width: calc(100% - 42px);">Edit</span>
@@ -109,10 +109,14 @@
                             <a href="{{ server.invite_url }}"><button class="btn btn-warning"><i class="fas fa-plus"></i> Join</button></a>
                         {% endif %}
                         {% if request.user.is_staff  %}
+                            {% if server.banned %}
+                                <a href="#!"><button class="btn btn-warning m-1" onclick="setServerId('unbanServerId', '{{ server.id }}');" data-toggle="modal" data-target="#unbanServerModalCenter"><i class="fas fa-exclamation-triangle"></i> Unban</button></a>
+                            {% else %}
                             <a href="#!"><button class="btn btn-danger m-1" data-bs-toggle="modal" data-bs-target="#banServerModalCenter" onclick="setServerId('banServerId', '{{ server.id }}');"><i class="fas fa-ban"></i> Ban</button></a>
                             {% if not server.verified %}
                                 <a href="#!"><button class="btn btn-warning m-1" data-bs-toggle="modal" data-bs-target="#rejectServerModalCenter" onclick="setServerId('rejectServerId', '{{ server.id }}');"><i class="fa fa-times-circle"></i> Reject</button></a>
                                 <a href="#!"><button class="btn btn-success m-1" onclick="setServerId('verifyServerId', '{{ server.id }}');" data-toggle="modal" data-target="#verifyServerModalCenter"><i class="fas fa-check-circle"></i> Accept</button></a>
+                            {% endif %}
                             {% endif %}
                         {% elif request.user.member in server.admins.all%}
                             {% if not server.banned %}
@@ -199,6 +203,21 @@
   </div>
 </div>
 
+<div class="modal fade" id="unbanServerModalCenter" tabindex="-1" role="dialog" aria-labelledby="unbanServerModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content bg-dark">
+      <h5 class="modal-title text-white ml--2" id="unbanServerModalCenterTitle"><i class="fa fa-check"></i> Unabn this server</h5>
+      <div class="modal-body">
+          <p class="text-white">Are you sure you want to unban this server?</p>
+            <input type="hidden" id="unbanServerId">
+      </div>
+      <div class="modal-footer bg-transparent">
+        <button type="button" class="btn btn-white mr-2" data-dismiss="modal">Close</button>
+        <button type="button" server_id="{{ server.id }}" class="btn btn-warning unbanServerBtn" data-dismiss="modal">Unban</button>
+      </div>
+    </div>
+  </div>
+</div>
 <!-- Modal -->
 <div class="modal fade" id="banServerModalCenter" tabindex="-1" role="dialog" aria-labelledby="banServerModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">

@@ -415,6 +415,11 @@ $(document).ready(function (){
             $.ajax({data: {action: "reject", bot_id: bot_id, rejection_reason: reason}});
     });
 
+    $('.unbanBotBtn').on('click',function() {
+            let bot_id = $('#unbanBotId').val()
+            $.ajax({data: {action: "unban", bot_id: bot_id}});
+    });
+
     $('.banBotBtn').on('click',function() {
             let bot_id = $('#banBotId').val()
             let reason = $('#banBotReason').val()
@@ -458,6 +463,11 @@ $(document).ready(function (){
             let server_id = $('#rejectServerId').val()
             let reason = $('#rejectServerReason').val()
             $.ajax({data: {action: "reject", server_id: server_id, rejection_reason: reason}});
+    });
+
+    $('.unbanServerBtn').on('click',function() {
+            let server_id = $('#unbanServerId').val()
+            $.ajax({data: {action: "unban", server_id: server_id}});
     });
 
     $('.banServerBtn').on('click',function() {
