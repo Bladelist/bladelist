@@ -110,12 +110,12 @@
                         {% endif %}
                         {% if request.user.is_staff  %}
                             {% if server.banned %}
-                                <a href="#!"><button class="btn btn-warning m-1" onclick="setServerId('unbanServerId', '{{ server.id }}');" data-toggle="modal" data-target="#unbanServerModalCenter"><i class="fas fa-exclamation-triangle"></i> Unban</button></a>
+                                <a href="#!"><button class="btn btn-warning m-1" onclick="setServerId('unbanServerId', '{{ server.id }}');" data-bs-toggle="modal" data-bs-target="#unbanServerModalCenter"><i class="fas fa-exclamation-triangle"></i> Unban</button></a>
                             {% else %}
                             <a href="#!"><button class="btn btn-danger m-1" data-bs-toggle="modal" data-bs-target="#banServerModalCenter" onclick="setServerId('banServerId', '{{ server.id }}');"><i class="fas fa-ban"></i> Ban</button></a>
                             {% if not server.verified %}
                                 <a href="#!"><button class="btn btn-warning m-1" data-bs-toggle="modal" data-bs-target="#rejectServerModalCenter" onclick="setServerId('rejectServerId', '{{ server.id }}');"><i class="fa fa-times-circle"></i> Reject</button></a>
-                                <a href="#!"><button class="btn btn-success m-1" onclick="setServerId('verifyServerId', '{{ server.id }}');" data-toggle="modal" data-target="#verifyServerModalCenter"><i class="fas fa-check-circle"></i> Accept</button></a>
+                                <a href="#!"><button class="btn btn-success m-1" onclick="setServerId('verifyServerId', '{{ server.id }}');" data-bs-toggle="modal" data-bs-target="#verifyServerModalCenter"><i class="fas fa-check-circle"></i> Accept</button></a>
                             {% endif %}
                             {% endif %}
                         {% elif request.user.member in server.admins.all%}
@@ -161,7 +161,7 @@
       </div>
         <p class="text-white"><b class="text-danger">Note:</b> False reports could get your account banned.</p>
       <div class="modal-footer bg-transparent">
-        <button type="button" class="btn btn-white mr-2" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-white mr-2" data-bs-dismiss="modal">Close</button>
         <button type="button" server_id="{{ server.id }}" class="btn btn-danger reportServerBtn" data-bs-dismiss="modal">Report</button>
       </div>
     </div>
@@ -171,15 +171,15 @@
 <!-- Modal -->
 <div class="modal fade" id="verifyServerModalCenter" tabindex="-1" role="dialog" aria-labelledby="verifyServerModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content bg-dark">
-      <h5 class="modal-title text-white ml--2" id="verifyServerModalCenterTitle"><i class="fa fa-check"></i> Approve this server</h5>
+    <div class="modal-content bg-dark p-2">
+      <h5 class="modal-title text-white" id="verifyServerModalCenterTitle"><i class="fa fa-check"></i> Approve this server</h5>
       <div class="modal-body">
           <p class="text-white">Are you sure you want to approve this server?</p>
             <input type="hidden" id="verifyServerId">
       </div>
       <div class="modal-footer bg-transparent">
-        <button type="button" class="btn btn-white mr-2" data-dismiss="modal">Close</button>
-        <button type="button" server_id="{{ server.id }}" class="btn btn-success verifyServerBtn" data-dismiss="modal">Approve</button>
+        <button type="button" class="btn btn-white mr-2" data-bs-dismiss="modal">Close</button>
+        <button type="button" server_id="{{ server.id }}" class="btn btn-success verifyServerBtn" data-bs-dismiss="modal">Approve</button>
       </div>
     </div>
   </div>
@@ -187,8 +187,8 @@
 <!-- Modal -->
 <div class="modal fade" id="rejectServerModalCenter" tabindex="-1" role="dialog" aria-labelledby="rejectServerModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content bg-dark">
-      <h5 class="modal-title text-white ml--2" id="rejectServerModalCenterTitle"><i class="fa fa-times"></i> Reject this server</h5>
+    <div class="modal-content bg-dark p-2">
+      <h5 class="modal-title text-white" id="rejectServerModalCenterTitle"><i class="fa fa-times"></i> Reject this server</h5>
       <div class="modal-body">
         <p class="text-white">Are you sure you want to reject this server?</p><br><br>
         <label class="text-white">Enter Reason</label>
@@ -196,7 +196,7 @@
         <input type="hidden" id="rejectServerId">
       </div>
       <div class="modal-footer bg-transparent">
-        <button type="button" class="btn btn-white mr-2" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-white mr-2" data-bs-dismiss="modal">Close</button>
         <button type="button" server_id="{{ server.id }}" class="btn btn-danger rejectServerBtn" data-bs-dismiss="modal">Reject</button>
       </div>
     </div>
@@ -205,15 +205,15 @@
 
 <div class="modal fade" id="unbanServerModalCenter" tabindex="-1" role="dialog" aria-labelledby="unbanServerModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content bg-dark">
-      <h5 class="modal-title text-white ml--2" id="unbanServerModalCenterTitle"><i class="fa fa-check"></i> Unabn this server</h5>
+    <div class="modal-content bg-dark p-2">
+      <h5 class="modal-title text-white" id="unbanServerModalCenterTitle"><i class="fa fa-check"></i> Unban this server</h5>
       <div class="modal-body">
           <p class="text-white">Are you sure you want to unban this server?</p>
             <input type="hidden" id="unbanServerId">
       </div>
       <div class="modal-footer bg-transparent">
-        <button type="button" class="btn btn-white mr-2" data-dismiss="modal">Close</button>
-        <button type="button" server_id="{{ server.id }}" class="btn btn-warning unbanServerBtn" data-dismiss="modal">Unban</button>
+        <button type="button" class="btn btn-white mr-2" data-bs-dismiss="modal">Close</button>
+        <button type="button" server_id="{{ server.id }}" class="btn btn-warning unbanServerBtn" data-bs-dismiss="modal">Unban</button>
       </div>
     </div>
   </div>
@@ -230,7 +230,7 @@
         <input type="hidden" id="banServerId">
       </div>
       <div class="modal-footer bg-transparent">
-        <button type="button" class="btn btn-white mr-2" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-white mr-2" data-bs-dismiss="modal">Close</button>
         <button type="button" server_id="{{ server.id }}" class="btn btn-danger banServerBtn" data-bs-dismiss="modal">Ban</button>
       </div>
     </div>
@@ -246,7 +246,7 @@
             <input type="hidden" id="deleteServerId">
       </div>
       <div class="modal-footer bg-transparent">
-        <button type="button" class="btn btn-white mr-2" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-white mr-2" data-bs-dismiss="modal">Close</button>
         <button type="button" server_id="{{ server.id }}" class="btn btn-danger deleteServerBtn" data-bs-dismiss="modal">Delete</button>
       </div>
     </div>

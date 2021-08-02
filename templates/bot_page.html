@@ -67,7 +67,7 @@
                                 <div class="btnicon-icon text-danger"><i class="fas fa-flag"></i></div><span class=btnicon-content>Report</span></a>
                         </ul>
                         {% if request.user.is_staff %}
-                        {% if bot.verified %}
+                        {% if bot.verified and bot.moderator %}
                         <div class=supercard-header><span class=TitleCard><i class="fas fa-gavel"></i> Staff</span></div>
                         <ul class=buttons-group>
                             <a class="btn-block btn-icon" href="{%  url 'profile' user_id=bot.meta.moderator.id %}">

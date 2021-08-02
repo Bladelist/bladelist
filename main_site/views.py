@@ -420,6 +420,7 @@ class BotModerationView(LoginRequiredMixin, View, ResponseMixin):
                     )
                 elif data.get("action") == "unban":
                     bot.banned = False
+                    bot.verification_status = "VERIFIED"
                     bot.verified = True
                     bot.save()
                     bot.meta.moderator = request.user.member
@@ -518,6 +519,7 @@ class ServerModerationView(LoginRequiredMixin, View, ResponseMixin):
                 elif data.get("action") == "unban":
                     server.banned = False
                     server.verified = True
+                    server.verification_status = "VERIFIED"
                     server.save()
                     server.meta.moderator = request.user.member
                     server.meta.save()
