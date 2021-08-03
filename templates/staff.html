@@ -2,10 +2,21 @@
 {% load static %}
 
 {% block content %}
-
-   <div class="container darker-container center" id="verificationQueue">
-        {% include 'refresh_pages/queue.html' %}
+<style>
+    th{
+        color: white !important;
+    }
+    td{
+        color: #b9def0 !important;
+    }
+</style>
+   <div class="container darker-container center" id="botVerificationQueue">
+        {% include 'refresh_pages/bot_queue.html' %}
     </div>
+    <br>
+   <div class="container darker-container center" id="serverVerificationQueue">
+        {% include 'refresh_pages/server_queue.html' %}
+   </div>
 
 <!-- Modal -->
 <div class="modal fade" id="verifyBotModalCenter" tabindex="-1" role="dialog" aria-labelledby="verifyBotModalCenterTitle" aria-hidden="true">
@@ -31,7 +42,7 @@
       <div class="modal-body">
         <p>Are you sure you want to reject this bot?</p><br><br>
         <label>Enter Reason</label>
-        <input type="text" class="form-control" id="rejectBotReason" required>
+        <input type="text" class="form-control text-white" id="rejectBotReason" required>
         <input type="hidden" id="rejectBotId">
       </div>
       <div class="modal-footer bg-transparent">
@@ -50,12 +61,67 @@
       <div class="modal-body">
         <p>Are you sure you want to ban this bot?</p><br><br>
         <label>Enter Reason</label>
-        <input type="text" class="form-control" id="banBotReason" required>
+        <input type="text" class="form-control text-white" id="banBotReason" required>
         <input type="hidden" id="banBotId">
       </div>
       <div class="modal-footer bg-transparent">
         <button type="button" class="btn btn-white mr-2" data-dismiss="modal">Close</button>
         <button type="button" bot_id="{{ bot.id }}" class="btn btn-danger banBotBtn" data-dismiss="modal">Ban</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="verifyServerModalCenter" tabindex="-1" role="dialog" aria-labelledby="verifyServerModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content bg-dark">
+      <h5 class="modal-title text-white ml--2" id="verifyServerModalCenterTitle"><i class="fa fa-check"></i> Approve this server</h5>
+      <div class="modal-body">
+          <p class="text-white">Are you sure you want to approve this server?</p>
+            <input type="hidden" id="verifyServerId">
+      </div>
+      <div class="modal-footer bg-transparent">
+        <button type="button" class="btn btn-white mr-2" data-dismiss="modal">Close</button>
+        <button type="button" server_id="{{ server.id }}" class="btn btn-success verifyServerBtn" data-dismiss="modal">Approve</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="rejectServerModalCenter" tabindex="-1" role="dialog" aria-labelledby="rejectServerModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content bg-dark">
+      <h5 class="modal-title text-white ml--2" id="rejectServerModalCenterTitle"><i class="fa fa-times"></i> Reject this server</h5>
+      <div class="modal-body">
+        <p>Are you sure you want to reject this server?</p><br><br>
+        <label>Enter Reason</label>
+        <input type="text" class="form-control bg-dark text-white" id="rejectServerReason" required>
+        <input type="hidden" id="rejectServerId">
+      </div>
+      <div class="modal-footer bg-transparent">
+        <button type="button" class="btn btn-white mr-2" data-dismiss="modal">Close</button>
+        <button type="button" server_id="{{ server.id }}" class="btn btn-danger rejectServerBtn" data-dismiss="modal">Reject</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="banServerModalCenter" tabindex="-1" role="dialog" aria-labelledby="banServerModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content bg-dark">
+      <h5 class="modal-title text-white ml--2" id="banServerModalCenterTitle"><i class="fa fa-ban"></i> Ban this server</h5>
+      <div class="modal-body">
+        <p>Are you sure you want to ban this server?</p><br><br>
+        <label>Enter Reason</label>
+        <input type="text" class="form-control bg-dark text-white" id="banServerReason" required>
+        <input type="hidden" id="banServerId">
+      </div>
+      <div class="modal-footer bg-transparent">
+        <button type="button" class="btn btn-white mr-2" data-dismiss="modal">Close</button>
+        <button type="button" server_id="{{ server.id }}" class="btn btn-danger banServerBtn" data-dismiss="modal">Ban</button>
       </div>
     </div>
   </div>

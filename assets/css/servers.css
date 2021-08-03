@@ -79,6 +79,19 @@ body {
 .text-decoration-none a{
     text-decoration: none !important;
 }
+.pagination {
+  background-color: transparent;
+  margin: auto;
+}
+.pagination a {
+ margin: auto;
+}
+.warnTopBot {
+  border: solid 2px red;
+  border-radius: 12px;
+  padding: 10px;
+  margin: 50px;
+}
   .bblsearchbar {
     display:inline-block;
     background-color: #000000 !important;

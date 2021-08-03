@@ -1,0 +1,66 @@
+
+{% if servers_awaiting_review %}
+<h2 class="text-left">Servers Awaiting Review</h2><br>
+<div id="ServersToReview" class="">
+  <div>
+    <table class="table text-left">
+    <tr>
+        <th scope="col">Server Name</th>
+        <th scope="col">Server ID</th>
+        <th style="width:10%;" scope="col">Attempt</th>
+         <th scope="col">Manage</th>
+    </tr>
+   {% for server in servers_awaiting_review %}
+    <tr>
+        <td>{{ server.name }}</td>
+        <td>{{ server.id }}</td>
+        <td>{{ server.verification_attempt}}</td>
+        <td>
+            <a class="btn-sm btn-primary serverReviewBtn" href="#!" server_id="{{ server.id }}"><i class="fa fa-address-card" aria-hidden="true"></i> Review</a>
+        </td>
+    </tr>
+   {% endfor %}
+    </table>
+  </div>
+</div>
+{% endif %}
+<br><br>
+{% if not servers_under_review and not servers_awaiting_review %}
+    <h2><--No servers in queue--></h2>
+{% endif %}
+{% if servers_under_review %}
+<h2 class="text-left">Servers Under Review</h2><br>
+<div id="ServersUnderReview">
+  <div style="overflow-x:auto;">
+    <table class="table text-left">
+    <tr>
+        <th scope="col">Server Name</th>
+        <th scope="col">Server ID</th>
+        <th style="width:10%;" scope="col">Attempt</th>
+         <th scope="col">Options</th>
+         <th scope="col">Actions</th>
+    </tr>
+   {% for server in servers_under_review %}
+    <tr>
+        <td>{{ server.name }}</td>
+        <td>{{ server.id }}</td>
+        <td>{{ server.verification_attempt }}</td>
+        <td>
+            <a class="btn-sm btn-primary mr-2" href="{% url 'server_single' server_id=server.id %}"><i class="fa fa-address-card" aria-hidden="true"></i> View Server</a>
+            <a class="btn-sm btn-warning mr-2" href="{{ server.invite_link }}"><i class="fa fa-plus" aria-hidden="true"></i> Join</a>
+        </td>
+    <td>
+            {% if request.user.member == server.meta.moderator %}
+            <a class="btn-sm btn-success mr-2" href="#!" onclick="setBotId('verifyServerId', '{{ server.id }}');" data-toggle="modal" data-target="#verifyServerModalCenter"><i class="fa fa-check-circle" aria-hidden="true"></i> Approve<i aria-hidden="true"></i></a>
+            <a class="btn-sm btn-danger mr-2" href="#!"  data-toggle="modal" data-target="#rejectServerModalCenter" onclick="setBotId('rejectServerId', '{{ server.id }}');"><i class="fas fa-times-circle"></i> Reject<i aria-hidden="true"></i></a>
+            <a class="btn-sm btn-danger mr-2" href="#!"  data-toggle="modal" data-target="#banServerModalCenter" onclick="setBotId('banServerId', '{{ server.id }}');"><i class="fa fa-ban" aria-hidden="true"></i> Ban<i aria-hidden="true"></i></a>
+            {% else %}
+                <h3> <<---Being Review by {{ server.meta.moderator.user.first_name }}#{{ server.meta.moderator.tag }} --->></h3>
+            {% endif %}
+    </td>
+    </tr>
+   {% endfor %}
+    </table>
+  </div>
+</div>
+{% endif %}

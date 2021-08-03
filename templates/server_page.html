@@ -4,7 +4,21 @@
 
 {% block content %}
     <div class="container text-white">
-
+        {% if server.unverified and not server.banned %}
+        <div class="warnTopBot">
+            <span><i class="fas fa-exclamation-triangle"></i> This server is in waiting to be verified and won't show up in search <i class="fas fa-exclamation-triangle"></i></span>
+        </div>
+        {% endif %}
+        {% if server.rejected and not server.banned %}
+        <div class="warnTopBot">
+            <span><i class="fas fa-exclamation-triangle"></i> This server was rejected: {{ server.meta.rejection_reason }}</span>
+        </div>
+        {% endif %}
+        {% if server.banned %}
+        <div class="warnTopBot">
+            <span><i class="fas fa-exclamation-triangle"></i> This server is banned: {{ server.meta.ban_reason }}</span>
+        </div>
+        {% endif %}
         <div class='row m-2'>
             <div class="col-md-4">
                 <div class="bg-customdark text-center p-3 rounded">
@@ -43,7 +57,7 @@
                             </a>
                             {% if server.owner == request.user.member or request.user.member in server.admins.all%}
                             <a class="btn-block btn-icon m-2" href="{% url 'server_edit_view' server_id=server.id %}">
-                                <div class="btnicon-icon text-warning"">
+                                <div class="btnicon-icon text-warning">
                                     <i class="fas fa-edit    "></i>
                                 </div>
                                 <span class="btnicon-content" style="width: calc(100% - 42px);">Edit</span>
@@ -51,15 +65,17 @@
                             {% endif %}
                         </ul><br>
                         <div class="border-bottom border-white m-2">
-                            <h5 class=""><i class="fa fa-users" aria-hidden="true"></i> Owners</h5>
+                            <h5 class=""><i class="fa fa-users" aria-hidden="true"></i> Admins</h5>
                         </div>
                         <ul class="text-decoration-none">
-                            <a class="btn-block btn-icon m-2" href="{{ server.invite_link }}">
+                            {% for admin in server.admins.all %}
+                            <a class="btn-block btn-icon m-2" href="{% url 'profile' user_id=admin.id %}">
                                 <div class="btnicon-icon text-info">
                                     <i class="fas fa-user"></i>
                                 </div>
-                                <span class="btnicon-content text-decoration-none" style="width: calc(100% - 42px);">Name#1223</span>
+                                <span class="btnicon-content text-decoration-none" style="width: calc(100% - 42px);">{{ admin.user.first_name }}#{{ admin.tag }} {% if server.owner == admin %}<i class="fa fa-check-circle text-success mt-1" data-bs-toggle="tooltip" data-bs-position="right" title="Owner" style="float: right!important;"></i>{% endif %}</span>
                             </a>
+                            {% endfor %}
                         </ul><br>
                         <div class="border-bottom border-white m-2">
                             <h5 class=""><i class="fa fa-tags" aria-hidden="true"></i> Tags</h5>
@@ -89,28 +105,32 @@
                     <div class="botButtons">
                         {% if not server.banned %}
                             <a href="#!"><button class="btn btn-success voteServerBtn m-1" server_id="{{ server.id }}"><i class="fas fa-chevron-up"></i> Vote</button></a>
-                            <a href="#!"><button class="btn btn-danger m-1" {% if not request.user.is_authenticated %}disabled data-toggle="tooltip" data-placement="bottom" title="Login to report"{% else %}data-toggle="modal" data-target="#reportServerModalCenter" {% endif %}><i class="far fa-flag"></i> Report</button></a>
+                            <a href="#!"><button class="btn btn-danger m-1" {% if not request.user.is_authenticated %}disabled data-toggle="tooltip" data-placement="bottom" title="Login to report"{% else %} data-bs-toggle="modal" data-bs-target="#reportServerModalCenter" {% endif %}><i class="far fa-flag"></i> Report</button></a>
                             <a href="{{ server.invite_url }}"><button class="btn btn-warning"><i class="fas fa-plus"></i> Join</button></a>
                         {% endif %}
-                            {% if request.user.is_staff  %}
-                                <a href="#!"><button class="btn btn-danger m-1" data-toggle="modal" data-target="#banServerModalCenter" onclick="setServerId('banServerId', '{{ server.id }}');"><i class="fas fa-ban"></i> Ban</button></a>
-                                {% if not server.verified %}
-                                    <a href="#!"><button class="btn btn-warning m-1" data-toggle="modal" data-target="#rejectServerModalCenter" onclick="setServerId('rejectServerId', '{{ server.id }}');"><i class="fa fa-times-circle"></i> Reject</button></a>
-                                    <a href="#!"><button class="btn btn-success m-1" onclick="setServerId('verifyServerId', '{{ server.id }}');" data-toggle="modal" data-target="#verifyServerModalCenter"><i class="fas fa-check-circle"></i> Accept</button></a>
-                                {% endif %}
-                            {% elif request.user.member == server.owner%}
-                                {% if not server.banned %}
-                                    <a href="#!"><button class="btn btn-danger m-1" onclick="setServerId('deleteServerId', '{{ server.id }}');" data-toggle="modal" data-target="#deleteServerModalCenter"><i class="far fa-trash-alt"></i> Delete</button></a>
-                                    <a href="{% url 'server_edit_view' server_id=server.id %}"><button class="btn btn-warning m-1"><i class="far fa-edit"></i> Edit</button></a>
-                                    {% if server.rejected %}
-                                        <a href="#!"><button class="btn btn-info reapplyServerBtn" server_id="{{ server.id }}"><i class="fas fa-redo"></i> Reapply</button></a>
-                                    {% endif %}
+                        {% if request.user.is_staff  %}
+                            {% if server.banned %}
+                                <a href="#!"><button class="btn btn-warning m-1" onclick="setServerId('unbanServerId', '{{ server.id }}');" data-bs-toggle="modal" data-bs-target="#unbanServerModalCenter"><i class="fas fa-exclamation-triangle"></i> Unban</button></a>
+                            {% else %}
+                            <a href="#!"><button class="btn btn-danger m-1" data-bs-toggle="modal" data-bs-target="#banServerModalCenter" onclick="setServerId('banServerId', '{{ server.id }}');"><i class="fas fa-ban"></i> Ban</button></a>
+                            {% if not server.verified %}
+                                <a href="#!"><button class="btn btn-warning m-1" data-bs-toggle="modal" data-bs-target="#rejectServerModalCenter" onclick="setServerId('rejectServerId', '{{ server.id }}');"><i class="fa fa-times-circle"></i> Reject</button></a>
+                                <a href="#!"><button class="btn btn-success m-1" onclick="setServerId('verifyServerId', '{{ server.id }}');" data-bs-toggle="modal" data-bs-target="#verifyServerModalCenter"><i class="fas fa-check-circle"></i> Accept</button></a>
+                            {% endif %}
+                            {% endif %}
+                        {% elif request.user.member in server.admins.all%}
+                            {% if not server.banned %}
+                                <a href="#!"><button class="btn btn-danger m-1" onclick="setServerId('deleteServerId', '{{ server.id }}');" data-bs-toggle="modal" data-bs-target="#deleteServerModalCenter"><i class="far fa-trash-alt"></i> Delete</button></a>
+                                <a href="{% url 'server_edit_view' server_id=server.id %}"><button class="btn btn-warning m-1"><i class="far fa-edit"></i> Edit</button></a>
+                                {% if server.rejected %}
+                                    <a href="#!"><button class="btn btn-info reapplyServerBtn" server_id="{{ server.id }}"><i class="fas fa-redo"></i> Reapply</button></a>
                                 {% endif %}
                             {% endif %}
+                        {% endif %}
                     </div>
                 </div>
                 <div class="bg-customdark rounded p-2">
-                        {{ meta.long_desc | markdown | safe }}
+                        {{ server.meta.long_desc | markdown | safe }}
                 </div>
             </div>
         </div>
@@ -120,29 +140,29 @@
 <!-- Modal -->
 <div class="modal fade" id="reportServerModalCenter" tabindex="-1" role="dialog" aria-labelledby="reportServerModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content bg-dark">
-      <h5 class="modal-title text-white ml--2" id="reportServerModalCenterTitle"><i class="fa fa-flag"></i> Report this server</h5>
+    <div class="modal-content bg-dark p-2">
+      <h5 class="modal-title text-white" id="reportServerModalCenterTitle"><i class="fa fa-flag"></i> Report this server</h5>
       <div class="modal-body">
-      <label for="report_selector text-white">Select Reason</label>
-        <select id="report_selector" class="form-control w-75 bg-dark text-white" name="selector">
+      <label for="server_report_selector text-white">Select Reason</label>
+        <select id="server_report_selector" class="form-control w-75 bg-dark text-white" name="reason">
             <option value="" selected disabled>Please select</option>
             <option value="NSFW server without nsfw tag">NSFW server without nsfw tag</option>
             <option value="Server promoting illegal stuff">Server promoting illegal stuff</option>
             <option value="Bad Short/Long desc">Bad Short/Long desc</option>
-            <option value="Dead Server">Dead online</option>
+            <option value="Dead Server">Dead Server</option>
             <option value="Malicious Server(dm all, and others)">Malicious Server</option>
             <option value="Other">Other</option>
         </select>
-        <div id="customField" style="display: none;">
+        <div id="serverReportCustomReasonField" style="display: none;">
             <br>
-            <label>Enter Reason</label>
-            <input type="text" class="form-control" id="customReason">
+            <label class="text-white">Enter Reason</label>
+            <input type="text" class="form-control form-control-sm bg-dark text-white" id="serverReportCustomReason">
         </div>
       </div>
         <p class="text-white"><b class="text-danger">Note:</b> False reports could get your account banned.</p>
       <div class="modal-footer bg-transparent">
-        <button type="button" class="btn btn-white mr-2" data-dismiss="modal">Close</button>
-        <button type="button" server_id="{{ server.id }}" class="btn btn-danger reportServerBtn" data-dismiss="modal">Report</button>
+        <button type="button" class="btn btn-white mr-2" data-bs-dismiss="modal">Close</button>
+        <button type="button" server_id="{{ server.id }}" class="btn btn-danger reportServerBtn" data-bs-dismiss="modal">Report</button>
       </div>
     </div>
   </div>
@@ -151,15 +171,15 @@
 <!-- Modal -->
 <div class="modal fade" id="verifyServerModalCenter" tabindex="-1" role="dialog" aria-labelledby="verifyServerModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content bg-dark">
-      <h5 class="modal-title text-white ml--2" id="verifyServerModalCenterTitle"><i class="fa fa-check"></i> Approve this server</h5>
+    <div class="modal-content bg-dark p-2">
+      <h5 class="modal-title text-white" id="verifyServerModalCenterTitle"><i class="fa fa-check"></i> Approve this server</h5>
       <div class="modal-body">
           <p class="text-white">Are you sure you want to approve this server?</p>
             <input type="hidden" id="verifyServerId">
       </div>
       <div class="modal-footer bg-transparent">
-        <button type="button" class="btn btn-white mr-2" data-dismiss="modal">Close</button>
-        <button type="button" server_id="{{ server.id }}" class="btn btn-success verifyServerBtn" data-dismiss="modal">Approve</button>
+        <button type="button" class="btn btn-white mr-2" data-bs-dismiss="modal">Close</button>
+        <button type="button" server_id="{{ server.id }}" class="btn btn-success verifyServerBtn" data-bs-dismiss="modal">Approve</button>
       </div>
     </div>
   </div>
@@ -167,36 +187,51 @@
 <!-- Modal -->
 <div class="modal fade" id="rejectServerModalCenter" tabindex="-1" role="dialog" aria-labelledby="rejectServerModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content bg-dark">
-      <h5 class="modal-title text-white ml--2" id="rejectServerModalCenterTitle"><i class="fa fa-times"></i> Reject this server</h5>
+    <div class="modal-content bg-dark p-2">
+      <h5 class="modal-title text-white" id="rejectServerModalCenterTitle"><i class="fa fa-times"></i> Reject this server</h5>
       <div class="modal-body">
-        <p>Are you sure you want to reject this server?</p><br><br>
-        <label>Enter Reason</label>
-        <input type="text" class="form-control" id="rejectServertReason" required>
+        <p class="text-white">Are you sure you want to reject this server?</p><br><br>
+        <label class="text-white">Enter Reason</label>
+        <input type="text" class="form-control bg-dark text-white" id="rejectServertReason" required>
         <input type="hidden" id="rejectServerId">
       </div>
       <div class="modal-footer bg-transparent">
-        <button type="button" class="btn btn-white mr-2" data-dismiss="modal">Close</button>
-        <button type="button" server_id="{{ server.id }}" class="btn btn-danger rejectServerBtn" data-dismiss="modal">Reject</button>
+        <button type="button" class="btn btn-white mr-2" data-bs-dismiss="modal">Close</button>
+        <button type="button" server_id="{{ server.id }}" class="btn btn-danger rejectServerBtn" data-bs-dismiss="modal">Reject</button>
       </div>
     </div>
   </div>
 </div>
 
+<div class="modal fade" id="unbanServerModalCenter" tabindex="-1" role="dialog" aria-labelledby="unbanServerModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content bg-dark p-2">
+      <h5 class="modal-title text-white" id="unbanServerModalCenterTitle"><i class="fa fa-check"></i> Unban this server</h5>
+      <div class="modal-body">
+          <p class="text-white">Are you sure you want to unban this server?</p>
+            <input type="hidden" id="unbanServerId">
+      </div>
+      <div class="modal-footer bg-transparent">
+        <button type="button" class="btn btn-white mr-2" data-bs-dismiss="modal">Close</button>
+        <button type="button" server_id="{{ server.id }}" class="btn btn-warning unbanServerBtn" data-bs-dismiss="modal">Unban</button>
+      </div>
+    </div>
+  </div>
+</div>
 <!-- Modal -->
 <div class="modal fade" id="banServerModalCenter" tabindex="-1" role="dialog" aria-labelledby="banServerModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content bg-dark">
-      <h5 class="modal-title text-white ml--2" id="banServerModalCenterTitle"><i class="fa fa-ban"></i> Ban this server</h5>
+    <div class="modal-content bg-dark p-2">
+      <h5 class="modal-title text-white" id="banServerModalCenterTitle"><i class="fa fa-ban"></i> Ban this server</h5>
       <div class="modal-body">
-        <p>Are you sure you want to ban this server?</p><br><br>
-        <label>Enter Reason</label>
-        <input type="text" class="form-control" id="banServerReason" required>
+        <p class="text-white">Are you sure you want to ban this server?</p><br><br>
+        <label class="text-white">Enter Reason</label>
+        <input type="text" class="form-control bg-dark text-white" id="banServerReason" required>
         <input type="hidden" id="banServerId">
       </div>
       <div class="modal-footer bg-transparent">
-        <button type="button" class="btn btn-white mr-2" data-dismiss="modal">Close</button>
-        <button type="button" server_id="{{ server.id }}" class="btn btn-danger banServerBtn" data-dismiss="modal">Ban</button>
+        <button type="button" class="btn btn-white mr-2" data-bs-dismiss="modal">Close</button>
+        <button type="button" server_id="{{ server.id }}" class="btn btn-danger banServerBtn" data-bs-dismiss="modal">Ban</button>
       </div>
     </div>
   </div>
@@ -204,20 +239,20 @@
 
 <div class="modal fade" id="deleteServerModalCenter" tabindex="-1" role="dialog" aria-labelledby="deleteServerModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content bg-dark">
-      <h5 class="modal-title text-white ml--2" id="deleteServerModalCenterTitle"><i class="fa fa-check"></i> Delete this server</h5>
+    <div class="modal-content bg-dark p-2">
+      <h5 class="modal-title text-white" id="deleteServerModalCenterTitle"><i class="fa fa-check"></i> Delete this server</h5>
       <div class="modal-body">
           <p class="text-white">Are you sure you want to delete this server?</p>
             <input type="hidden" id="deleteServerId">
       </div>
       <div class="modal-footer bg-transparent">
-        <button type="button" class="btn btn-white mr-2" data-dismiss="modal">Close</button>
-        <button type="button" server_id="{{ server.id }}" class="btn btn-danger deleteServerBtn" data-dismiss="modal">Delete</button>
+        <button type="button" class="btn btn-white mr-2" data-bs-dismiss="modal">Close</button>
+        <button type="button" server_id="{{ server.id }}" class="btn btn-danger deleteServerBtn" data-bs-dismiss="modal">Delete</button>
       </div>
     </div>
   </div>
 </div>
-    
+
 <script>
 function setServerId(elementId, serverId){
     document.getElementById(elementId).value = serverId;

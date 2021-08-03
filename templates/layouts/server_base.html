@@ -31,23 +31,23 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link" href="/bots"><i class="fas fa-robot"></i> Bots</a>
+              <a class="nav-link" href="{% url 'bots' %}"><i class="fas fa-robot"></i> Bots</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/"><i class="fas fa-server"></i> Servers</a>
+              <a class="nav-link" href="{% url 'servers' %}"><i class="fas fa-server"></i> Servers</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="https://docs.bladebotlist.xyz"><i class="fas fa-book"></i> Docs</a>
+              <a class="nav-link" href="https://docs.bladelist.gg"><i class="fas fa-book"></i> Docs</a>
 
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/discord"><i class="fab fa-discord"></i> Community</a>
+              <a class="nav-link" href="https://discord.gg/D3JmwgQ6Vu"><i class="fab fa-discord"></i> Community</a>
             </li>
+{#            <li class="nav-item">#}
+{#              <a class="nav-link" href="/partners"><i class="fas fa-handshake"></i> Partners</a>#}
+{#            </li>#}
             <li class="nav-item">
-              <a class="nav-link" href="/partners"><i class="fas fa-handshake"></i> Partners</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/about"><i class="fas fa-life-ring"></i> About</a>
+              <a class="nav-link" href="{% url 'about' %}"><i class="fas fa-life-ring"></i> About</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="https://status.bladebotlist.xyz"><i class="fas fa-signal"></i> Status</a>
@@ -193,6 +193,7 @@
         <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
         <script src="{% static 'js/script.js' %}"></script>
+        <script src="{% static 'js/server.js' %}"></script>
         {% if error %}
             <script>
                 notyf.error("{{error}}");

@@ -24,6 +24,10 @@ class Member(models.Model):
         return self.bots.first()
 
     @property
+    def has_servers(self):
+        return self.servers.first()
+
+    @property
     def avatar_url(self):
         if self.avatar is not None:
             return f"https://cdn.discordapp.com/avatars/{self.id}/{self.avatar}.png"
@@ -71,13 +75,24 @@ class Member(models.Model):
             self.meta.admin_servers = admin_servers
             self.meta.save()
             return admin_servers
-        else:
-            return
+        return
 
     def get_admin_server_data(self, server_id):
         for server in self.meta.admin_servers:
             if server.get("id") == server_id:
                 return server
+
+    def sync_servers(self):
+        for server in self.refresh_admin_servers():
+            try:
+                server_obj = Server.objects.get(id=server["id"])
+                if self not in server_obj.admins.all():
+                    server_obj.admins.add(self)
+                if server["owner"] and server_obj.owner != self:
+                    server_obj.owner = self
+                    server_obj.save()
+            except Server.DoesNotExist:
+                pass
 
 
 class MemberMeta(models.Model):
@@ -203,11 +218,23 @@ class Server(models.Model):
     tags = models.ManyToManyField(ServerTag, related_name="attached_servers", blank=True)
     banner_url = models.URLField(default="https://i.postimg.cc/15TN17rQ/xirprofilback.jpg")
     banned = models.BooleanField(default=False)
-    admins = models.ForeignKey(Member, related_name="admin_servers", null=True, on_delete=models.SET_NULL)
+    admins = models.ManyToManyField(Member, related_name="admin_servers")
 
     @property
     def icon_url(self):
         return f"https://cdn.discordapp.com/icons/{self.id}/{self.icon}.png"
+
+    @property
+    def verification_attempt(self):
+        return self.meta.rejection_count + 1
+
+    @property
+    def rejected(self):
+        return self.get_verification_status_display() == "Rejected"
+
+    @property
+    def unverified(self):
+        return self.get_verification_status_display() == "Unverified"
 
 
 class ServerMeta(models.Model):
@@ -215,6 +242,8 @@ class ServerMeta(models.Model):
     long_desc = models.TextField(null=True, blank=True)
     ban_reason = models.TextField(null=True, blank=True)
     member_count = models.IntegerField(default=0, null=True)
+    rejection_count = models.IntegerField(default=0)
+    rejection_reason = models.TextField(null=True, blank=True)
     moderator = models.ForeignKey(Member, on_delete=models.SET_NULL, null=True, blank=True)
 
 

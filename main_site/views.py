@@ -46,6 +46,7 @@ def server_refresh(request):
         (guild.get("id"), guild.get("name")) for guild in request.user.member.refresh_admin_servers()
         if not Server.objects.filter(id=guild.get("id")).exists()
     ]
+    request.user.member.sync_servers()
     return render(request, "refresh_pages/server_select.html", {"admin_guilds": admin_guilds})
 
 
@@ -130,6 +131,7 @@ class IndexView(View):
 
 
 class AboutView(View):
+
     def get(self, request):
         return render(request, "about.html")
 
@@ -330,16 +332,27 @@ class StaffView(View, ResponseMixin):
 
     def get(self, request):
         if request.user.is_staff:
-            awaiting_review = Bot.objects.filter(verification_status="UNVERIFIED",
-                                                 banned=False).order_by('date_added')[:10]
-            under_review = Bot.objects.filter(verification_status="UNDER_REVIEW",
-                                              banned=False).order_by('date_added')[:10]
+            bots_awaiting_review = Bot.objects.filter(verification_status="UNVERIFIED",
+                                                      banned=False, owner__banned=False).order_by('date_added')[:10]
+            bots_under_review = Bot.objects.filter(verification_status="UNDER_REVIEW",
+                                                   banned=False, owner__banned=False).order_by('date_added')[:10]
+            servers_awaiting_review = Server.objects.filter(verification_status="UNVERIFIED",
+                                                            banned=False, owner__banned=False
+                                                            ).order_by("date_added")[:10]
+            servers_under_review = Server.objects.filter(verification_status="UNDER_REVIEW",
+                                                         banned=False, owner__banned=False).order_by("date_added")[:10]
             return render(request, self.template_name, {
-                "bots_awaiting_review": awaiting_review,
-                "bots_under_review": under_review
+                "bots_awaiting_review": bots_awaiting_review,
+                "bots_under_review": bots_under_review,
+                "servers_awaiting_review": servers_awaiting_review,
+                "servers_under_review": servers_under_review
+
             })
         else:
             return self.http_responce_404(request)
+
+
+class BotModerationView(LoginRequiredMixin, View, ResponseMixin):
 
     def post(self, request):
         if request.user.is_staff:
@@ -358,7 +371,7 @@ class StaffView(View, ResponseMixin):
                                                              banned=False).order_by('date_added')[:10]
                         under_review = Bot.objects.filter(verification_status="UNDER_REVIEW",
                                                           banned=False).order_by('date_added')[:10]
-                        return render(request, "refresh_pages/queue.html", {
+                        return render(request, "refresh_pages/bot_queue.html", {
                             "bots_awaiting_review": awaiting_review,
                             "bots_under_review": under_review
                         })
@@ -405,17 +418,126 @@ class StaffView(View, ResponseMixin):
                         f"<:botdeclined:652482092499730433> "
                         f"Your bot got banned for the reason: {data.get('ban_reason')}"
                     )
+                elif data.get("action") == "unban":
+                    bot.banned = False
+                    bot.verification_status = "VERIFIED"
+                    bot.verified = True
+                    bot.save()
+                    bot.meta.moderator = request.user.member
+                    bot.meta.save()
+                    bot.owner.send_message(
+                        f"<:botadded:652482091971248140> "
+                        f"Your bot is unbanned"
+                    )
                 else:
                     return self.json_response_500()
                 awaiting_review = Bot.objects.filter(verification_status="UNVERIFIED",
                                                      banned=False).order_by('date_added')[:10]
                 under_review = Bot.objects.filter(verification_status="UNDER_REVIEW",
                                                   banned=False).order_by('date_added')[:10]
-                return render(request, "refresh_pages/queue.html", {
+                return render(request, "refresh_pages/bot_queue.html", {
                     "bots_awaiting_review": awaiting_review,
                     "bots_under_review": under_review
                 })
             except Bot.DoesNotExist:
+                return self.json_response_404()
+        else:
+            return self.json_response_401()
+
+
+class ServerModerationView(LoginRequiredMixin, View, ResponseMixin):
+
+    def post(self, request):
+        if request.user.is_staff:
+            if not Server.objects.filter(
+                    meta__moderator=request.user.member, verification_status="UNDER_REVIEW"
+            ).exists():
+                server_id = request.POST.get("server_id")
+                try:
+                    server = Server.objects.get(id=server_id)
+                    if server.meta.moderator and server.meta.moderator != request.user.member:
+                        return self.json_response_503()
+                    else:
+                        server.verification_status = "UNDER_REVIEW"
+                        server.meta.moderator = request.user.member
+                        server.save()
+                        server.meta.save()
+                        awaiting_review = Server.objects.filter(verification_status="UNVERIFIED",
+                                                                banned=False, owner__banned=False
+                                                                ).order_by('date_added')[:10]
+                        under_review = Server.objects.filter(verification_status="UNDER_REVIEW",
+                                                             banned=False, owner__banned=False
+                                                             ).order_by('date_added')[:10]
+                        return render(request, "refresh_pages/server_queue.html", {
+                            "servers_awaiting_review": awaiting_review,
+                            "servers_under_review": under_review
+                        })
+                except Server.DoesNotExist:
+                    return self.json_response_404()
+            return self.json_response_403()
+        return self.json_response_401()
+
+    def put(self, request):
+        if request.user.is_staff:
+            data = QueryDict(request.body)
+            try:
+                server = Server.objects.get(id=data.get("server_id"))
+                if data.get("action") == "verify":
+                    server.verified = True
+                    server.verification_status = "VERIFIED"
+                    server.save()
+                    server.owner.send_message(
+                        "<:botadded:652482091971248140> Your server is now verified and is now public."
+                    )
+                elif data.get("action") == "reject":
+                    server.meta.rejection_count += 1
+                    server.owner.send_message(f"<:botdeclined:652482092499730433> "
+                                              f"Your bot got rejected for reason: {data.get('rejection_reason')}")
+                    if server.meta.rejection_count == 3:
+                        server.banned = True
+                        server.verified = False
+                        server.save()
+                        server.meta.ban_reason = "Got rejected 3 times."
+                        server.owner.send_message(
+                            f"<:botdeclined:652482092499730433> "
+                            f"Your server got shadow banned since it got rejected 3 times."
+                        )
+                    server.verification_status = "REJECTED"
+                    server.save()
+                    server.meta.rejection_reason = data.get("rejection_reason")
+                    server.meta.save()
+                elif data.get("action") == "ban":
+                    server.banned = True
+                    server.verified = False
+                    server.meta.ban_reason = data.get("ban_reason")
+                    server.meta.save()
+                    server.save()
+                    server.owner.send_message(
+                        f"<:botdeclined:652482092499730433> "
+                        f"Your server got banned for the reason: {data.get('ban_reason')}"
+                    )
+                elif data.get("action") == "unban":
+                    server.banned = False
+                    server.verified = True
+                    server.verification_status = "VERIFIED"
+                    server.save()
+                    server.meta.moderator = request.user.member
+                    server.meta.save()
+                    server.owner.send_message(
+                        f"<:botadded:652482091971248140> "
+                        f"Your server is unbanned"
+                    )
+                else:
+                    return self.json_response_500()
+                awaiting_review = Server.objects.filter(verification_status="UNVERIFIED",
+                                                        banned=False).order_by('date_added')[:10]
+                under_review = Server.objects.filter(verification_status="UNDER_REVIEW",
+                                                     banned=False).order_by('date_added')[:10]
+                return render(request, "refresh_pages/server_queue.html", {
+                    "servers_awaiting_review": awaiting_review,
+                    "servers_under_review": under_review
+                })
+            except Server.DoesNotExist:
                 return self.json_response_404()
         else:
             return self.json_response_401()
@@ -462,6 +584,37 @@ class ServerIndexView(View, ResponseMixin):
                        "recent_servers": recent_servers,
                        "trending_servers": trending_servers})
 
+    def put(self, request):
+        data = QueryDict(request.body)
+        if request.user.is_authenticated:
+            server = Server.objects.get(id=data.get("server_id"))
+            vote = ServerVote.objects.filter(
+                member=request.user.member, server=server
+            ).order_by("-creation_time").first()
+            if vote is None:
+                ServerVote.objects.create(
+                    member=request.user.member,
+                    server=server,
+                    creation_time=datetime.now(timezone.utc)
+                )
+                server.votes += 1
+                server.save()
+                return JsonResponse({"vote_count": server.votes})
+            elif (datetime.now(timezone.utc) - vote.creation_time).total_seconds() >= 43200:
+                vote.delete()
+                ServerVote.objects.create(
+                    member=request.user.member,
+                    server=server,
+                    creation_time=datetime.now(timezone.utc)
+                )
+                server.votes += 1
+                server.save()
+                return JsonResponse({"vote_count": server.votes})
+            else:
+                return self.json_response_403()
+        else:
+            return self.json_response_401()
+
 
 class ServerListView(ListView, ResponseMixin):
     template_name = "server_list.html"
@@ -482,17 +635,35 @@ class ServerView(View, ResponseMixin):
             server = self.model.objects.get(id=server_id)
             if server.banned or not server.verified:
                 if request.user.is_authenticated:
-                    if request.user.member == server.owner or request.user.is_staff:
+                    if request.user.member in server.admins.all() or request.user.is_staff:
                         return render(request, self.template_name, {"server": server, "search_off": True})
                 return render(request, "404.html")
             return render(request, self.template_name, {"server": server, "search_off": True})
         except self.model.DoesNotExist:
             return render(request, "404.html")
 
-
+    def put(self, request, server_id):
+        try:
+            server = self.model.objects.get(id=server_id)
+            if request.user.member == server.owner:
+                if not server.banned:
+                    if server.rejected:
+                        server.verification_status = "UNVERIFIED"
+                        server.meta.moderator = None
+                        server.meta.save()
+                        server.save()
+                        return self.json_response_200()
+                    return self.json_response_503()
+                else:
+                    return self.json_response_403()
+            return self.json_response_401()
+        except self.model.DoesNotExist:
+            return self.json_response_404()
+        
+        
 class ServerSearchView(ListView):
     paginate_by = 16
-    template_name = "server_search.html"
+    template_name = "server_list.html"
 
     def get_queryset(self):
         query = self.request.GET.get("q")
@@ -524,7 +695,7 @@ class ServerAddView(LoginRequiredMixin, View):
 
     def get(self, request):
         if not request.user.member.meta.admin_servers:
-            if not request.user.member.refresh_admin_servers():
+            if request.user.member.refresh_admin_servers() is None:
                 logout(request)
                 return redirect("/accounts/login/")
         admin_guilds = [
@@ -548,6 +719,7 @@ class ServerAddView(LoginRequiredMixin, View):
                                        is_nsfw=data.get('nsfw') == 'checkedValue'
                                        )
         server.tags.set(ServerTag.objects.filter(name__in=data.getlist('server_tags')))
+        server.admins.add(request.user.member)
         server.meta.long_desc = data.get("long_desc")
         server.meta.save()
         request.user.member.send_message(
@@ -564,7 +736,7 @@ class ServerEditView(View, ResponseMixin):
 
     def get(self, request, server_id):
         server = Server.objects.get(id=server_id)
-        if server.owner == request.user.member or request.user.member in server.admins:
+        if request.user.member in server.admins.all():
             self.context["server"] = server
             self.context['tags'] = SERVER_TAGS
             return render(request, self.template_name, self.context)
@@ -574,7 +746,7 @@ class ServerEditView(View, ResponseMixin):
         if server_id is not None:
             server = Server.objects.get(id=server_id)
             if server:
-                if request.user.member == server.owner or request.user.member in server.admins.all():
+                if request.user.member in server.admins.all():
                     server.invite_link = data.get("invite")
                     server.short_desc = data.get("short_desc")
                     server.save()
@@ -589,3 +761,32 @@ class ServerEditView(View, ResponseMixin):
                 return ProfileView.as_view(self.request, {"error": "Server not found"})
         else:
             return ProfileView.as_view(self.request, {"error": "Internal Server error"})
+
+    def put(self, request):
+        if request.user.is_authenticated:
+            data = QueryDict(request.body)
+            server_id = data.get("server_id")
+            if ServerReport.objects.filter(
+                    server_id=server_id, reporter=self.request.user.member, reviewed=False
+            ).exists():
+                return self.json_response_403()
+            ServerReport.objects.create(
+                server_id=server_id,
+                reporter=request.user.member,
+                reason=data.get("reason"),
+                creation_date=datetime.now(timezone.utc)
+            )
+            return self.json_response_200()
+        return self.json_response_401()
+
+    def delete(self, request):
+        if request.user.is_authenticated:
+            server_id = request.GET.get("server_id")
+            try:
+                server = Server.objects.get(id=server_id)
+                if request.user.member in server.admins.all():
+                    server.delete()
+                    return self.json_response_200()
+            except Server.DoesNotExist:
+                return self.json_response_404()
+        return self.json_response_401()
