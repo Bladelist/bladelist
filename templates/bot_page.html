@@ -136,7 +136,8 @@
                                     <a href="#!"><button class="btn-sm btn-success float-right" onclick="setBotId('verifyBotId', '{{ bot.id }}');" data-toggle="modal" data-target="#verifyBotModalCenter"><i class="fas fa-check-circle"></i> Accept</button></a>
                                 {% endif %}
                                 {% endif %}
-                            {% elif request.user.member == bot.owner%}
+                            {% endif %}
+                            {% if request.user.member == bot.owner%}
                                 {% if not bot.banned %}
                                     <a href="#!"><button class="btn-sm btn-danger float-right" onclick="setBotId('deleteBotId', '{{ bot.id }}');" data-toggle="modal" data-target="#deleteBotModalCenter"><i class="far fa-trash-alt"></i> Delete</button></a>
                                     <a href="{% url 'bot_edit_view' bot_id=bot.id %}"><button class="btn-sm btn-warning float-right"><i class="far fa-edit"></i> Edit</button></a>

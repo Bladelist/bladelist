@@ -118,7 +118,8 @@
                                 <a href="#!"><button class="btn btn-success m-1" onclick="setServerId('verifyServerId', '{{ server.id }}');" data-bs-toggle="modal" data-bs-target="#verifyServerModalCenter"><i class="fas fa-check-circle"></i> Accept</button></a>
                             {% endif %}
                             {% endif %}
-                        {% elif request.user.member in server.admins.all%}
+                        {% endif %}
+                        {% if request.user.member in server.admins.all%}
                             {% if not server.banned %}
                                 <a href="#!"><button class="btn btn-danger m-1" onclick="setServerId('deleteServerId', '{{ server.id }}');" data-bs-toggle="modal" data-bs-target="#deleteServerModalCenter"><i class="far fa-trash-alt"></i> Delete</button></a>
                                 <a href="{% url 'server_edit_view' server_id=server.id %}"><button class="btn btn-warning m-1"><i class="far fa-edit"></i> Edit</button></a>
