@@ -582,7 +582,8 @@ class ServerIndexView(View, ResponseMixin):
         return render(request, self.template_name,
                       {"random_servers": RANDOM_SERVERS,
                        "recent_servers": recent_servers,
-                       "trending_servers": trending_servers})
+                       "trending_servers": trending_servers,
+                       "tags": SERVER_TAGS})
 
     def put(self, request):
         data = QueryDict(request.body)

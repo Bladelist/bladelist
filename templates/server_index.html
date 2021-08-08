@@ -117,12 +117,9 @@
 
         <h2 class="h2 text-light"><i class="fas fa-tags"></i> Trending tags</h2>
             <div class="btn-group-xs">
-                <a href="#"><button class="btn btn-outline-primary"><i class="fas fa-gamepad"></i> Fortnite</button></a>
-                <a href="#"><button class="btn btn-outline-primary"><i class="fas fa-gamepad"></i> Fortnite</button></a>
-                <a href="#"><button class="btn btn-outline-primary"><i class="fas fa-gamepad"></i> Fortnite</button></a>
-                <a href="#"><button class="btn btn-outline-primary"><i class="fas fa-gamepad"></i> Fortnite</button></a>
-                <a href="#"><button class="btn btn-outline-primary"><i class="fas fa-gamepad"></i> Fortnite</button></a>
-                <a href="#"><button class="btn btn-outline-primary"><i class="fas fa-gamepad"></i> Fortnite</button></a>
+                {% for tag in tags %}
+                <a href="{% url 'server_search' %}?tag={{ tag.name }}"><button class="btn btn-outline-primary"><i class="{{ tag.icon }}"></i> {{ tag.name }}</button></a>
+                {% endfor %}
             </div>
 
     </div>
