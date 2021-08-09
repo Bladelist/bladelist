@@ -10,7 +10,7 @@ from utils.hashing import Hasher
 hasher = Hasher()
 
 
-def create_user(user_json):
+def create_user(user_json, api=False):
     user_id = user_json.get("id")
     user = User.objects.create_user(username=user_id,
                                     password=hasher.get_hashed_pass(user_id),
@@ -20,12 +20,13 @@ def create_user(user_json):
                                    avatar=user_json.get("avatar"),
                                    tag=user_json.get("discriminator"),
                                    )
-    member.meta.access_token = user_json.get("token_data")["access_token"]
-    member.meta.refresh_token = user_json.get("token_data")["refresh_token"]
-    member.meta.access_token_expiry = \
-        datetime.now(timezone.utc) + timedelta(seconds=int(user_json.get("token_data")["expires_in"]))
-    member.meta.save()
-    member.sync_servers()
+    if not api:
+        member.meta.access_token = user_json.get("token_data")["access_token"]
+        member.meta.refresh_token = user_json.get("token_data")["refresh_token"]
+        member.meta.access_token_expiry = \
+            datetime.now(timezone.utc) + timedelta(seconds=int(user_json.get("token_data")["expires_in"]))
+        member.meta.save()
+        member.sync_servers()
     return user
 
 

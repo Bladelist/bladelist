@@ -40,6 +40,6 @@ class UserMigrateView(APIView, ResponseMixin):
             data = request.data
             if User.objects.filter(username=data.get("id")).exists():
                 return self.json_response_503()
-            create_user(data)
+            create_user(data, api=True)
             return self.json_response_201()
         return self.json_response_401()
