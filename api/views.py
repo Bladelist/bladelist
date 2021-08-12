@@ -1,5 +1,6 @@
+from datetime import datetime, timezone
 from rest_framework.views import APIView
-from main_site.models import Bot
+from main_site.models import Bot, BotTag
 from utils.mixins import ResponseMixin
 from rest_framework.response import Response
 from .serializers import BotSerializer
@@ -41,5 +42,40 @@ class UserMigrateView(APIView, ResponseMixin):
             if User.objects.filter(username=data.get("id")).exists():
                 return self.json_response_503()
             create_user(data, api=True)
+            return self.json_response_201()
+        return self.json_response_401()
+
+
+class BotMigrateView(APIView, ResponseMixin):
+
+    def post(self, request):
+        if request.user.is_superuser:
+            data = request.data
+            if Bot.objects.filter(username=data.get("id")).exists():
+                return self.json_response_503()
+            resp = discord_api.get_bot_info(data.get("id"))
+            if resp.status_code == 404:
+                return self.json_response_404()
+            elif resp.status_code == 200:
+                resp = resp.json()
+                bot = Bot.objects.create(id=data.get("id"),
+                                         name=resp.get("username"),
+                                         owner=request.user.member,
+                                         invite_link=data.get("invite"),
+                                         date_added=datetime.now(timezone.utc),
+                                         avatar=resp.get("avatar"),
+                                         short_desc=data.get("short_desc"))
+                bot.tags.set(BotTag.objects.filter(name__in=data.getlist('tags')))
+                bot.meta.support_server = data.get("support_server")
+                bot.meta.prefix = data.get("prefix")
+                bot.meta.github = data.get("github")
+                bot.meta.website = data.get("website")
+                bot.meta.library = data.get("library")
+                bot.meta.twitter = data.get("twitter")
+                bot.meta.support_server = data.get("support_server")
+                bot.meta.privacy = data.get("privacy")
+                bot.meta.donate = data.get("donate")
+                bot.meta.long_desc = data.get("long_desc")
+                bot.meta.save()
             return self.json_response_201()
         return self.json_response_401()
