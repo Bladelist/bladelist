@@ -94,3 +94,13 @@ class BotStatusEditView(APIView, ResponseMixin):
             serializer = self.serializer(queryset)
             return Response(serializer.data)
         return self.json_response_401()
+
+    def put(self, request, bot_id):
+        if request.user.is_superuser:
+            queryset = get_object_or_404(self.model, id=bot_id)
+            serializer = self.serializer(queryset, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            return self.json_response_400()
+        return self.json_response_401()

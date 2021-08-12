@@ -276,3 +276,295 @@
     </div>
 </footer>
 </html>
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <title>BladeList - Home</title>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <link rel='stylesheet' type='text/css' media='screen' href='../static/css/style.css'>
+
+  <!-- bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+
+  <!-- fontawesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#"><img class="navbar-logo" width="32px" height="32px" src="https://bladebotlist.xyz/img/logo.svg"> BladeList</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" href="/bots"><i class="fas fa-robot"></i> Bots</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/servers"><i class="fas fa-server"></i> Servers</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="https://docs.bladebotlist.xyz"><i class="fas fa-book"></i> Docs</a>
+
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/discord"><i class="fab fa-discord"></i> Community</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/partners"><i class="fas fa-handshake"></i> Partners</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/about"><i class="fas fa-life-ring"></i> About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="https://status.bladebotlist.xyz"><i class="fas fa-signal"></i> Status</a>
+            </li>
+        </ul>
+          <ul class="nav navbar-nav navbar-right">
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="https://cdn.discordapp.com/embed/avatars/0.png" class="rounded-circle" width="32px" height="32px">
+                    User#0001
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-dark bg-customdark border border-white rounded m-3" aria-labelledby="navbarDropdown">
+                    <li><a class="dropdown-item p-4" href="#"><i aria-hidden="true" class="fas fa-user-circle"></i>&nbsp;Profile</a></li>
+                    <li><a class="dropdown-item p-4" href="#"><i aria-hidden="true" class="fas fa-plus"></i>&nbsp;New Bot</a></li>
+                    <li><a class="dropdown-item p-4" href="#"><i aria-hidden="true" class="fas fa-plus"></i>&nbsp;New Server</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item p-4" href="#"><i aria-hidden="true" class="fas fa-gavel"></i>&nbsp;Staff panel</a></li>
+                    <li><a class="dropdown-item p-4" href="#"><i aria-hidden="true" class="fas fa-cogs"></i>&nbsp;Admin panel</a></li>
+                    <div class="dropdown-divider"></div>
+                    <li><a class="dropdown-item text-danger p-4" href="#"><i aria-hidden="true" class="fas fa-sign-in-alt"></i>&nbsp;Logout</a></li>
+                  </ul>
+                </li>
+                <li class="nav-item active" href="/auth/login">
+                  <a class="nav-link" href="#"><i class="fas fa-sign-in-alt"></i> Login</a>
+                  </li>
+            </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <div class="bg-customdark text-white text-center p-5">
+    <img src="https://bladebotlist.xyz/img/logo.svg" class="logo rounded-circle" width="256" height="256">
+    <h1 class="brand-title">BladeBotList</h1>
+    <h5>Search in more than <a class="text-primary text-decoration-none">400+</a> Discord bots</h5>
+    <form action="/search" method="GET">
+          <div>
+            <!-- <div class="beforeicon"> --->
+            <!--  <i class="fas fa-search"></i> --->
+            <!-- </div> --->
+            <input autocomplete="off" name="q" id="searchbox" type="text" value="" class="bblsearchbar" placeholder="Search a bot" >
+          </div>
+
+    </form>
+  </div>
+  <div class="wave wave-top"></div>
+
+  <div class="container text-white">
+
+
+    <!-- Most voted bots part -->
+
+    <h1><i class="fas fa-vote-yea"></i>Top voted bots</h1>
+
+    <div class="row text-center">
+
+      <!-- Start of card -->
+
+        <div class="col-xs-6 col-lg-3 col-md-3">
+          <div class='card bg-dark p-2 m-3'>
+            <img class="card-logo m-auto" src="https://cdn.discordapp.com/avatars/486948160124485642/2095294fa50229fc1956fe854e355ec3.png" width="128" height="128">
+            <h3 class="card-title">YouTube Bot</h3>
+            <div class="tags">
+              <span class="badge rounded-pill bg-info">10 votes</i></span>
+              <span class="badge rounded-pill bg-warning">267 servers</i></span>
+              <span class="badge rounded-pill bg-muted">#Moderation</span>
+              <span class="badge rounded-pill bg-muted">#Music</span>
+            </div>
+            <p class="card-desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+            <div class="card-buttons m-2 text-center">
+                  <a href="#"><button class="m-2 btn btn-secondary"><i class="far fa-eye"></i> View</button></a>
+                  <a href="#"><button class="m-2 btn btn-primary"><i class="fas fa-plus"></i> Invite</button></a>
+                  <a href="#"><button class="m-2 btn btn-success"><i class="fas fa-chevron-up"></i> Vote</button></a>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- End of card -->
+          <!-- Just make this part as template -->
+
+
+
+
+    </div>
+
+
+
+    <!-- Recent bots part -->
+
+    <h1><i class="fas fa-bolt"></i> Recently added bots</h1>
+
+    <div class="row text-center">
+
+
+      <!-- Start of card -->
+
+      <div class="col-xs-6 col-lg-3 col-md-3">
+        <div class='card bg-dark p-2 m-3'>
+          <img class="card-logo m-auto" src="https://cdn.discordapp.com/avatars/486948160124485642/2095294fa50229fc1956fe854e355ec3.png" width="128" height="128">
+          <h3 class="card-title">YouTube Bot</h3>
+          <div class="tags">
+            <span class="badge rounded-pill bg-info">10 votes</i></span>
+            <span class="badge rounded-pill bg-warning">267 servers</i></span>
+            <span class="badge rounded-pill bg-muted">#Moderation</span>
+            <span class="badge rounded-pill bg-muted">#Music</span>
+          </div>
+          <p class="card-desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+          <div class="card-buttons m-2 text-center">
+                <a href="#"><button class="m-2 btn btn-secondary"><i class="far fa-eye"></i> View</button></a>
+                <a href="#"><button class="m-2 btn btn-primary"><i class="fas fa-plus"></i> Invite</button></a>
+                <a href="#"><button class="m-2 btn btn-success"><i class="fas fa-chevron-up"></i> Vote</button></a>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- End of card -->
+        <!-- Just make this part as template -->
+
+
+    </div>
+
+    <!-- Recent bots part -->
+
+    <h1><i class="fas fa-dice"></i> Random bots</h1>
+
+    <div class="row text-center">
+
+
+      <!-- Start of card -->
+
+      <div class="col-xs-6 col-lg-3 col-md-3">
+        <div class='card bg-dark p-2 m-3'>
+          <img class="card-logo m-auto" src="https://cdn.discordapp.com/avatars/486948160124485642/2095294fa50229fc1956fe854e355ec3.png" width="128" height="128">
+          <h3 class="card-title">YouTube Bot</h3>
+          <div class="tags">
+            <span class="badge rounded-pill bg-info">10 votes</i></span>
+            <span class="badge rounded-pill bg-warning">267 servers</i></span>
+            <span class="badge rounded-pill bg-muted">#Moderation</span>
+            <span class="badge rounded-pill bg-muted">#Music</span>
+          </div>
+          <p class="card-desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+          <div class="card-buttons m-2 text-center">
+                <a href="#"><button class="m-2 btn btn-secondary"><i class="far fa-eye"></i> View</button></a>
+                <a href="#"><button class="m-2 btn btn-primary"><i class="fas fa-plus"></i> Invite</button></a>
+                <a href="#"><button class="m-2 btn btn-success"><i class="fas fa-chevron-up"></i> Vote</button></a>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- End of card -->
+        <!-- Just make this part as template -->
+
+
+    </div>
+
+
+
+
+
+  </div>
+  <div class="d-grid gap-2 col-6 mx-auto m-5">
+    <a href="/bots" class="mx-auto"><button class="btn btn-primary">View more bots</button></a>
+  </div>
+</body>
+
+<footer>
+  <div class="wave"></div>
+  <div class="bg-customdark text-white text-center p-5">
+    <div class='row'>
+      <div class='col-xs-6 col-md-2'>
+        <h1>BladeList</h1>
+        <div class="text-white fs-2">
+          <a href="https://twitter.com/bladelist" class="text-primary"><i class="fab fa-twitter"></i></a>
+          <a href="https://discord.gg/bbl" class="text-discord"><i class="fab fa-discord"></i></a>
+          <a href="https://github.com/bladebotlist" class="text-dark"><i class="fab fa-github"></i></a>
+          <a href="mailto:contact@aisurustudios.com" class="text-white"><i class="fas fa-envelope"></i></a>
+        </div>
+      </div>
+      <div class='col-xs-6 col-md-2'>
+        <h3>Important Links</h3>
+          <ul class="list-unstyled">
+            <li>
+              <a href="/" class="text-white text-decoration-none"><i class="fas fa-home"></i> Home</a>
+            </li>
+            <li>
+              <a href="/" class="text-white text-decoration-none"><i class="fas fa-robot"></i> Browse bots</a>
+            </li>
+            <li>
+              <a href="/" class="text-white text-decoration-none"><i class="fas fa-bot"></i> Browse bots</a>
+            </li>
+            <li>
+              <a href="/" class="text-white text-decoration-none"><i class="fas fa-certificate"></i> Certification</a>
+            </li>
+            <li>
+              <a class="text-white text-decoration-none"><i class="fas fa-balance-scale-right"></i> <a class="text-decoration-none text-white" href="/terms">Terms</a> & <a class="text-decoration-none text-white" href="/privacy">Privacy</a></a>
+            </li>
+          </ul>
+      </div>
+      <div class='col-xs-6 col-md-2'>
+        <h3>Useful stuff</h3>
+        <ul class="list-unstyled">
+          <li>
+            <a href="/about" class="text-white text-decoration-none"><i class="fas fa-lightbulb"></i> About</a>
+          </li>
+          <li>
+            <a href="https://discordjs.guide/" class="text-white text-decoration-none"><i class="fas fa-robot"></i> Create your own bot</a>
+          </li>
+          <li>
+            <a href="https://discord.com/developers/applications/me" class="text-white text-decoration-none"><i class="fab fa-discord"></i> Discord Developers portail</a>
+          </li>
+        </ul>
+      </div>
+      <div class='col-xs-6 col-md-2'>
+        <h3>Partners</h3>
+        <ul class="list-unstyled">
+          <li>
+            <a href="/about" class="text-white text-decoration-none">PornHub Community</a>
+          </li>
+        </ul>
+      </div>
+      <div class='col-xs-6 col-md-2'>
+        <h3>Dashboard</h3>
+        <ul class="list-unstyled">
+          <li>
+            <a href="/auth/login" class="text-white text-decoration-none"><i class="fas fa-sign-in-alt"></i> Login</a>
+          </li>
+          <li>
+            <a href="/me" class="text-white text-decoration-none"><i class="fas fa-user"></i> Profile</a>
+          </li>
+          <li>
+            <a href="/bots/new" class="text-white text-decoration-none"><i class="fas fa-plus "></i> New Bot</a>
+          </li>
+          <li>
+            <a href="/servers/new" class="text-white text-decoration-none"><i class="fas fa-plus "></i> New Server</a>
+          </li>
+          <li>
+            <a href="/auth/logout" class="text-white text-decoration-none"><i class="fas fa-sign-out-alt"></i> Log out</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
+</html>

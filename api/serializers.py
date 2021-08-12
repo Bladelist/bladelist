@@ -26,4 +26,4 @@ class BotStatusSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Bot
-        fields = ['verified', 'banned']
+        fields = ["verified", "banned", "verification_status"]
