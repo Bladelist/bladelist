@@ -1,6 +1,6 @@
-from datetime import datetime, timezone
+from datetime import datetime
 from rest_framework.views import APIView
-from main_site.models import Bot, BotTag
+from main_site.models import Bot, BotTag, Member
 from utils.mixins import ResponseMixin
 from rest_framework.response import Response
 from .serializers import BotSerializer
@@ -60,11 +60,14 @@ class BotMigrateView(APIView, ResponseMixin):
                 resp = resp.json()
                 bot = Bot.objects.create(id=data.get("id"),
                                          name=resp.get("username"),
-                                         owner=request.user.member,
+                                         owner=Member.objects.get(id=data.get("owner_id")),
                                          invite_link=data.get("invite"),
-                                         date_added=datetime.now(timezone.utc),
+                                         date_added=datetime.strptime(data.get("date_added"), "%d%m%Y"),
                                          avatar=resp.get("avatar"),
-                                         short_desc=data.get("short_desc"))
+                                         short_desc=data.get("short_desc"),
+                                         votes=data.get("votes"),
+                                         banned=data.get("banned"),
+                                         verified=data.get("verified"))
                 bot.tags.set(BotTag.objects.filter(name__in=data.getlist('tags')))
                 bot.meta.support_server = data.get("support_server")
                 bot.meta.prefix = data.get("prefix")
