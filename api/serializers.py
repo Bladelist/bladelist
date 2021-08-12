@@ -20,3 +20,10 @@ class BotEditSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bot
         fields = ["server_count"]
+
+
+class BotStatusSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Bot
+        fields = ['verified', 'banned']

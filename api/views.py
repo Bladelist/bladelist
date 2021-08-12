@@ -8,7 +8,7 @@ from rest_framework.generics import get_object_or_404
 from django.contrib.auth.models import User
 from utils.background import create_user
 from utils.api_client import DiscordAPIClient
-
+from .serializers import BotStatusSerializer
 discord_api = DiscordAPIClient()
 
 
@@ -81,4 +81,16 @@ class BotMigrateView(APIView, ResponseMixin):
                 bot.meta.long_desc = data.get("long_desc")
                 bot.meta.save()
             return self.json_response_201()
+        return self.json_response_401()
+
+
+class BotStatusEditView(APIView, ResponseMixin):
+    model = Bot
+    serializer = BotStatusSerializer
+
+    def get(self, request, bot_id):
+        if request.user.is_superuser:
+            queryset = get_object_or_404(self.model, id=bot_id)
+            serializer = self.serializer(queryset)
+            return Response(serializer.data)
         return self.json_response_401()
