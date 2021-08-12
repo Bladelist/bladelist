@@ -5,7 +5,7 @@ from main_site.models import Bot, BotMeta
 class BotMetaSerializer(serializers.ModelSerializer):
     class Meta:
         model = BotMeta
-        exclude = ("bot", "ban_reason", "rejection_count", "rejection_reason", "moderator")
+        exclude = ("bot", "long_desc", "moderator")
 
 
 class BotSerializer(serializers.ModelSerializer):

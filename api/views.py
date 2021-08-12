@@ -18,7 +18,7 @@ class BotManageView(APIView, ResponseMixin):
 
     def get(self, request, bot_id):
         queryset = get_object_or_404(Bot, id=bot_id)
-        serializer = self.serializers(queryset, context={'request': request})
+        serializer = self.serializers(queryset)
         return Response(serializer.data, status=200)
 
     def put(self, request, bot_id):
