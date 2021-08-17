@@ -20,6 +20,7 @@
 
                 <div class="form-group bg-dark rounded p-2 m-3">
                  <h3>Select your server tags <a class="text-decoration-none text-danger">*</a></h3>
+                <p class="text-danger">Multiple tags can be selected by holding CTRL</p>
                 <select class="form-select form-select bg-customdark text-white" name="server_tags" id="server_tags" required multiple>
                     {% for tag in tags %}
                         <option value="{{ tag.name }}">{{ tag.name }}</option>
