@@ -28,7 +28,7 @@
 
                   <div class="form-group bg-dark rounded p-2 m-3">
                     <h3>Server Invite Link <a class="text-decoration-none text-danger">*</a></h3>
-                        <input type="text" class="form-control bg-customdark text-white" name="invite" id="server_invite" value="{{ server.invite_link }}" aria-describedby="helpId" placeholder="https://discord.gg/bbl" required>
+                        <input type="text" class="form-control bg-customdark text-white" name="invite" id="server_invite" value="{% url 'server_invite' server_id=server.id %}" aria-describedby="helpId" placeholder="https://discord.gg/bbl" required>
                   </div>
 
                   <div class="form-group bg-dark rounded p-2 m-3">

@@ -129,7 +129,7 @@
                     <hr>
                     <div class="card-manage">
                         <a href="{% url 'server_single' server_id=server.id %}"><button class="btn btn-primary mr-1">View</button></a>
-                        <a href="{{ server.invite_link }}"><button class="btn btn-success">Join</button></a><br>
+                        <a href="{% url 'server_invite' server_id=server.id %}"><button class="btn btn-success">Join</button></a><br>
                          <a href="{% url 'server_edit_view' server_id=server.id %}"><button class="btn btn-info mt-2"><i class="fa fa-edit"></i> Edit</button></a>
                     </div>
             </div>
@@ -154,7 +154,7 @@
                     <hr>
                     <div class="card-manage">
                         <a href="{% url 'server_single' server_id=server.id %}"><button class="btn btn-primary mr-1">View</button></a>
-                        <a href="{{ server.invite_link }}"><button class="btn btn-success">Join</button></a>
+                        <a href="{% url 'server_invite' server_id=server.id %}"><button class="btn btn-success">Join</button></a>
                     </div>
             </div>
         </div>

@@ -23,7 +23,7 @@
                     <p class="card-desc">{{ server.short_desc }}</p>
                     <div class="card-buttons m-2 text-center">
                         <a href="{% url 'server_single' server_id=server.id %}"><button class="m-2 btn btn-secondary"><i class="far fa-eye"></i> View</button></a>
-                        <a href="{{ server.invite_link }}"><button class="m-2 btn btn-primary"><i class="fas fa-user-plus"></i> Join</button></a>
+                        <a href="{% url 'server_invite' server_id=server.id %}"><button class="m-2 btn btn-primary"><i class="fas fa-user-plus"></i> Join</button></a>
                     </div>
                 </div>
             </div>

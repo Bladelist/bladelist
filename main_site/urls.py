@@ -20,7 +20,7 @@ urlpatterns = [
     url(r'^bots/add', BotAddView.as_view(), name="bot_add"),
     url(r'^bots', BotListView.as_view(), name="bots"),
 
-    url(r'^servers/(?P<server_id>[0-9]{18})/invite/', server_invite_counter, name="bot_invite"),
+    url(r'^servers/(?P<server_id>[0-9]{18})/invite/', server_invite_counter, name="server_invite"),
     url(r'^servers/(?P<server_id>[0-9]{18})/edit/', ServerEditView.as_view(), name="server_edit_view"),
     url(r'^servers/edit/', ServerEditView.as_view(), name="server_edit"),
     url(r'^servers/(?P<server_id>[0-9]{18})', ServerView.as_view(), name="server_single"),

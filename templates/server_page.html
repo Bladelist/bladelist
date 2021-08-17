@@ -29,7 +29,7 @@
                             <h5 class=""><i class="fa fa-info-circle" aria-hidden="true"></i> Information</h5>
                         </div><br>
                         <ul class="text-decoration-none">
-                            <a class="btn-block btn-icon m-2" href="{{ server.invite_link }}">
+                            <a class="btn-block btn-icon m-2" href="{% url 'server_invite' server_id=server.id %}">
                                 <div class="btnicon-icon text-info">
                                     <i class="fas fa-plus"></i>
                                 </div>
@@ -106,7 +106,7 @@
                         {% if not server.banned %}
                             <a href="#!"><button class="btn btn-success voteServerBtn m-1" server_id="{{ server.id }}"><i class="fas fa-chevron-up"></i> Vote</button></a>
                             <a href="#!"><button class="btn btn-danger m-1" {% if not request.user.is_authenticated %}disabled data-toggle="tooltip" data-placement="bottom" title="Login to report"{% else %} data-bs-toggle="modal" data-bs-target="#reportServerModalCenter" {% endif %}><i class="far fa-flag"></i> Report</button></a>
-                            <a href="{{ server.invite_url }}"><button class="btn btn-warning"><i class="fas fa-plus"></i> Join</button></a>
+                            <a href="{% url 'server_invite' server_id=server.id %}"><button class="btn btn-warning"><i class="fas fa-plus"></i> Join</button></a>
                         {% endif %}
                         {% if request.user.is_staff  %}
                             {% if server.banned %}

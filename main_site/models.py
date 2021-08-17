@@ -246,6 +246,7 @@ class ServerMeta(models.Model):
     rejection_count = models.IntegerField(default=0)
     rejection_reason = models.TextField(null=True, blank=True)
     moderator = models.ForeignKey(Member, on_delete=models.SET_NULL, null=True, blank=True)
+    total_invites = models.IntegerField(default=0, null=True)
 
 
 class ServerVote(models.Model):
