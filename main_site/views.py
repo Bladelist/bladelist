@@ -60,9 +60,9 @@ def bot_invite_counter(request, bot_id):
         return render(request, "404.html")
 
 
-def server_invite_counter(request, bot_id):
+def server_invite_counter(request, server_id):
     try:
-        server = Server.objects.get(id=bot_id)
+        server = Server.objects.get(id=server_id)
         server.meta.total_invites += 1
         server.meta.save()
         return redirect(server.invite_link)

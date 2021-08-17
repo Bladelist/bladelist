@@ -1,10 +1,10 @@
 from django.urls import path
 from django.conf.urls import url
-from .views import (IndexView, BotView, LoginView, login_handler_view, discord_login_normal,
-                    logout_view, discord_login_view, server_refresh, AboutView, ServerModerationView,
-                    ProfileEditView, StaffView, BotSearchView, ServerView, ServerListView,
+from .views import (IndexView, LoginView, AboutView, ServerModerationView, BotAddView,
+                    ProfileEditView, StaffView, BotSearchView, ServerView, ServerListView, BotView,
                     ServerAddView, ServerEditView, ServerSearchView, ServerIndexView, BotModerationView,
-                    TemplateView, BotListView, BotAddView, BotEditView, ProfileView, bot_invite_counter)
+                    TemplateView, BotListView, BotEditView, ProfileView, discord_login_view, logout_view,
+                    bot_invite_counter, server_invite_counter, server_refresh, login_handler_view, discord_login_normal)
 
 
 urlpatterns = [
@@ -20,6 +20,7 @@ urlpatterns = [
     url(r'^bots/add', BotAddView.as_view(), name="bot_add"),
     url(r'^bots', BotListView.as_view(), name="bots"),
 
+    url(r'^servers/(?P<server_id>[0-9]{18})/invite/', server_invite_counter, name="bot_invite"),
     url(r'^servers/(?P<server_id>[0-9]{18})/edit/', ServerEditView.as_view(), name="server_edit_view"),
     url(r'^servers/edit/', ServerEditView.as_view(), name="server_edit"),
     url(r'^servers/(?P<server_id>[0-9]{18})', ServerView.as_view(), name="server_single"),
