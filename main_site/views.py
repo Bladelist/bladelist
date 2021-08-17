@@ -60,6 +60,16 @@ def bot_invite_counter(request, bot_id):
         return render(request, "404.html")
 
 
+def server_invite_counter(request, bot_id):
+    try:
+        server = Server.objects.get(id=bot_id)
+        server.meta.total_invites += 1
+        server.meta.save()
+        return redirect(server.invite_link)
+    except Server.DoesNotExist:
+        return render(request, "404.html")
+
+
 class BotView(View, ResponseMixin):
     template_name = "bot_page.html"
     model = Bot
