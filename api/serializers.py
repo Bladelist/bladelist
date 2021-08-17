@@ -5,7 +5,7 @@ from main_site.models import Bot, BotMeta, Server, ServerMeta
 class BotMetaSerializer(serializers.ModelSerializer):
     class Meta:
         model = BotMeta
-        exclude = ("id", "bot", "long_desc", "moderator", "rejection_reason", "rejection_count")
+        exclude = ("id", "bot", "long_desc", "moderator", "rejection_reason", "rejection_count", "ban_reason")
 
 
 class BotSerializer(serializers.ModelSerializer):
@@ -32,7 +32,7 @@ class BotStatusSerializer(serializers.ModelSerializer):
 class ServerMetaSerializer(serializers.ModelSerializer):
     class Meta:
         model = ServerMeta
-        exclude = ("id", "server", "long_desc", "moderator", "rejection_reason", "rejection_count")
+        fields = ("member_count", "total_invites")
 
 
 class ServerSerializer(serializers.ModelSerializer):
