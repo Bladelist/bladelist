@@ -53,6 +53,8 @@ def server_refresh(request):
 def bot_invite_counter(request, bot_id):
     try:
         bot = Bot.objects.get(id=bot_id)
+        bot.meta.total_invites += 1
+        bot.meta.save()
         return redirect(bot.invite_link)
     except Bot.DoesNotExist:
         return render(request, "404.html")
