@@ -370,7 +370,6 @@ class BotModerationView(LoginRequiredMixin, View, ResponseMixin):
 
     def post(self, request):
         if request.user.is_staff:
-            if not Bot.objects.filter(meta__moderator=request.user.member, verification_status="UNDER_REVIEW").exists():
                 bot_id = request.POST.get("bot_id")
                 try:
                     bot = Bot.objects.get(id=bot_id)
