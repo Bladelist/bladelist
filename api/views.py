@@ -8,7 +8,7 @@ from rest_framework.generics import get_object_or_404
 from django.contrib.auth.models import User
 from utils.background import create_user
 from utils.api_client import DiscordAPIClient
-from .serializers import BotStatusSerializer
+from .serializers import BotStatusSerializer, ServerSerializer
 discord_api = DiscordAPIClient()
 
 
@@ -108,7 +108,7 @@ class BotStatusEditView(APIView, ResponseMixin):
 
 class ServerView(APIView, ResponseMixin):
 
-    serializers = BotSerializer
+    serializers = ServerSerializer
 
     def get(self, request, server_id):
         queryset = get_object_or_404(Server, id=server_id)
