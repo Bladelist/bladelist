@@ -179,6 +179,7 @@ class BotMeta(models.Model):
     rejection_reason = models.TextField(null=True, blank=True)
     moderator = models.ForeignKey(Member, on_delete=models.SET_NULL, null=True, blank=True)
     long_desc = models.TextField(null=True, blank=True)
+    total_invites = models.IntegerField(default=0, null=True)
 
 
 class BotReport(models.Model):
