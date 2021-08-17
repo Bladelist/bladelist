@@ -142,6 +142,7 @@ class Bot(models.Model):
     short_desc = models.CharField(max_length=120, null=True)
     tags = models.ManyToManyField(BotTag, related_name="bots", blank=True)
     banner_url = models.URLField(default="https://i.postimg.cc/15TN17rQ/xirprofilback.jpg")
+    admins = models.ManyToManyField(Member, related_name="admin_bots")
 
     @property
     def rejected(self):
