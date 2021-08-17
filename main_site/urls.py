@@ -1,6 +1,6 @@
 from django.urls import path
 from django.conf.urls import url
-from .views import (IndexView, LoginView, AboutView, ServerModerationView, BotAddView,
+from .views import (IndexView, LoginView, ServerModerationView, BotAddView,
                     ProfileEditView, StaffView, BotSearchView, ServerView, ServerListView, BotView,
                     ServerAddView, ServerEditView, ServerSearchView, ServerIndexView, BotModerationView,
                     TemplateView, BotListView, BotEditView, ProfileView, discord_login_view, logout_view,
@@ -30,7 +30,7 @@ urlpatterns = [
     url(r'^servers/list/', ServerListView.as_view(), name="server_list"),
     url(r'^servers', ServerIndexView.as_view(), name="servers"),
 
-    url(r'^about', AboutView.as_view(), name="about"),
+    url(r'^about', TemplateView.as_view(template_name="about.html"), name="about"),
     url(r'^staff/bots/', BotModerationView.as_view(), name="bot_moderation"),
     url(r'^staff/servers/', ServerModerationView.as_view(), name="server_moderation"),
     url(r'^staff/', StaffView.as_view(), name="staff_panel"),

@@ -150,12 +150,6 @@ class IndexView(View):
                        "trending_bots": trending_bots})
 
 
-class AboutView(View):
-
-    def get(self, request):
-        return render(request, "about.html")
-
-
 class TemplateView(View):
     template_name = "404.html"
 
