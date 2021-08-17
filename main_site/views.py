@@ -50,6 +50,14 @@ def server_refresh(request):
     return render(request, "refresh_pages/server_select.html", {"admin_guilds": admin_guilds})
 
 
+def bot_invite_counter(request, bot_id):
+    try:
+        bot = Bot.objects.get(id=bot_id)
+        return redirect(bot.invite_link)
+    except Bot.DoesNotExist:
+        return render(request, "404.html")
+
+
 class BotView(View, ResponseMixin):
     template_name = "bot_page.html"
     model = Bot
