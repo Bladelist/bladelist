@@ -106,7 +106,7 @@
                         {% if not bot.banned %}
                             <a href="#!"><button class="btn-lg btn-success voteBotBtn" bot_id="{{ bot.id }}"><i class="fas fa-chevron-up"></i> Vote</button></a>
                             <a href="#!"><button class="btn-lg btn-danger" {% if not request.user.is_authenticated %}disabled data-toggle="tooltip" data-placement="bottom" title="Login to report"{% else %}data-toggle="modal" data-target="#reportBotModalCenter" {% endif %}><i class="far fa-flag"></i> Report</button></a>
-                            <a href="{{ bot.invite_url }}"><button class="btn-lg btn-warning"><i class="fas fa-plus"></i> Invite</button></a>
+                            <a href="{% url 'bot_invite' bot_id=bot.id %}"><button class="btn-lg btn-warning"><i class="fas fa-plus"></i> Invite</button></a>
                             <a href="{{ bot.meta.support_server }}"><button class="btn-lg btn-info"><i class="fa fa-headphones"></i> Support</button></a>
                             <br>
                             {% if bot.meta.github %}

@@ -2,9 +2,9 @@ from django.urls import path
 from django.conf.urls import url
 from .views import (IndexView, BotView, LoginView, login_handler_view, discord_login_normal,
                     logout_view, discord_login_view, server_refresh, AboutView, ServerModerationView,
-                    TemplateView, BotListView, BotAddView, BotEditView, ProfileView,
                     ProfileEditView, StaffView, BotSearchView, ServerView, ServerListView,
-                    ServerAddView, ServerEditView, ServerSearchView, ServerIndexView, BotModerationView)
+                    ServerAddView, ServerEditView, ServerSearchView, ServerIndexView, BotModerationView,
+                    TemplateView, BotListView, BotAddView, BotEditView, ProfileView, bot_invite_counter)
 
 
 urlpatterns = [
@@ -12,6 +12,7 @@ urlpatterns = [
     path('login/handlers/', login_handler_view),
     url(r'^logout', logout_view, name="logout"),
 
+    url(r'^bots/(?P<bot_id>[0-9]{18})/invite/', bot_invite_counter, name="bot_invite"),
     url(r'^bots/(?P<bot_id>[0-9]{18})/edit/', BotEditView.as_view(), name="bot_edit_view"),
     url(r'^bots/(?P<bot_id>[0-9]{18})', BotView.as_view(), name="bot_single"),
     url(r'^bots/search/', BotSearchView.as_view(), name="bot_search"),
