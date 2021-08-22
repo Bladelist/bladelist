@@ -41,3 +41,18 @@ class ServerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Server
         fields = ("id", "name", "invite_link", "votes", "short_desc", "members_online", "is_nsfw", "meta")
+
+
+class BotMetaAllSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = BotMeta
+        fields = '__all__'
+
+
+class BotAllSerializer(serializers.ModelSerializer):
+    meta = BotMetaAllSerializer()
+
+    class Meta:
+        model = Bot
+        fields = '__all__'

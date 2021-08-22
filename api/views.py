@@ -8,7 +8,7 @@ from rest_framework.generics import get_object_or_404
 from django.contrib.auth.models import User
 from utils.background import create_user
 from utils.api_client import DiscordAPIClient
-from .serializers import BotStatusSerializer, ServerSerializer
+from .serializers import BotStatusSerializer, ServerSerializer, BotAllSerializer
 discord_api = DiscordAPIClient()
 
 
@@ -16,7 +16,10 @@ class BotManageView(APIView, ResponseMixin):
 
     serializers = BotSerializer
 
-    def get(self, request, bot_id):
+    def get(self, request, bot_id=None):
+        if not bot_id and request.user.is_superuser:
+            serializer = BotAllSerializer(Bot.objects.all(), many=True)
+            return Response(serializer.data)
         queryset = get_object_or_404(Bot, id=bot_id)
         serializer = self.serializers(queryset)
         return Response(serializer.data, status=200)
