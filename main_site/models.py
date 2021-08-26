@@ -137,6 +137,7 @@ class Bot(models.Model):
     banned = models.BooleanField(default=False)
     verified = models.BooleanField(default=False)
     date_added = models.DateTimeField()
+    uptime = models.FloatField(default=100, null=True)
     server_count = models.IntegerField(default=0, null=True)
     avatar = models.CharField(max_length=100, null=True)
     short_desc = models.CharField(max_length=120, null=True)
@@ -165,7 +166,6 @@ class Bot(models.Model):
 
 class BotMeta(models.Model):
     bot = models.OneToOneField(Bot, on_delete=models.CASCADE, related_name="meta")
-    uptime = models.FloatField(default=100)
     prefix = models.CharField(max_length=10, null=True, blank=True, default="N/A")
     github = models.URLField(null=True, blank=True)
     website = models.URLField(null=True, blank=True)
