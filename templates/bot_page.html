@@ -48,7 +48,7 @@
                                 <div class="btnicon-icon text-primary"><i class="fas fa-shield-alt"></i></div><span class=btnicon-content style="width: calc(100% - 42px)">Status <span class="float-right badge badge-light"><i class="fas fa-circle {% if bot.online %}text-success{% else %}text-danger{% endif %}"></i> {% if bot.online %}online{% else %}offline{% endif %}</span></span>
                             </a>
                             <a class="btn-block btn-icon">
-                                <div class="btnicon-icon text-info"><i class="fas fa-globe"></i></div><span class=btnicon-content style="width: calc(100% - 42px)">Uptime <span class="float-right badge badge-light">{{ bot.meta.uptime }}</span></span>
+                                <div class="btnicon-icon text-info"><i class="fas fa-globe"></i></div><span class=btnicon-content style="width: calc(100% - 42px)">Uptime <span class="float-right badge badge-light">{{ bot.uptime }}</span></span>
                             </a>
                             <a class="btn-block btn-icon">
                                 <div class="btnicon-icon text-dark"><i class="fas fa-server"></i></div><span class=btnicon-content style="width: calc(100% - 42px)">Servers <span class="float-right badge badge-light">{% if bot.server_count %}{{ bot.server_count }}{% else %}N/A{% endif %}</span></span>
