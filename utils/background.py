@@ -71,7 +71,7 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
 
 
 @receiver(post_save, sender=Bot)
-def alert_with_webhook(sender, instance=None, created=False, **kwargs):
+def alert_with_webhook_on_bot_change(sender, instance=None, created=False, **kwargs):
     if created:
         instance.owner.send_message(
             f"<:botadded:652482091971248140> Your bot {instance.name} is added and is currently awaiting verification."
@@ -97,4 +97,35 @@ def alert_with_webhook(sender, instance=None, created=False, **kwargs):
             else:
                 instance.owner.send_message(
                     f"<:botadded:652482091971248140> Your bot {instance.name} is verified and is now public."
+                )
+
+
+@receiver(post_save, sender=Server)
+def alert_with_webhook_on_server_change(sender, instance=None, created=False, **kwargs):
+    if created:
+        instance.owner.send_message(
+            f"<:botadded:652482091971248140> "
+            f"Your server {instance.name} is added and is currently awaiting verification."
+        )
+    elif kwargs['update_fields']:
+        if "banned" in kwargs['update_fields']:
+            if instance.banned:
+                instance.owner.send_message(
+                    f"<:botdeclined:652482092499730433> "
+                    f"Your server {instance.name} got banned for the reason: {instance.meta.ban_reason}"
+                )
+            else:
+                instance.owner.send_message(
+                    f"<:botadded:652482091971248140> "
+                    f"Your server {instance.name} is unbanned"
+                )
+        elif "verification_status" in kwargs["update_fields"]:
+            if instance.verification_status == "REJECTED":
+                instance.owner.send_message(
+                    f"<:botdeclined:652482092499730433> "
+                    f"Your server {instance.name} is rejected for the reason: {instance.meta.rejection_reason}"
+                )
+            else:
+                instance.owner.send_message(
+                    f"<:botadded:652482091971248140> Your server {instance.name} is verified and is now public."
                 )

@@ -484,14 +484,9 @@ class ServerModerationView(LoginRequiredMixin, View, ResponseMixin):
                 if data.get("action") == "verify":
                     server.verified = True
                     server.verification_status = "VERIFIED"
-                    server.save()
-                    server.owner.send_message(
-                        "<:botadded:652482091971248140> Your server is now verified and is now public."
-                    )
+                    server.save(update_fields=["verification_status"])
                 elif data.get("action") == "reject":
                     server.meta.rejection_count += 1
-                    server.owner.send_message(f"<:botdeclined:652482092499730433> "
-                                              f"Your bot got rejected for reason: {data.get('rejection_reason')}")
                     if server.meta.rejection_count == 3:
                         server.banned = True
                         server.verified = False
@@ -502,7 +497,7 @@ class ServerModerationView(LoginRequiredMixin, View, ResponseMixin):
                             f"Your server got shadow banned since it got rejected 3 times."
                         )
                     server.verification_status = "REJECTED"
-                    server.save()
+                    server.save(update_fields=["verification_status"])
                     server.meta.rejection_reason = data.get("rejection_reason")
                     server.meta.save()
                 elif data.get("action") == "ban":
@@ -510,22 +505,14 @@ class ServerModerationView(LoginRequiredMixin, View, ResponseMixin):
                     server.verified = False
                     server.meta.ban_reason = data.get("ban_reason")
                     server.meta.save()
-                    server.save()
-                    server.owner.send_message(
-                        f"<:botdeclined:652482092499730433> "
-                        f"Your server got banned for the reason: {data.get('ban_reason')}"
-                    )
+                    server.save(update_fields=["banned"])
                 elif data.get("action") == "unban":
                     server.banned = False
                     server.verified = True
                     server.verification_status = "VERIFIED"
-                    server.save()
+                    server.save(update_fields=["banned"])
                     server.meta.moderator = request.user.member
                     server.meta.save(update_fields=['verification_status'])
-                    server.owner.send_message(
-                        f"<:botadded:652482091971248140> "
-                        f"Your server is unbanned"
-                    )
                 else:
                     return self.json_response_500()
                 awaiting_review = Server.objects.filter(verification_status="UNVERIFIED",
