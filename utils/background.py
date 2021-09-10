@@ -1,12 +1,14 @@
 from datetime import datetime, timezone, timedelta
 from django.contrib.auth.models import User
 from django.dispatch import receiver
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
 from rest_framework.authtoken.models import Token
 
 from main_site.models import Member, Bot, BotMeta, MemberMeta, Server, ServerMeta
 from utils.hashing import Hasher
+from utils.api_client import DiscordAPIClient
 
+api_client = DiscordAPIClient()
 hasher = Hasher()
 
 
@@ -66,3 +68,20 @@ def create_member_meta(sender, instance, created, **kwargs):
 def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
         Token.objects.create(user=instance)
+
+
+@receiver(pre_save, sender=Bot)
+def alert_with_webhook(sender, instance=None, created=False, **kwargs):
+    if created:
+        pass
+    elif "banned" in kwargs['update_fields']:
+        if instance.banned:
+            instance.owner.send_message(
+                f"<:botdeclined:652482092499730433> "
+                f"Your bot {instance.name} got banned for the reason: {instance.meta.ban_reason}"
+            )
+        else:
+            instance.owner.send_message(
+                f"<:botadded:652482091971248140> "
+                f"Your bot {instance.name} is unbanned"
+            )
