@@ -1,7 +1,7 @@
 from datetime import datetime, timezone, timedelta
 from django.contrib.auth.models import User
 from django.dispatch import receiver
-from django.db.models.signals import post_save, pre_save
+from django.db.models.signals import post_save
 from rest_framework.authtoken.models import Token
 
 from main_site.models import Member, Bot, BotMeta, MemberMeta, Server, ServerMeta
@@ -70,18 +70,31 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
         Token.objects.create(user=instance)
 
 
-@receiver(pre_save, sender=Bot)
+@receiver(post_save, sender=Bot)
 def alert_with_webhook(sender, instance=None, created=False, **kwargs):
     if created:
-        pass
-    elif "banned" in kwargs['update_fields']:
-        if instance.banned:
-            instance.owner.send_message(
-                f"<:botdeclined:652482092499730433> "
-                f"Your bot {instance.name} got banned for the reason: {instance.meta.ban_reason}"
-            )
-        else:
-            instance.owner.send_message(
-                f"<:botadded:652482091971248140> "
-                f"Your bot {instance.name} is unbanned"
-            )
+        instance.owner.send_message(
+            f"<:botadded:652482091971248140> Your bot {instance.name} is added and is currently awaiting verification."
+        )
+    elif kwargs['update_fields']:
+        if "banned" in kwargs['update_fields']:
+            if instance.banned:
+                instance.owner.send_message(
+                    f"<:botdeclined:652482092499730433> "
+                    f"Your bot {instance.name} got banned for the reason: {instance.meta.ban_reason}"
+                )
+            else:
+                instance.owner.send_message(
+                    f"<:botadded:652482091971248140> "
+                    f"Your bot {instance.name} is unbanned"
+                )
+        elif "verification_status" in kwargs["update_fields"]:
+            if instance.verification_status == "REJECTED":
+                instance.owner.send_message(
+                    f"<:botdeclined:652482092499730433> "
+                    f"Your bot {instance.name} is rejected for the reason: {instance.meta.rejection_reason}"
+                )
+            else:
+                instance.owner.send_message(
+                    f"<:botadded:652482091971248140> Your bot {instance.name} is verified and is now public."
+                )

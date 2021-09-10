@@ -233,9 +233,6 @@ class BotAddView(LoginRequiredMixin, View):
                     bot.meta.donate = data.get("donate")
                     bot.meta.long_desc = data.get("long_desc")
                     bot.meta.save()
-                    request.user.member.send_message(
-                        "<:botadded:652482091971248140> Your bot is added and is currently awaiting verification."
-                    )
                     self.context["success"] = "Bot added successfully!"
                     self.context["member"] = request.user.member
                     return render(request, "profile_page.html", self.context)
@@ -379,8 +376,8 @@ class BotModerationView(LoginRequiredMixin, View, ResponseMixin):
                     else:
                         bot.verification_status = "UNDER_REVIEW"
                         bot.meta.moderator = request.user.member
-                        bot.save()
                         bot.meta.save()
+                        bot.save()
                         awaiting_review = Bot.objects.filter(verification_status="UNVERIFIED",
                                                              banned=False).order_by('date_added')[:10]
                         under_review = Bot.objects.filter(verification_status="UNDER_REVIEW",
@@ -402,13 +399,9 @@ class BotModerationView(LoginRequiredMixin, View, ResponseMixin):
                 if data.get("action") == "verify":
                     bot.verified = True
                     bot.verification_status = "VERIFIED"
-                    bot.save()
-                    bot.owner.send_message(
-                        "<:botadded:652482091971248140> Your bot is now verified and is now public."
-                    )
+                    bot.save(update_fields=["verification_status"])
                 elif data.get("action") == "reject":
                     bot.meta.rejection_count += 1
-                    bot.owner.send_message(f"Your bot got rejected for reason: {data.get('rejection_reason')}")
                     if bot.meta.rejection_count == 3:
                         bot.banned = True
                         bot.verified = False
@@ -419,7 +412,7 @@ class BotModerationView(LoginRequiredMixin, View, ResponseMixin):
                             f"Your bot got shadow banned since it got rejected 3 times."
                         )
                     bot.verification_status = "REJECTED"
-                    bot.save()
+                    bot.save(update_fields=["verification_status"])
                     bot.meta.rejection_reason = data.get("rejection_reason")
                     bot.meta.save()
                 elif data.get("action") == "ban":
@@ -427,12 +420,12 @@ class BotModerationView(LoginRequiredMixin, View, ResponseMixin):
                     bot.verified = False
                     bot.meta.ban_reason = data.get("ban_reason")
                     bot.meta.save()
-                    bot.save(update_fields=['banned'])
+                    bot.save(update_fields=["banned"])
                 elif data.get("action") == "unban":
                     bot.banned = False
                     bot.verification_status = "VERIFIED"
                     bot.verified = True
-                    bot.save(update_fields=['banned'])
+                    bot.save(update_fields=["banned"])
                     bot.meta.moderator = request.user.member
                     bot.meta.save()
                 else:
