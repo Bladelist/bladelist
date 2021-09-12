@@ -399,19 +399,19 @@ class BotModerationView(LoginRequiredMixin, View, ResponseMixin):
                 if data.get("action") == "verify":
                     bot.verified = True
                     bot.verification_status = "VERIFIED"
-                    bot.save(update_fields=["verification_status"])
+                    bot.save(update_fields=["verification_status", "verified"])
                 elif data.get("action") == "reject":
                     bot.meta.rejection_count += 1
                     bot.verification_status = "REJECTED"
                     bot.meta.rejection_reason = data.get("rejection_reason")
                     bot.meta.save()
                     bot.save(update_fields=["verification_status"])
-                    if bot.meta.rejection_count == 3:
+                    if bot.meta.rejection_count >= 3:
                         bot.banned = True
                         bot.verified = False
                         bot.meta.ban_reason = "Got rejected 3 times."
                         bot.meta.save()
-                        bot.save(update_fields=["banned"])
+                        bot.save(update_fields=["banned", "verified"])
                 elif data.get("action") == "ban":
                     bot.banned = True
                     bot.verified = False
@@ -424,7 +424,7 @@ class BotModerationView(LoginRequiredMixin, View, ResponseMixin):
                     bot.verified = True
                     bot.meta.moderator = request.user.member
                     bot.meta.save()
-                    bot.save(update_fields=["banned"])
+                    bot.save(update_fields=["banned", "verified", "verification_status"])
                 else:
                     return self.json_response_500()
                 awaiting_review = Bot.objects.filter(verification_status="UNVERIFIED",
@@ -488,7 +488,7 @@ class ServerModerationView(LoginRequiredMixin, View, ResponseMixin):
                     server.meta.rejection_reason = data.get("rejection_reason")
                     server.meta.save()
                     server.save(update_fields=["verification_status"])
-                    if server.meta.rejection_count == 3:
+                    if server.meta.rejection_count >= 3:
                         server.banned = True
                         server.verified = False
                         server.meta.ban_reason = "Got rejected 3 times."

@@ -1,5 +1,4 @@
 class EmbedHandler:
-
     @staticmethod
     def bot_verification(bot, status):
         embed = {
@@ -20,8 +19,9 @@ class EmbedHandler:
                     },
                     {
                       "name": "Date",
-                      "value": "Some date"
+                      "value": bot.date_added.strftime("%m/%d/%Y")
                     }
+
                 ],
                 "thumbnail": {
                     "url": bot.avatar_url,
@@ -55,4 +55,14 @@ class EmbedHandler:
             embed["description"] = "Your bot is unbanned and public!"
             embed["footer"]["text"] = ""
             embed["color"] = 0x18B745
+
+        # if status != "added":
+        #     embed["fields"].append(
+        #         {
+        #             "name": "Moderator",
+        #             "value": f"[{bot.meta.moderator.user.first_name}#{bot.meta.moderator.tag}]"
+        #                      f"({bot.meta.moderator.web_url})",
+        #         },
+        #     )
+
         return embed
