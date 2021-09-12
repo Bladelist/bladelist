@@ -7,9 +7,11 @@ from rest_framework.authtoken.models import Token
 from main_site.models import Member, Bot, BotMeta, MemberMeta, Server, ServerMeta
 from utils.hashing import Hasher
 from utils.api_client import DiscordAPIClient
+from utils.embedhandler import EmbedHandler
 
-api_client = DiscordAPIClient()
 hasher = Hasher()
+embed = EmbedHandler()
+api_client = DiscordAPIClient()
 
 
 def create_user(user_json, api=False):
@@ -76,6 +78,8 @@ def alert_with_webhook_on_bot_change(sender, instance=None, created=False, **kwa
         instance.owner.send_message(
             f"<:botadded:652482091971248140> Your bot {instance.name} is added and is currently awaiting verification."
         )
+        api_client.send_embed(embed=instance.embed(status="added"))
+
     elif kwargs['update_fields']:
         if "banned" in kwargs['update_fields']:
             if instance.banned:
@@ -83,21 +87,26 @@ def alert_with_webhook_on_bot_change(sender, instance=None, created=False, **kwa
                     f"<:botdeclined:652482092499730433> "
                     f"Your bot {instance.name} got banned for the reason: {instance.meta.ban_reason}"
                 )
+                api_client.send_embed(embed=instance.embed(status="banned"))
             else:
                 instance.owner.send_message(
                     f"<:botadded:652482091971248140> "
                     f"Your bot {instance.name} is unbanned"
                 )
+                api_client.send_embed(embed=instance.embed(status="unbanned"))
+
         elif "verification_status" in kwargs["update_fields"]:
             if instance.verification_status == "REJECTED":
                 instance.owner.send_message(
                     f"<:botdeclined:652482092499730433> "
                     f"Your bot {instance.name} is rejected for the reason: {instance.meta.rejection_reason}"
                 )
+                api_client.send_embed(embed=instance.embed(status="rejected"))
             else:
                 instance.owner.send_message(
                     f"<:botadded:652482091971248140> Your bot {instance.name} is verified and is now public."
                 )
+                api_client.send_embed(embed=instance.embed(status="verified"))
 
 
 @receiver(post_save, sender=Server)

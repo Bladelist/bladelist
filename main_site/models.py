@@ -3,10 +3,12 @@ from datetime import datetime, timezone, timedelta
 from django.db import models
 from django.contrib.auth.models import User
 from utils.oauth import Oauth
+from utils.embedhandler import EmbedHandler
 from utils.api_client import DiscordAPIClient
 from rest_framework.authtoken.models import Token
 
 oauth = Oauth()
+embed_handler = EmbedHandler()
 api_client = DiscordAPIClient()
 
 
@@ -169,6 +171,9 @@ class Bot(models.Model):
     @property
     def web_url(self):
         return ""
+
+    def embed(self, status):
+        return embed_handler.bot_verification(self, status)
 
 
 class BotMeta(models.Model):

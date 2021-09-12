@@ -402,19 +402,16 @@ class BotModerationView(LoginRequiredMixin, View, ResponseMixin):
                     bot.save(update_fields=["verification_status"])
                 elif data.get("action") == "reject":
                     bot.meta.rejection_count += 1
+                    bot.verification_status = "REJECTED"
+                    bot.meta.rejection_reason = data.get("rejection_reason")
+                    bot.meta.save()
+                    bot.save(update_fields=["verification_status"])
                     if bot.meta.rejection_count == 3:
                         bot.banned = True
                         bot.verified = False
-                        bot.save()
                         bot.meta.ban_reason = "Got rejected 3 times."
-                        bot.owner.send_message(
-                            f"<:botdeclined:652482092499730433> "
-                            f"Your bot got shadow banned since it got rejected 3 times."
-                        )
-                    bot.verification_status = "REJECTED"
-                    bot.save(update_fields=["verification_status"])
-                    bot.meta.rejection_reason = data.get("rejection_reason")
-                    bot.meta.save()
+                        bot.meta.save()
+                        bot.save(update_fields=["banned"])
                 elif data.get("action") == "ban":
                     bot.banned = True
                     bot.verified = False
@@ -425,9 +422,9 @@ class BotModerationView(LoginRequiredMixin, View, ResponseMixin):
                     bot.banned = False
                     bot.verification_status = "VERIFIED"
                     bot.verified = True
-                    bot.save(update_fields=["banned"])
                     bot.meta.moderator = request.user.member
                     bot.meta.save()
+                    bot.save(update_fields=["banned"])
                 else:
                     return self.json_response_500()
                 awaiting_review = Bot.objects.filter(verification_status="UNVERIFIED",
@@ -487,19 +484,16 @@ class ServerModerationView(LoginRequiredMixin, View, ResponseMixin):
                     server.save(update_fields=["verification_status"])
                 elif data.get("action") == "reject":
                     server.meta.rejection_count += 1
+                    server.verification_status = "REJECTED"
+                    server.meta.rejection_reason = data.get("rejection_reason")
+                    server.meta.save()
+                    server.save(update_fields=["verification_status"])
                     if server.meta.rejection_count == 3:
                         server.banned = True
                         server.verified = False
-                        server.save()
                         server.meta.ban_reason = "Got rejected 3 times."
-                        server.owner.send_message(
-                            f"<:botdeclined:652482092499730433> "
-                            f"Your server got shadow banned since it got rejected 3 times."
-                        )
-                    server.verification_status = "REJECTED"
-                    server.save(update_fields=["verification_status"])
-                    server.meta.rejection_reason = data.get("rejection_reason")
-                    server.meta.save()
+                        server.meta.save()
+                        server.save(update_fields=["banned"])
                 elif data.get("action") == "ban":
                     server.banned = True
                     server.verified = False
@@ -509,10 +503,10 @@ class ServerModerationView(LoginRequiredMixin, View, ResponseMixin):
                 elif data.get("action") == "unban":
                     server.banned = False
                     server.verified = True
+                    server.meta.moderator = request.user.member
+                    server.meta.save()
                     server.verification_status = "VERIFIED"
                     server.save(update_fields=["banned"])
-                    server.meta.moderator = request.user.member
-                    server.meta.save(update_fields=['verification_status'])
                 else:
                     return self.json_response_500()
                 awaiting_review = Server.objects.filter(verification_status="UNVERIFIED",

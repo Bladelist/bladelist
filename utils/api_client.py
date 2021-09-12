@@ -28,5 +28,5 @@ class DiscordAPIClient:
     def send_message(self, channel_id, message: str):
         return self.post(f"/channels/{channel_id}/messages", data={"content": message})
 
-    def send_embed(self, channel_id, embed: dict):
+    def send_embed(self, embed: dict, channel_id=settings.LOG_CHANNEL_ID):
         return self.post(f"/channels/{channel_id}/messages", data={"embed": embed})
