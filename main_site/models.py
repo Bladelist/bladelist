@@ -57,6 +57,10 @@ class Member(models.Model):
     def api_token(self):
         return Token.objects.get(user=self.user)
 
+    @property
+    def web_url(self):
+        return ""
+
     def refresh_access_token(self):
         token_json = oauth.refresh_access_token(self.meta.refresh_token)
         self.meta.access_token = token_json.get("access_token")
@@ -161,6 +165,10 @@ class Bot(models.Model):
         if self.avatar is not None:
             return f"https://cdn.discordapp.com/avatars/{self.id}/{self.avatar}.png"
         return "https://cdn.discordapp.com/embed/avatars/4.png"
+
+    @property
+    def web_url(self):
+        return ""
 
 
 class BotMeta(models.Model):
