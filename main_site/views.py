@@ -396,6 +396,9 @@ class BotModerationView(LoginRequiredMixin, View, ResponseMixin):
             data = QueryDict(request.body)
             try:
                 bot = Bot.objects.get(id=data.get("bot_id"))
+                if not bot.meta.moderator:
+                    bot.meta.moderator = request.user.member
+                    bot.meta.save()
                 if data.get("action") == "verify":
                     bot.verified = True
                     bot.verification_status = "VERIFIED"
@@ -422,7 +425,6 @@ class BotModerationView(LoginRequiredMixin, View, ResponseMixin):
                     bot.banned = False
                     bot.verification_status = "VERIFIED"
                     bot.verified = True
-                    bot.meta.moderator = request.user.member
                     bot.meta.save()
                     bot.save(update_fields=["banned", "verified", "verification_status"])
                 else:

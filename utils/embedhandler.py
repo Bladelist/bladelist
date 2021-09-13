@@ -56,13 +56,13 @@ class EmbedHandler:
             embed["footer"]["text"] = ""
             embed["color"] = 0x18B745
 
-        # if status != "added":
-        #     embed["fields"].append(
-        #         {
-        #             "name": "Moderator",
-        #             "value": f"[{bot.meta.moderator.user.first_name}#{bot.meta.moderator.tag}]"
-        #                      f"({bot.meta.moderator.web_url})",
-        #         },
-        #     )
+        if status != "added":
+            embed["fields"].append(
+                {
+                    "name": "Moderator",
+                    "value": f"[{bot.meta.moderator.user.first_name}#{bot.meta.moderator.tag}]"
+                             f"({bot.meta.moderator.web_url})",
+                },
+            )
 
         return embed

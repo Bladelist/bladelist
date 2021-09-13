@@ -61,7 +61,7 @@ class Member(models.Model):
 
     @property
     def web_url(self):
-        return ""
+        return f"https://bladelist.gg/users/{self.id}"
 
     def refresh_access_token(self):
         token_json = oauth.refresh_access_token(self.meta.refresh_token)
@@ -170,7 +170,7 @@ class Bot(models.Model):
 
     @property
     def web_url(self):
-        return ""
+        return f"https://bladelist.gg/bots/{self.id}"
 
     def embed(self, status):
         return embed_handler.bot_verification(self, status)
