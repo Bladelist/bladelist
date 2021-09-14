@@ -175,6 +175,9 @@ class Bot(models.Model):
     def embed(self, status):
         return embed_handler.bot_verification(self, status)
 
+    def vote_embed(self, member):
+        return embed_handler.bot_vote(self, member)
+
 
 class BotMeta(models.Model):
     bot = models.OneToOneField(Bot, on_delete=models.CASCADE, related_name="meta")
@@ -236,6 +239,9 @@ class Server(models.Model):
 
     def embed(self, status):
         return embed_handler.server_verification(self, status)
+
+    def vote_embed(self, member):
+        return embed_handler.server_vote(self, member)
 
     @property
     def icon_url(self):

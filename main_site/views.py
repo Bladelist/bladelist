@@ -179,6 +179,7 @@ class BotListView(ListView, ResponseMixin):
                 )
                 bot.votes += 1
                 bot.save()
+                discord_client.send_embed(bot.vote_embed(request.user.member))
                 return JsonResponse({"vote_count": bot.votes})
             elif (datetime.now(timezone.utc) - vote.creation_time).total_seconds() >= 43200:
                 vote.delete()
@@ -189,6 +190,7 @@ class BotListView(ListView, ResponseMixin):
                 )
                 bot.votes += 1
                 bot.save()
+                discord_client.send_embed(bot.vote_embed(request.user.member))
                 return JsonResponse({"vote_count": bot.votes})
             else:
                 return self.json_response_403()
@@ -583,6 +585,7 @@ class ServerIndexView(View, ResponseMixin):
                 )
                 server.votes += 1
                 server.save()
+                discord_client.send_embed(server.vote_embed(request.user.member))
                 return JsonResponse({"vote_count": server.votes})
             elif (datetime.now(timezone.utc) - vote.creation_time).total_seconds() >= 43200:
                 vote.delete()
@@ -593,6 +596,7 @@ class ServerIndexView(View, ResponseMixin):
                 )
                 server.votes += 1
                 server.save()
+                discord_client.send_embed(server.vote_embed(request.user.member))
                 return JsonResponse({"vote_count": server.votes})
             else:
                 return self.json_response_403()

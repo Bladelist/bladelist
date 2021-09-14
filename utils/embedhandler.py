@@ -133,3 +133,59 @@ class EmbedHandler:
                 },
             )
         return embed
+
+    @staticmethod
+    def bot_vote(bot, member):
+        return {
+                "type": "rich",
+                "title": "Bot Up-voted",
+                "color": 0x3366ff,
+                "fields": [
+                    {
+                      "name": "Server",
+                      "value": f"[{bot.name}]({bot.web_url})",
+                      "inline": True
+                    },
+                    {
+                      "name": "Votes",
+                      "value": f"{bot.votes} <:vote:704268098844360714>",
+                      "inline": True
+                    },
+                    {
+                      "name": "User",
+                      "value": f"[{member.user.first_name}#{member.tag}]({member.web_url})"
+                    }
+
+                ],
+                "thumbnail": {
+                    "url": bot.avatar_url,
+                },
+                }
+
+    @staticmethod
+    def server_vote(server, member):
+        return {
+                "type": "rich",
+                "title": "Server Up-voted",
+                "color": 0x3366ff,
+                "fields": [
+                    {
+                      "name": "Server",
+                      "value": f"[{server.name}]({server.web_url})",
+                      "inline": True
+                    },
+                    {
+                      "name": "Votes",
+                      "value": f"{server.votes} <:vote:704268098844360714>",
+                      "inline": True
+                    },
+                    {
+                      "name": "User",
+                      "value": f"[{member.user.first_name}#{member.tag}]({member.web_url})"
+                    }
+
+                ],
+                "thumbnail": {
+                    "url": server.icon_url,
+                },
+                }
