@@ -142,7 +142,7 @@ class EmbedHandler:
                 "color": 0x3366ff,
                 "fields": [
                     {
-                      "name": "Server",
+                      "name": "Bot",
                       "value": f"[{bot.name}]({bot.web_url})",
                       "inline": True
                     },
