@@ -100,12 +100,39 @@ class BotStatusEditView(APIView, ResponseMixin):
 
     def put(self, request, bot_id):
         if request.user.is_superuser:
-            queryset = get_object_or_404(self.model, id=bot_id)
-            serializer = self.serializer(queryset, data=request.data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data)
-            return self.json_response_400()
+            bot = get_object_or_404(self.model, id=bot_id)
+            verification_status = request.data.get("verification_status")
+            moderator_id = request.data.get("moderator_id")
+            bot.meta.moderator = Member.objects.get(id=moderator_id)
+            bot.meta.save()
+            bot.verification_status = verification_status
+            if verification_status == "VERIFIED":
+                bot.verified = True
+                bot.save(update_fields=["verification_status", "verified"])
+            elif verification_status == "REJECTED":
+                bot.meta.rejection_count += 1
+                bot.meta.rejection_reason = request.data.get("reason")
+                bot.meta.save()
+                bot.save(update_fields=["verification_status"])
+                if bot.meta.rejection_count >= 3:
+                    bot.banned = True
+                    bot.verified = False
+                    bot.meta.ban_reason = "Got rejected 3 times."
+                    bot.meta.save()
+                    bot.save(update_fields=["banned", "verified"])
+            elif verification_status == "BANNED":
+                bot.banned = True
+                bot.verified = False
+                bot.meta.ban_reason = request.data.get("reason")
+                bot.meta.save()
+                bot.save(update_fields=["banned"])
+            elif verification_status == "UNBANNED":
+                bot.banned = False
+                bot.verified = True
+                bot.save(update_fields=["banned", "verified", "verification_status"])
+            else:
+                return self.json_response_400()
+            return self.json_response_200()
         return self.json_response_401()
 
 

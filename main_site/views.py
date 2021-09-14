@@ -420,7 +420,7 @@ class BotModerationView(LoginRequiredMixin, View, ResponseMixin):
                     bot.verified = False
                     bot.meta.ban_reason = data.get("ban_reason")
                     bot.meta.save()
-                    bot.save(update_fields=["banned"])
+                    bot.save(update_fields=["banned", "verified"])
                 elif data.get("action") == "unban":
                     bot.banned = False
                     bot.verification_status = "VERIFIED"
