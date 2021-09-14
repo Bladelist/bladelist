@@ -8,7 +8,7 @@ from rest_framework.generics import get_object_or_404
 from django.contrib.auth.models import User
 from utils.background import create_user
 from utils.api_client import DiscordAPIClient
-from .serializers import BotStatusSerializer, ServerSerializer, BotAllSerializer
+from .serializers import BotStatusSerializer, ServerSerializer, BotAllSerializer, ServerStatusSerializer
 discord_api = DiscordAPIClient()
 
 
@@ -144,3 +144,52 @@ class ServerView(APIView, ResponseMixin):
         queryset = get_object_or_404(Server, id=server_id)
         serializer = self.serializers(queryset)
         return Response(serializer.data, status=200)
+
+
+class ServerStatusEditView(APIView, ResponseMixin):
+    model = Server
+    serializer = ServerStatusSerializer
+
+    def get(self, request, server_id):
+        if request.user.is_superuser:
+            queryset = get_object_or_404(self.model, id=server_id)
+            serializer = self.serializer(queryset)
+            return Response(serializer.data)
+        return self.json_response_401()
+
+    def put(self, request, server_id):
+        if request.user.is_superuser:
+            server = get_object_or_404(self.model, id=server_id)
+            verification_status = request.data.get("verification_status")
+            moderator_id = request.data.get("moderator_id")
+            server.meta.moderator = Member.objects.get(id=moderator_id)
+            server.meta.save()
+            server.verification_status = verification_status
+            if verification_status == "VERIFIED":
+                server.verified = True
+                server.save(update_fields=["verification_status", "verified"])
+            elif verification_status == "REJECTED":
+                server.meta.rejection_count += 1
+                server.meta.rejection_reason = request.data.get("reason")
+                server.meta.save()
+                server.save(update_fields=["verification_status"])
+                if server.meta.rejection_count >= 3:
+                    server.banned = True
+                    server.verified = False
+                    server.meta.ban_reason = "Got rejected 3 times."
+                    server.meta.save()
+                    server.save(update_fields=["banned", "verified"])
+            elif verification_status == "BANNED":
+                server.banned = True
+                server.verified = False
+                server.meta.ban_reason = request.data.get("reason")
+                server.meta.save()
+                server.save(update_fields=["banned"])
+            elif verification_status == "UNBANNED":
+                server.banned = False
+                server.verified = True
+                server.save(update_fields=["banned", "verified", "verification_status"])
+            else:
+                return self.json_response_400()
+            return self.json_response_200()
+        return self.json_response_401()
