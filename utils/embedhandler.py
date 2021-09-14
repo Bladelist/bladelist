@@ -66,3 +66,70 @@ class EmbedHandler:
             )
 
         return embed
+
+    @staticmethod
+    def server_verification(server, status):
+        embed = {
+                "type": "rich",
+                "title": "New Server",
+                "description": "New server added and is currently awaiting verification.",
+                "color": 0xffcd03,
+                "fields": [
+                    {
+                      "name": "Server",
+                      "value": f"[{server.name}]({server.web_url})",
+                      "inline": True
+                    },
+                    {
+                      "name": "Owner",
+                      "value": f"[{server.owner.user.first_name}#{server.owner.tag}]({server.owner.web_url})",
+                      "inline": True
+                    },
+                    {
+                      "name": "Date",
+                      "value": server.date_added.strftime("%m/%d/%Y")
+                    }
+
+                ],
+                "thumbnail": {
+                    "url": server.icon_url,
+                },
+                "footer": {
+                    "text": "The verification of your server can take anywhere between 1 day to 1 week.\n "\
+                    "Please don't ping staff unless its beyond that period."
+                }
+                }
+
+        if status == "verified":
+            embed["title"] = "Server Verified"
+            embed["description"] = "Your server is verified and public!"
+            embed["footer"]["text"] = ""
+            embed["color"] = 0x18B745
+        elif status == "added":
+            pass
+        elif status == "rejected":
+            embed["title"] = "Server Rejected"
+            embed["description"] = f"Reason: {server.meta.rejection_reason}"
+            embed["footer"]["text"] = f"Please make the necessary corrections and reapply\n "\
+                                      f"You have {3 - server.meta.rejection_count} more attempts."
+            embed["color"] = 0xf37100
+        elif status == "banned":
+            embed["title"] = "Server Banned"
+            embed["description"] = f"Reason:  {server.meta.ban_reason}"
+            embed["footer"]["text"] = "If you want to appeal. Contact staff."
+            embed["color"] = 0xff0000
+        elif status == "unbanned":
+            embed["title"] = "Server Unbanned"
+            embed["description"] = "Your server is unbanned and public!"
+            embed["footer"]["text"] = ""
+            embed["color"] = 0x18B745
+
+        if status != "added":
+            embed["fields"].append(
+                {
+                    "name": "Moderator",
+                    "value": f"[{server.meta.moderator.user.first_name}#{server.meta.moderator.tag}]"
+                             f"({server.meta.moderator.web_url})",
+                },
+            )
+        return embed

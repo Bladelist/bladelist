@@ -116,6 +116,8 @@ def alert_with_webhook_on_server_change(sender, instance=None, created=False, **
             f"<:botadded:652482091971248140> "
             f"Your server {instance.name} is added and is currently awaiting verification."
         )
+        api_client.send_embed(embed=instance.embed(status="added"))
+
     elif kwargs['update_fields']:
         if "banned" in kwargs['update_fields']:
             if instance.banned:
@@ -123,18 +125,23 @@ def alert_with_webhook_on_server_change(sender, instance=None, created=False, **
                     f"<:botdeclined:652482092499730433> "
                     f"Your server {instance.name} got banned for the reason: {instance.meta.ban_reason}"
                 )
+                api_client.send_embed(embed=instance.embed(status="banned"))
             else:
                 instance.owner.send_message(
                     f"<:botadded:652482091971248140> "
                     f"Your server {instance.name} is unbanned"
                 )
+                api_client.send_embed(embed=instance.embed(status="unbanned"
+                                                                  ""))
         elif "verification_status" in kwargs["update_fields"]:
             if instance.verification_status == "REJECTED":
                 instance.owner.send_message(
                     f"<:botdeclined:652482092499730433> "
                     f"Your server {instance.name} is rejected for the reason: {instance.meta.rejection_reason}"
                 )
+                api_client.send_embed(embed=instance.embed(status="rejected"))
             else:
                 instance.owner.send_message(
                     f"<:botadded:652482091971248140> Your server {instance.name} is verified and is now public."
                 )
+                api_client.send_embed(embed=instance.embed(status="verified"))

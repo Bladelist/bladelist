@@ -234,6 +234,9 @@ class Server(models.Model):
     banned = models.BooleanField(default=False)
     admins = models.ManyToManyField(Member, related_name="admin_servers")
 
+    def embed(self, status):
+        return embed_handler.server_verification(self, status)
+
     @property
     def icon_url(self):
         return f"https://cdn.discordapp.com/icons/{self.id}/{self.icon}.png"
@@ -249,6 +252,10 @@ class Server(models.Model):
     @property
     def unverified(self):
         return self.get_verification_status_display() == "Unverified"
+
+    @property
+    def web_url(self):
+        return f"https://bladelist.gg/bots/{self.id}"
 
 
 class ServerMeta(models.Model):

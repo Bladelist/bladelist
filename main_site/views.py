@@ -396,7 +396,7 @@ class BotModerationView(LoginRequiredMixin, View, ResponseMixin):
             data = QueryDict(request.body)
             try:
                 bot = Bot.objects.get(id=data.get("bot_id"))
-                if not bot.meta.moderator:
+                if bot.meta.moderator != request.user.member:
                     bot.meta.moderator = request.user.member
                     bot.meta.save()
                 if data.get("action") == "verify":
@@ -480,10 +480,13 @@ class ServerModerationView(LoginRequiredMixin, View, ResponseMixin):
             data = QueryDict(request.body)
             try:
                 server = Server.objects.get(id=data.get("server_id"))
+                if server.meta.moderator != request.user.member:
+                    server.meta.moderator = request.user.member
+                    server.meta.save()
                 if data.get("action") == "verify":
                     server.verified = True
                     server.verification_status = "VERIFIED"
-                    server.save(update_fields=["verification_status"])
+                    server.save(update_fields=["verification_status", "verified"])
                 elif data.get("action") == "reject":
                     server.meta.rejection_count += 1
                     server.verification_status = "REJECTED"
@@ -495,20 +498,18 @@ class ServerModerationView(LoginRequiredMixin, View, ResponseMixin):
                         server.verified = False
                         server.meta.ban_reason = "Got rejected 3 times."
                         server.meta.save()
-                        server.save(update_fields=["banned"])
+                        server.save(update_fields=["banned", "verified"])
                 elif data.get("action") == "ban":
                     server.banned = True
                     server.verified = False
                     server.meta.ban_reason = data.get("ban_reason")
                     server.meta.save()
-                    server.save(update_fields=["banned"])
+                    server.save(update_fields=["banned", "verified"])
                 elif data.get("action") == "unban":
                     server.banned = False
                     server.verified = True
-                    server.meta.moderator = request.user.member
-                    server.meta.save()
                     server.verification_status = "VERIFIED"
-                    server.save(update_fields=["banned"])
+                    server.save(update_fields=["verification_status", "banned", "verified"])
                 else:
                     return self.json_response_500()
                 awaiting_review = Server.objects.filter(verification_status="UNVERIFIED",
