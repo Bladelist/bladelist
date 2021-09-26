@@ -53,36 +53,48 @@ class BotMigrateView(APIView, ResponseMixin):
 
     def post(self, request):
         if request.user.is_superuser:
+            """
+             {
+                "id": ,"username": "", "owner_id": , "invite": "", "short_desc": "", "date_added": "%d%m%Y",
+                "votes": , "banned": False, "verified": True, "tags": [], "support_server": "", "prefix": "",
+                "github": "", "website": "", "library": "", "twitter": "", "support_server": "", "privacy": "",
+                "donate": "", "long_desc": ""
+             }
+            """
             data = request.data
             if Bot.objects.filter(username=data.get("id")).exists():
                 return self.json_response_503()
             resp = discord_api.get_bot_info(data.get("id"))
             if resp.status_code == 404:
-                return self.json_response_404()
+                return self.json_response_503()
             elif resp.status_code == 200:
                 resp = resp.json()
-                bot = Bot.objects.create(id=data.get("id"),
-                                         name=resp.get("username"),
-                                         owner=Member.objects.get(id=data.get("owner_id")),
-                                         invite_link=data.get("invite"),
-                                         date_added=datetime.strptime(data.get("date_added"), "%d%m%Y"),
-                                         avatar=resp.get("avatar"),
-                                         short_desc=data.get("short_desc"),
-                                         votes=data.get("votes"),
-                                         banned=data.get("banned"),
-                                         verified=data.get("verified"))
-                bot.tags.set(BotTag.objects.filter(name__in=data.getlist('tags')))
-                bot.meta.support_server = data.get("support_server")
-                bot.meta.prefix = data.get("prefix")
-                bot.meta.github = data.get("github")
-                bot.meta.website = data.get("website")
-                bot.meta.library = data.get("library")
-                bot.meta.twitter = data.get("twitter")
-                bot.meta.support_server = data.get("support_server")
-                bot.meta.privacy = data.get("privacy")
-                bot.meta.donate = data.get("donate")
-                bot.meta.long_desc = data.get("long_desc")
-                bot.meta.save()
+                try:
+                    owner = Member.objects.get(id=data.get("owner_id"))
+                    bot = Bot.objects.create(id=data.get("id"),
+                                             name=resp.get("username"),
+                                             owner=owner,
+                                             invite_link=data.get("invite"),
+                                             date_added=datetime.strptime(data.get("date_added"), "%d%m%Y"),
+                                             avatar=resp.get("avatar"),
+                                             short_desc=data.get("short_desc"),
+                                             votes=data.get("votes"),
+                                             banned=data.get("banned"),
+                                             verified=data.get("verified"))
+                    bot.tags.set(BotTag.objects.filter(name__in=data.getlist('tags')))
+                    bot.meta.support_server = data.get("support_server")
+                    bot.meta.prefix = data.get("prefix")
+                    bot.meta.github = data.get("github")
+                    bot.meta.website = data.get("website")
+                    bot.meta.library = data.get("library")
+                    bot.meta.twitter = data.get("twitter")
+                    bot.meta.support_server = data.get("support_server")
+                    bot.meta.privacy = data.get("privacy")
+                    bot.meta.donate = data.get("donate")
+                    bot.meta.long_desc = data.get("long_desc")
+                    bot.meta.save()
+                except Member.DoesNotExist:
+                    return self.json_response_404()
             return self.json_response_201()
         return self.json_response_401()
 
