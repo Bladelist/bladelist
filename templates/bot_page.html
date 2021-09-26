@@ -80,7 +80,7 @@
                         <div class=supercard-header><span class=TitleCard><i class="fas fa-tags"></i> Tags</span></div>
                         <ul class=buttons-group>
                             {% for tag in bot.tags.all %}
-                            <a class="btn-block btn-icon">
+                            <a class="btn-block btn-icon" href="{% url 'bot_search' %}?tag={{ tag.name }}">
                                 <div class=btnicon-icon><i class="{{ tag.icon }}"></i></div><span class=btnicon-content>{{ tag.name }}</span>
                             </a>
                             {% endfor %}
