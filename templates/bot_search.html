@@ -40,10 +40,10 @@
 
     <div class="pagination">
         {% if page_obj.has_previous %}
-          <a href="?page={{ page_obj.previous_page_number }}"><button class="pagin-item btn"><i class="far fa-arrow-alt-circle-left"></i> Previous</button></a>
+          <a href="?page={{ page_obj.previous_page_number }}{% if search_query %}?q={{ search_query }}{% elif search_query %}?tag={{ search_tag }}{% endif %}"><button class="pagin-item btn"><i class="far fa-arrow-alt-circle-left"></i> Previous</button></a>
         {% endif %}
         {% if page_obj.has_next %}
-          <a href="?page={{ page_obj.next_page_number }}"><button class="pagin-item btn">Next <i class="far fa-arrow-alt-circle-right"></i></button></a>
+          <a href="?page={{ page_obj.next_page_number }}{% if search_query %}?q={{ search_query }}{% elif search_query %}?tag={{ search_tag }}{% endif %}"><button class="pagin-item btn">Next <i class="far fa-arrow-alt-circle-right"></i></button></a>
         {% endif %}
     </div>
 </div>

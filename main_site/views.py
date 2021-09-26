@@ -531,17 +531,20 @@ class ServerModerationView(LoginRequiredMixin, View, ResponseMixin):
 class BotSearchView(ListView):
     paginate_by = 16
     template_name = "bot_search.html"
+    extra_context = {}
 
     def get_queryset(self):
         query = self.request.GET.get("q")
         tag = self.request.GET.get("tag")
         if tag:
+            self.extra_context = {"search_tag": tag}
             return Bot.objects.filter(tags__name__contains=tag,
                                       owner__banned=False,
                                       verified=True,
                                       banned=False
                                       ).order_by("-votes")
         if query:
+            self.extra_context = {"search_query": query}
             if query.isdigit():
                 return Bot.objects.filter(
                     id__exact=query,
@@ -551,7 +554,7 @@ class BotSearchView(ListView):
                 ).order_by("-votes")
             else:
                 return Bot.objects.filter(
-                    Q(name__contains=query) | Q(tags__name__contains=query),
+                    name__contains=query,
                     banned=False, owner__banned=False, verified=True
                 ).order_by("-votes")
 
@@ -657,12 +660,15 @@ class ServerSearchView(ListView):
         query = self.request.GET.get("q")
         tag = self.request.GET.get("tag")
         if tag:
+            self.extra_context = {"search_tag": tag}
             return Server.objects.filter(tags__name__contains=tag,
                                          verified=True,
                                          banned=False,
                                          owner__banned=False
                                          ).order_by("-votes")
+
         if query:
+            self.extra_context = {"search_query": tag}
             if query.isdigit():
                 return Server.objects.filter(
                     id__exact=query,
@@ -672,7 +678,7 @@ class ServerSearchView(ListView):
                 ).order_by("-votes")
             else:
                 return Server.objects.filter(
-                    Q(name__contains=query) | Q(tags__name__contains=query),
+                    name__contains=query,
                     banned=False, owner__banned=False, verified=True
                 ).order_by("-votes")
 
