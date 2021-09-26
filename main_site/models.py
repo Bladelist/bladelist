@@ -231,7 +231,7 @@ class Server(models.Model):
     is_nsfw = models.BooleanField(default=False)
     members_online = models.IntegerField(default=0, null=True)
     icon = models.CharField(max_length=100, null=True)
-    short_desc = models.CharField(max_length=120, null=True)
+    short_desc = models.CharField(max_length=200, null=True)
     tags = models.ManyToManyField(ServerTag, related_name="attached_servers", blank=True)
     banner_url = models.URLField(default="https://i.postimg.cc/15TN17rQ/xirprofilback.jpg")
     banned = models.BooleanField(default=False)

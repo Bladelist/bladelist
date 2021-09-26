@@ -709,7 +709,7 @@ class ServerAddView(LoginRequiredMixin, View):
                                        invite_link=data.get("invite"),
                                        date_added=datetime.now(timezone.utc),
                                        icon=server_data.get("icon"),
-                                       short_desc=data.get("short_desc"),
+                                       short_desc=data.get("short_desc")[:200],
                                        is_nsfw=data.get('nsfw') == 'checkedValue'
                                        )
         server.tags.set(ServerTag.objects.filter(name__in=data.getlist('server_tags')))
