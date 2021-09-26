@@ -145,7 +145,7 @@ class Bot(models.Model):
     date_added = models.DateTimeField()
     server_count = models.IntegerField(default=0, null=True)
     avatar = models.CharField(max_length=100, null=True)
-    short_desc = models.CharField(max_length=120, null=True)
+    short_desc = models.CharField(max_length=200, null=True)
     tags = models.ManyToManyField(BotTag, related_name="bots", blank=True)
     banner_url = models.URLField(default="https://i.postimg.cc/15TN17rQ/xirprofilback.jpg")
     admins = models.ManyToManyField(Member, related_name="admin_bots")

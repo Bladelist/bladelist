@@ -1,5 +1,7 @@
+import pytz
 from datetime import datetime
 from rest_framework.views import APIView
+from django.http import QueryDict
 from main_site.models import Bot, BotTag, Member, Server
 from utils.mixins import ResponseMixin
 from rest_framework.response import Response
@@ -62,7 +64,7 @@ class BotMigrateView(APIView, ResponseMixin):
              }
             """
             data = request.data
-            if Bot.objects.filter(username=data.get("id")).exists():
+            if Bot.objects.filter(id=data.get("id")).exists():
                 return self.json_response_503()
             resp = discord_api.get_bot_info(data.get("id"))
             if resp.status_code == 404:
@@ -75,14 +77,16 @@ class BotMigrateView(APIView, ResponseMixin):
                                              name=resp.get("username"),
                                              owner=owner,
                                              invite_link=data.get("invite"),
-                                             date_added=datetime.utcfromtimestamp(data.get("date_added"))
-                                             .strftime("%d%m%Y"),
+                                             date_added=datetime.utcfromtimestamp(
+                                                 data.get("date_added", 1622042205981)/1000
+                                             ).replace(tzinfo=pytz.utc),
                                              avatar=resp.get("avatar"),
                                              short_desc=data.get("short_desc"),
                                              votes=data.get("votes"),
+                                             verification_status="VERIFIED" if data.get("verified") else "UNVERIFIED",
                                              banned=data.get("banned"),
                                              verified=data.get("verified"))
-                    bot.tags.set(BotTag.objects.filter(name__in=data.getlist('tags')))
+                    bot.tags.set(BotTag.objects.filter(name__in=data.get('tags')))
                     bot.meta.support_server = data.get("support_server")
                     bot.meta.prefix = data.get("prefix")
                     bot.meta.github = data.get("github")
@@ -96,7 +100,8 @@ class BotMigrateView(APIView, ResponseMixin):
                     bot.meta.save()
                 except Member.DoesNotExist:
                     return self.json_response_404()
-            return self.json_response_201()
+                return self.json_response_201()
+            return self.json_response_400()
         return self.json_response_401()
 
 
