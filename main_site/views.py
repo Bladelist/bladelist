@@ -56,7 +56,7 @@ def bot_invite_counter(request, bot_id):
         bot.meta.total_invites += 1
         bot.meta.save()
         return redirect(to=bot.invite_link)
-    except Bot.DoesNotExist:
+    except Exception as E:
         return render(request, "404.html")
 
 
@@ -66,7 +66,7 @@ def server_invite_counter(request, server_id):
         server.meta.total_invites += 1
         server.meta.save()
         return redirect(to=server.invite_link)
-    except Server.DoesNotExist:
+    except Exception as E:
         return render(request, "404.html")
 
 
