@@ -75,7 +75,8 @@ class BotMigrateView(APIView, ResponseMixin):
                                              name=resp.get("username"),
                                              owner=owner,
                                              invite_link=data.get("invite"),
-                                             date_added=datetime.strptime(data.get("date_added"), "%d%m%Y"),
+                                             date_added=datetime.utcfromtimestamp(data.get("date_added"))
+                                             .strftime("%d%m%Y"),
                                              avatar=resp.get("avatar"),
                                              short_desc=data.get("short_desc"),
                                              votes=data.get("votes"),
