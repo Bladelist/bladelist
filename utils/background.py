@@ -75,9 +75,9 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
 @receiver(post_save, sender=Bot)
 def alert_with_webhook_on_bot_change(sender, instance=None, created=False, **kwargs):
     if created:
-        instance.owner.send_message(
-            f"<:botadded:652482091971248140> Your bot {instance.name} is added and is currently awaiting verification."
-        )
+        # instance.owner.send_message(
+        #     f"<:botadded:652482091971248140> Your bot {instance.name} is added and is currently awaiting verification."
+        # )
         api_client.send_embed(embed=instance.embed(status="added"))
 
     elif kwargs['update_fields']:
