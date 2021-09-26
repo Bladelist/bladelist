@@ -53,11 +53,11 @@
                         </ul>
                         <div class=supercard-header><span class=TitleCard><i class="fas fa-tasks"></i> Manage</span></div>
                         <ul class=buttons-group>
-                            <a class="btn btn-block btn-icon" href="#!">
+                            <a class="btn btn-block btn-icon voteBotBtn" href="#!" bot_id="{{ bot.id }}">
                                 <div class="btnicon-icon text-info"><i class="fas fa-chevron-up"></i></div><span class=btnicon-content>Vote</span> </a>
-                            <a class="btn btn-block btn-icon" href="{{ bot.invite_url }}">
+                            <a class="btn btn-block btn-icon" href="{% url 'bot_invite' bot_id=bot.id %}">
                                 <div class="btnicon-icon text-success"><i class="fas fa-plus-square"></i></div><span class=btnicon-content>Invite</span> </a>
-                            <a class="btn btn-block btn-icon btn-danger" href="#!">
+                            <a class="btn btn-block btn-icon btn-danger" href="#!" {% if not request.user.is_authenticated %}disabled data-toggle="tooltip" data-placement="bottom" title="Login to report"{% else %}data-toggle="modal" data-target="#reportBotModalCenter" {% endif %}>
                                 <div class="btnicon-icon text-danger"><i class="fas fa-flag"></i></div><span class=btnicon-content>Report</span></a>
                         </ul>
                         {% if request.user.is_staff %}
