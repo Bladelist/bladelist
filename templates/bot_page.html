@@ -68,6 +68,7 @@
                                 <div class="btnicon-icon text-warning"><i class="fas fa-user"></i></div><span class=btnicon-content>{% if bot.meta.moderator %}{{ bot.meta.moderator.user.first_name }} #{{ bot.meta.moderator.tag }}{% else %}Anonymous{% endif %}</span>
                             </a>
                         </ul>
+                        {% endif %}
                         {% else %}
                         <div class=supercard-header><span class=TitleCard><i class="fas fa-user"></i> Owner</span></div>
                         <ul class=buttons-group>
