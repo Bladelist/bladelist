@@ -81,7 +81,7 @@
                         <ul class=buttons-group>
                             {% for tag in bot.tags.all %}
                             <a class="btn-block btn-icon" href="{% url 'bot_search' %}?tag={{ tag.name }}">
-                                <div class=btnicon-icon><i class="{{ tag.icon }}"></i></div><span class=btnicon-content>{{ tag.name }}</span>
+                                <div class=btnicon-icon><i class="{{ tag.icon }}"></i></div><span class=btnicon-content style="text-decoration: none;">{{ tag.name }}</span>
                             </a>
                             {% endfor %}
                         </ul>
