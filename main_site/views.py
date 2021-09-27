@@ -13,7 +13,6 @@ from .models import Bot, BotTag, Member, BotVote, BotReport, Server, ServerTag, 
 from django.views.generic.list import ListView
 from utils.api_client import DiscordAPIClient
 from django.conf import settings
-from django.db.models import Q
 popup_oauth = Oauth()
 normal_oauth = Oauth(redirect_uri=settings.AUTH_HANDLER_URL)
 hasher = Hasher()
