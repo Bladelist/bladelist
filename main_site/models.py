@@ -136,7 +136,7 @@ class Bot(models.Model):
     id = models.BigIntegerField(primary_key=True)
     name = models.CharField(max_length=50)
     owner = models.ForeignKey(Member, related_name="bots", on_delete=models.CASCADE)
-    invite_link = models.URLField()
+    invite_link = models.URLField(max_length=350)
     votes = models.IntegerField(default=0)
     verification_status = models.CharField(max_length=20, choices=VERIFICATION_STATUS, default="UNVERIFIED")
     online = models.BooleanField(default=False)
