@@ -49,6 +49,10 @@ def server_refresh(request):
     return render(request, "refresh_pages/server_select.html", {"admin_guilds": admin_guilds})
 
 
+def support_server_invite(request):
+    return redirect(to="https://discord.gg/JKWhgPDnPp")
+
+
 def bot_invite_counter(request, bot_id):
     try:
         bot = Bot.objects.get(id=bot_id)

@@ -1,6 +1,6 @@
 from django.urls import path
 from django.conf.urls import url
-from .views import (IndexView, LoginView, ServerModerationView, BotAddView,
+from .views import (IndexView, LoginView, ServerModerationView, BotAddView, support_server_invite,
                     ProfileEditView, StaffView, BotSearchView, ServerView, ServerListView, BotView,
                     ServerAddView, ServerEditView, ServerSearchView, ServerIndexView, BotModerationView,
                     TemplateView, BotListView, BotEditView, ProfileView, discord_login_view, logout_view,
@@ -9,6 +9,7 @@ from .views import (IndexView, LoginView, ServerModerationView, BotAddView,
 
 urlpatterns = [
     path('login/', LoginView.as_view()),
+    path('join/', support_server_invite, name="join_support_server"),
     path('login/handlers/', login_handler_view),
     url(r'^logout', logout_view, name="logout"),
 
