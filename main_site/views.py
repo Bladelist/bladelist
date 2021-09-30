@@ -41,11 +41,12 @@ def discord_login_view(request):
 
 
 def server_refresh(request):
-    admin_guilds = [
-        (guild.get("id"), guild.get("name")) for guild in request.user.member.refresh_admin_servers()
-        if not Server.objects.filter(id=guild.get("id")).exists()
-    ]
-    return render(request, "refresh_pages/server_select.html", {"admin_guilds": admin_guilds})
+    # admin_guilds = [
+    #     (guild.get("id"), guild.get("name")) for guild in request.user.member.refresh_admin_servers()
+    #     if not Server.objects.filter(id=guild.get("id")).exists()
+    # ]
+    # return render(request, "refresh_pages/server_select.html", {"admin_guilds": admin_guilds})
+    return request.user.member.refresh_access_token()
 
 
 def support_server_invite(request):

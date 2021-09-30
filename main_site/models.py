@@ -65,11 +65,13 @@ class Member(models.Model):
 
     def refresh_access_token(self):
         token_json = oauth.refresh_access_token(self.meta.refresh_token)
-        self.meta.access_token = token_json.get("access_token")
-        self.meta.refresh_token = token_json.get("refresh_token")
-        self.meta.access_token_expiry = \
-            datetime.now(timezone.utc) + timedelta(seconds=int(token_json.get("expires_in")))
-        self.meta.save()
+        return token_json  # TEst case
+
+        # self.meta.access_token = token_json.get("access_token")
+        # self.meta.refresh_token = token_json.get("refresh_token")
+        # self.meta.access_token_expiry = \
+        #     datetime.now(timezone.utc) + timedelta(seconds=int(token_json.get("expires_in")))
+        # self.meta.save()
 
     def refresh_admin_servers(self):
         if self.meta.access_token:
