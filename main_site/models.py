@@ -74,7 +74,8 @@ class Member(models.Model):
     def refresh_admin_servers(self):
         if self.meta.access_token:
             if self.meta.access_token_expiry > datetime.now(timezone.utc):
-                self.refresh_access_token()
+                pass
+            self.refresh_access_token()
             admin_servers = [
                 guild for guild in oauth.get_guild_info_json(self.meta.access_token) if int(guild.get("permissions")) & 8
                 ]

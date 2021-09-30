@@ -4,7 +4,7 @@ from django.conf import settings
 
 class Oauth:
     redirect_uri = settings.AUTH_CALLBACK_URL
-    discord_api_url = "https://discord.com/api"
+    discord_api_url = "https://discord.com/api/v8"
     client_id = settings.OAUTH_CLIENT_ID
     client_secret = settings.OAUTH_CLIENT_SECRET
 
