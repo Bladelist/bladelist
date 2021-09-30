@@ -1,5 +1,5 @@
 from datetime import datetime, timezone
-from django.http import QueryDict, JsonResponse
+from django.http import QueryDict, JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth.models import User
@@ -46,7 +46,7 @@ def server_refresh(request):
     #     if not Server.objects.filter(id=guild.get("id")).exists()
     # ]
     # return render(request, "refresh_pages/server_select.html", {"admin_guilds": admin_guilds})
-    return request.user.member.refresh_access_token()
+    return HttpResponse(request.user.member.refresh_access_token())
 
 
 def support_server_invite(request):
