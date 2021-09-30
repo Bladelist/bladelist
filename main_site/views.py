@@ -1,5 +1,5 @@
 from datetime import datetime, timezone
-from django.http import QueryDict, JsonResponse, HttpResponse
+from django.http import QueryDict, JsonResponse
 from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth.models import User
@@ -41,12 +41,12 @@ def discord_login_view(request):
 
 
 def server_refresh(request):
-    # admin_guilds = [
-    #     (guild.get("id"), guild.get("name")) for guild in request.user.member.refresh_admin_servers()
-    #     if not Server.objects.filter(id=guild.get("id")).exists()
-    # ]
-    # return render(request, "refresh_pages/server_select.html", {"admin_guilds": admin_guilds})
-    return HttpResponse(request.user.member.refresh_access_token())
+    admin_guilds = [
+        (guild.get("id"), guild.get("name")) for guild in request.user.member.refresh_admin_servers()
+        if not Server.objects.filter(id=guild.get("id")).exists()
+    ]
+    request.user.member.sync_servers()
+    return render(request, "refresh_pages/server_select.html", {"admin_guilds": admin_guilds})
 
 
 def support_server_invite(request):
