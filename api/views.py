@@ -13,6 +13,12 @@ discord_api = DiscordAPIClient()
 
 class BotManageView(APIView, ResponseMixin):
 
+    """
+        USE: For owners to update the bot server_count and shard_count in regular intervals
+        TYPE: GET, PUT
+        DATA {"server_count": int, "shard_count": int}
+    """
+
     serializers = BotSerializer
 
     def get(self, request, bot_id):
@@ -40,6 +46,8 @@ class ServerManageView(APIView, ResponseMixin):
 
     """
         USE: For bot to update the server member_count and members_online in regular intervals
+        TYPE: GET, PUT
+        DATA {"members_online": int, "member_count": int}
     """
 
     serializers = ServerSerializer
@@ -51,13 +59,13 @@ class ServerManageView(APIView, ResponseMixin):
 
     def put(self, request, server_id):
         queryset = get_object_or_404(Server, id=server_id)
-        if request.user.member in queryset.admins.all():
-            if request.data.get("server_count"):
+        if request.user.is_superuser:
+            if request.data.get("members_online"):
                 queryset.members_online = request.data.get("members_online")
                 queryset.save()
-            if request.data.get("shard_count"):
+            if request.data.get("member_count"):
                 queryset.meta.member_count = request.data.get("member_count")
                 queryset.meta.save()
             return self.json_response_200()
-        return self.json_response_403()
+        return self.json_response_401()
 
