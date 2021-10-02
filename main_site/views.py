@@ -256,7 +256,9 @@ class BotEditView(LoginRequiredMixin, View, ResponseMixin):
 
     def get(self, request, bot_id):
         bot = Bot.objects.get(id=bot_id)
-        return render(request, self.template_name, {"bot": bot, "tags": BOT_TAGS})
+        if request.user.member in bot.admins.all()
+            return render(request, self.template_name, {"bot": bot, "tags": BOT_TAGS})
+        return render(request, "404.html")
 
     def post(self, request):
         data = request.POST
@@ -281,6 +283,7 @@ class BotEditView(LoginRequiredMixin, View, ResponseMixin):
                 bot.meta.save()
                 return render(request, self.template_name,
                               {"bot": bot, "tags": BOT_TAGS, "success": "Bot edited successfully!"})
+
         else:
             return ProfileView.as_view(self.request, {"error": "Internal Server error"})
 
