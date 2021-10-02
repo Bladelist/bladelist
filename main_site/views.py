@@ -83,7 +83,12 @@ class BotView(View, ResponseMixin):
             if bot.banned or not bot.verified:
                 if request.user.is_authenticated:
                     if request.user.member == bot.owner or request.user.is_staff:
-                        return render(request, self.template_name, {"bot": bot})
+                        return render(
+                            request, self.template_name, {"bot": bot,
+                                                          "custom_og_image": bot.avatar_url,
+                                                          "custom_og_title": bot.name,
+                                                          "custom_og_desc": bot.short_desc}
+                        )
                 return render(request, "404.html")
             return render(request, self.template_name, {"bot": bot})
         except self.model.DoesNotExist:
