@@ -736,17 +736,18 @@ class ServerEditView(View, ResponseMixin):
 
     def get(self, request, server_id):
         server = Server.objects.get(id=server_id)
-        if request.user.member in server.admins.all():
+        if request.user.member in server.admins.all() or request.user.is_superuser:
             self.context["server"] = server
             self.context['tags'] = SERVER_TAGS
             return render(request, self.template_name, self.context)
+        return render(request, "404.html")
 
     def post(self, request, server_id):
         data = request.POST
         if server_id is not None:
             server = Server.objects.get(id=server_id)
             if server:
-                if request.user.member in server.admins.all():
+                if request.user.member in server.admins.all() or request.user.is_superuser:
                     server.invite_link = data.get("invite")
                     server.short_desc = data.get("short_desc")
                     server.save()
