@@ -642,7 +642,12 @@ class ServerView(View, ResponseMixin):
                     if request.user.member in server.admins.all() or request.user.is_staff:
                         return render(request, self.template_name, {"server": server, "search_off": True})
                 return render(request, "404.html")
-            return render(request, self.template_name, {"server": server, "search_off": True})
+            return render(
+                request, self.template_name,  {"server": server, "search_off": True,
+                                               "custom_og_image": server.icon_url,
+                                               "custom_og_title": server.name,
+                                               "custom_og_desc": server.short_desc}
+            )
         except self.model.DoesNotExist:
             return render(request, "404.html")
 
