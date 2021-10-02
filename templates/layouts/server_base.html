@@ -9,6 +9,13 @@
   <link rel="icon" href="{% static 'img/favicon.ico' %}" type="image/ico" sizes="16x16">
   <link rel='stylesheet' type='text/css' media='screen' href="{% static 'css/servers.css' %}">
 
+    <meta name="description" content="BladeList">
+    <meta property="og:image" content="{% if custom_og_image %}{{ custom_og_image }}{% else %}https://bladelist.gg/static/img/logo.png{% endif %}" />
+    <meta property="og:image:alt" content="{% if custom_og_desc %}{{ custom_og_desc }}{% else %}BladeList was designed for bot users and bot devlopers to manage with ease your bot page and create something clean and beautiful{% endif %}" />
+    <meta property="og:site_name" content="Bladelist" />
+    <meta property="og:title" content="{% if custom_og_title %}{{ custom_og_title }}{% else %}Bladelist - Bot & Server Listing{% endif %}" />
+    <meta property="og:url" content="https://bladelist.gg" />
+    <meta property="og:description" content="{% if custom_og_desc %}{{ custom_og_desc }}{% else %}BladeList was designed for bot users and bot devlopers to manage with ease your bot page and create something clean and beautiful{% endif %}"/>
   <!-- bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
