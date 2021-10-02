@@ -256,7 +256,7 @@ class BotEditView(LoginRequiredMixin, View, ResponseMixin):
 
     def get(self, request, bot_id):
         bot = Bot.objects.get(id=bot_id)
-        if request.user.member in bot.admins.all():
+        if request.user.member in bot.admins.all() or request.user.member is bot.owner or request.user.is_superuser:
             return render(request, self.template_name, {"bot": bot, "tags": BOT_TAGS})
         return render(request, "404.html")
 
@@ -265,7 +265,7 @@ class BotEditView(LoginRequiredMixin, View, ResponseMixin):
         bot_id = data.get("id")
         if bot_id is not None:
             bot = Bot.objects.get(id=bot_id)
-            if request.user.member == bot.owner or request.user.member in bot.admins.all():
+            if request.user.member is bot.owner or request.user.member in bot.admins.all() or request.user.is_superuser:
                 bot.invite_link = data.get("invite")
                 bot.short_desc = data.get("short_desc")
                 bot.save()
