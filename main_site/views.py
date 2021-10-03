@@ -263,7 +263,7 @@ class BotEditView(LoginRequiredMixin, View, ResponseMixin):
 
     def get(self, request, bot_id):
         bot = Bot.objects.get(id=bot_id)
-        if request.user.member in bot.admins.all() or request.user.member is bot.owner or request.user.is_superuser:
+        if request.user.member in bot.admins.all() or request.user.member == bot.owner or request.user.is_superuser:
             return render(request, self.template_name, {"bot": bot, "tags": BOT_TAGS})
         return render(request, "404.html")
 
