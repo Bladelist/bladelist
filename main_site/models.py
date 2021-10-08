@@ -181,7 +181,7 @@ class Bot(models.Model):
 
 class BotMeta(models.Model):
     bot = models.OneToOneField(Bot, on_delete=models.CASCADE, related_name="meta")
-    prefix = models.CharField(max_length=10, null=True, blank=True, default="N/A")
+    prefix = models.CharField(max_length=20, null=True, blank=True, default="N/A")
     github = models.URLField(null=True, blank=True)
     website = models.URLField(null=True, blank=True)
     privacy = models.URLField(null=True, blank=True)
