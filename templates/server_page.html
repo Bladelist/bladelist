@@ -81,7 +81,7 @@
                             <h5 class=""><i class="fa fa-tags" aria-hidden="true"></i> Tags</h5>
                         </div>
                         <ul class="text-decoration-none">
-                            {% for tag in server.tags.all %}
+                            {% for tag in server.display_tags %}
                             <a class="btn-block btn-icon m-2" href="{% url 'server_search' %}?tag={{ tag.name }}">
                                 <div class="btnicon-icon text-info">
                                     <i class="{{ tag.icon }}"></i>

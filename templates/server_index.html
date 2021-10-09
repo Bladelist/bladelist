@@ -20,7 +20,7 @@
                         <span class="badge rounded-pill bg-primary">{{ server.votes }} <i class="fas fa-chevron-up"></i></span>
                         <span class="badge rounded-pill bg-success">{{ server.members_online }} <i class="fas fa-circle"></i></span>
                     <br>
-                        {% for tag in server.tags.all %}
+                        {% for tag in server.display_tags %}
                          <span class="badge rounded-pill bg-secondary">#{{ tag.name }}</span>
                         {% endfor %}
                     </div>
@@ -56,7 +56,7 @@
                         <span class="badge rounded-pill bg-primary">{{ server.votes }} <i class="fas fa-chevron-up"></i></span>
                         <span class="badge rounded-pill bg-success">{{ server.members_online }} <i class="fas fa-circle"></i></span>
                     <br>
-                        {% for tag in server.tags.all %}
+                        {% for tag in server.display_tags %}
                          <span class="badge rounded-pill bg-secondary">#{{ tag.name }}</span>
                         {% endfor %}
                     </div>
@@ -92,7 +92,7 @@
                         <span class="badge rounded-pill bg-primary">{{ server.votes }} <i class="fas fa-chevron-up"></i></span>
                         <span class="badge rounded-pill bg-success">{{ server.members_online }} <i class="fas fa-circle"></i></span>
                     <br>
-                        {% for tag in server.tags.all %}
+                        {% for tag in server.display_tags %}
                          <span class="badge rounded-pill bg-secondary">#{{ tag.name }}</span>
                         {% endfor %}
                     </div>

@@ -16,7 +16,7 @@
                  <h3>Select your server tags <a class="text-decoration-none text-danger">*</a></h3>
                 <select class="form-select form-select bg-customdark text-white" name="server_tags" id="server_tags" required multiple>
                     {% for tag in tags %}
-                        <option value="{{ tag.name }}" {% if tag in server.tags.all %}selected{% endif %}>{{ tag.name }}</option>
+                        <option value="{{ tag.name }}" {% if tag in server.display_tags %}selected{% endif %}>{{ tag.name }}</option>
                     {% endfor %}
                 </select>
                 </div>

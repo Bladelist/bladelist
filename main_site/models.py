@@ -263,6 +263,10 @@ class Server(models.Model):
     def web_url(self):
         return f"https://bladelist.gg/bots/{self.id}"
 
+    @property
+    def display_tags(self):
+        return self.tags.all()[:5]
+
 
 class ServerMeta(models.Model):
     server = models.OneToOneField(Server, on_delete=models.CASCADE, related_name="meta")
