@@ -267,6 +267,10 @@ class Server(models.Model):
     def display_tags(self):
         return self.tags.all()[:5]
 
+    @property
+    def short_desc_display(self):
+        return self.short_desc[:100]
+
 
 class ServerMeta(models.Model):
     server = models.OneToOneField(Server, on_delete=models.CASCADE, related_name="meta")

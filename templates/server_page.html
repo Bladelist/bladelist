@@ -101,7 +101,7 @@
                         <a href="#!"><button class="votecase voteServerBtn" server_id="{{ server.id }}"><span id="serverVoteCount">{{ server.votes }}</span> <i class="fas fa-chevron-up"></i></button></a>
                         {% endif %}
                     </div>
-                    <p class=mb-10>{{ server.short_desc }}</p>
+                    <p class=mb-10>{{ server.short_desc_display }}</p>
                     <div class="botButtons">
                         {% if not server.banned %}
                             <a href="#!"><button class="btn btn-success voteServerBtn m-1" server_id="{{ server.id }}"><i class="fas fa-chevron-up"></i> Vote</button></a>
