@@ -39,13 +39,17 @@
         </div>
         {% endif %}
     </div>
-{#    <div class=profile-badges>#}
-{#        <button class=poponHover data-toggle=popover title="Administrator of the website" data-trigger=hover data-content=Admin><i class="fas fa-crown" style="color: #faa61a"></i> Administrator</button>#}
+    <div class=profile-badges>
+        {% if request.user.is_superuser %}
+        <button class=poponHover data-toggle=popover title="Administrator of the website" data-trigger=hover data-content=Admin><i class="fas fa-crown" style="color: #faa61a"></i> Administrator</button>
+        {% endif %}
 {#        <button class=poponHover data-toggle=popover title="Senior moderator of the website" data-trigger=hover data-content=smod><i class="fas fa-award" style="color: yellow;"></i> Senior Moderator</button>#}
-{#        <button class=poponHover data-toggle=popover title="Moderator of the website" data-trigger=hover data-content=mod><i class="fas fa-balance-scale" style="color: brown;"></i> Moderator</button>#}
+        {% if request.user.is_staff %}
+        <button class=poponHover data-toggle=popover title="Moderator of the website" data-trigger=hover data-content=mod><i class="fas fa-balance-scale" style="color: brown;"></i> Moderator</button>
+        {% endif %}
 {#        <button  class="poponHover" data-toggle="popover" title="🪙 Donator 🪙" data-trigger="hover" data-content="donator"><i class="fas fa-piggy-bank" style="color: green;"></i> Donator</button>#}
 {#        <button class="poponHover" data-toggle="popover" title="Certified developer" data-trigger="hover" data-content="certdev"><i class="fas fa-code" style="color: azure;"></i> Certified Developer</button>#}
-{#    </div>#}
+    </div>
 </div>
 
 {% if member.has_bots %}
