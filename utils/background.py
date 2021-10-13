@@ -78,7 +78,7 @@ def alert_with_webhook_on_bot_change(sender, instance=None, created=False, **kwa
         instance.owner.send_message(
             f"<:botadded:652482091971248140> Your bot {instance.name} is added and is currently awaiting verification."
         )
-        api_client.send_embed(embed=instance.embed(status="added"))
+        api_client.send_embed(embed=instance.embed(status="added"), ping="<@&645283184606707742>")
 
     elif kwargs['update_fields']:
         if "banned" in kwargs['update_fields']:
@@ -116,7 +116,7 @@ def alert_with_webhook_on_server_change(sender, instance=None, created=False, **
             f"<:botadded:652482091971248140> "
             f"Your server {instance.name} is added and is currently awaiting verification."
         )
-        api_client.send_embed(embed=instance.embed(status="added"))
+        api_client.send_embed(embed=instance.embed(status="added"), ping="<@&645283184606707742>")
 
     elif kwargs['update_fields']:
         if "banned" in kwargs['update_fields']:
