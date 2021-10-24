@@ -19,8 +19,10 @@ hasher = Hasher()
 discord_client = DiscordAPIClient()
 BOT_TAGS = BotTag.objects.all()
 SERVER_TAGS = ServerTag.objects.all()
-RANDOM_BOTS = Bot.objects.filter(verified=True, banned=False, owner__banned=False).order_by("id").distinct()[:8]
-RANDOM_SERVERS = Server.objects.filter(verified=True, banned=False, owner__banned=False).order_by("id").distinct()[:8]
+RANDOM_BOTS = Bot.objects.filter(
+    verified=True, banned=False, owner__banned=False).order_by("date_added").distinct()[:8][::-1]
+RANDOM_SERVERS = Server.objects.filter(
+    verified=True, banned=False, owner__banned=False).order_by("date_added").distinct()[:8][::-1]
 
 
 def login_handler_view(request):
