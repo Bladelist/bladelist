@@ -261,7 +261,7 @@ class Server(models.Model):
 
     @property
     def web_url(self):
-        return f"https://bladelist.gg/bots/{self.id}"
+        return f"https://bladelist.gg/servers/{self.id}"
 
     @property
     def display_tags(self):
