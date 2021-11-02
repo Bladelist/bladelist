@@ -1,0 +1,40 @@
+{% extends 'layouts/bot_base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="container darker-container center" style="text-align: left !important; ">
+    <h1>Bot Submission Requirements</h1>
+    <p>
+        Before submitting your bot, make sure it follows all of our rules/guidelines.
+    </p>
+    <ul>
+        <li>The bot must be online when we are testing it.</li>
+        <li>Any NSFW commands can not be executed outside of an NSFW channel. This includes any endpoints with a possibility of a NSFW response e.g. nekos.life</li>
+        <li>The bot description must be relevant to the bot, without links to social media platforms.</li>
+        <li>The bot description must be readable without special characters.(𝔱𝔢𝔵𝔱, t̵̩̿ȅ̴̋ẋ̸͚t̶̅͝)</li>
+
+
+        <li>Bot can not reply to other bots</li>
+        <li>Bot must have a majority of its commands working, and all important commands (help, info) must work without bugs.</li>
+        <li>Bot must be public and with out requiring a code grant.</li>
+        <li>Bot can not be full pro/premium, it must have some free functionality.</li>
+        <li>Bot must not be a unedited fork.</li>
+
+
+        <li>Bot does not need administrator permissions.</li>
+        <li>Bot must not use the `/` prefix without application commands.</li>
+
+
+        <li>Usage of a common prefix like `!` is not recommended.</li>
+    </ul>
+
+
+    <p>
+        The rules are subject to change at anytime, with or without notice.
+    </p>
+</div>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+<script src="https://ajax.cloudflare.com/cdn-cgi/scripts/7d0fa10a/cloudflare-static/rocket-loader.min.js" data-cf-settings="557d21059af46c35e17b60f9-|49" defer=""></script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"rayId":"6568063b3c2bcbd4","version":"2021.5.2","r":1,"token":"6683d05ba1564622b8a5ce7ee48bd638","si":10}'></script>
+{% endblock content %}

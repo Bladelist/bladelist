@@ -16,6 +16,7 @@ urlpatterns = [
     url(r'^bots/(?P<bot_id>[0-9]{18})/invite/', bot_invite_counter, name="bot_invite"),
     url(r'^bots/(?P<bot_id>[0-9]{18})/edit/', BotEditView.as_view(), name="bot_edit_view"),
     url(r'^bots/(?P<bot_id>[0-9]{18})', BotView.as_view(), name="bot_single"),
+    url(r'^bots/requirements/', TemplateView.as_view(template_name="requirements.html"), name="bot_search"),
     url(r'^bots/search/', BotSearchView.as_view(), name="bot_search"),
     url(r'^bots/edit/', BotEditView.as_view(), name="bot_edit"),
     url(r'^bots/add', BotAddView.as_view(), name="bot_add"),
