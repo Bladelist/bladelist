@@ -21,7 +21,7 @@ class BotManageView(APIView, ResponseMixin):
 
     serializers = BotSerializer
 
-    def get(self, request, bot_id):
+    def get(self, request, bot_id=None):
         if not bot_id and request.user.is_superuser:
             serializer = BotAllSerializer(Bot.objects.filter(
                 verification_status__in=["UNVERIFIED", "UNDER_REVIEW"]), many=True)
