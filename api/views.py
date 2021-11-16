@@ -7,7 +7,7 @@ from .serializers import BotSerializer
 from rest_framework.generics import get_object_or_404
 
 from utils.api_client import DiscordAPIClient
-from .serializers import ServerSerializer
+from .serializers import ServerSerializer, BotAllSerializer
 discord_api = DiscordAPIClient()
 
 
@@ -22,9 +22,10 @@ class BotManageView(APIView, ResponseMixin):
     serializers = BotSerializer
 
     def get(self, request, bot_id):
-        # if not bot_id and request.user.is_superuser:
-        #     serializer = BotAllSerializer(Bot.objects.all(), many=True)
-        #     return Response(serializer.data)
+        if not bot_id and request.user.is_superuser:
+            serializer = BotAllSerializer(Bot.objects.filter(
+                verification_status__in=["UNVERIFIED", "UNDER_REVIEW"]), many=True)
+            return Response(serializer.data)
         queryset = get_object_or_404(Bot, id=bot_id)
         serializer = self.serializers(queryset)
         return Response(serializer.data, status=200)
