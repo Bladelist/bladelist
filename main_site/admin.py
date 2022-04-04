@@ -6,7 +6,7 @@ from .models import (
 
 
 class BotFilter(admin.ModelAdmin):
-    list_display = ("name", "date_added", "verified", "owner", "server_count")
+    list_display = ("name", "date_added", "verified")
     list_filter = ("banned",)
 
 
