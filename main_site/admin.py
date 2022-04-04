@@ -4,8 +4,14 @@ from .models import (
     Server, ServerVote, ServerTag, ServerReport, ServerMeta
 )
 
+
+class BotFilter(admin.ModelAdmin):
+    list_display = ("name", "date_added", "verified", "owner", "server_count")
+    list_filter = ("banned",)
+
+
 admin.site.register(Member)
-admin.site.register(Bot)
+admin.site.register(Bot, BotFilter)
 admin.site.register(BotMeta)
 admin.site.register(BotTag)
 admin.site.register(MemberMeta)
