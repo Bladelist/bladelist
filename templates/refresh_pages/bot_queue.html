@@ -48,7 +48,7 @@
         <td>{{ bot.verification_attempt }}</td>
         <td>
             <a class="btn-sm btn-primary mr-2" href="{% url 'bot_single' bot_id=bot.id %}"><i class="fa fa-address-card" aria-hidden="true"></i> View Profile</a>
-            <a class="btn-sm btn-warning mr-2" onclick="window.open('https://discordapp.com/oauth2/authorize?client_id={{ bot.id }}&scope=bot&permissions=0&guild_id=645281161949741064','name','width=400,height=700')"><i class="fa fa-plus" aria-hidden="true"></i> Invite</a>
+            <a class="btn-sm btn-warning mr-2" onclick="window.open('https://discordapp.com/oauth2/authorize?client_id={{ bot.id }}&scope=bot&permissions=0&guild_id=645281161949741064%20applications.commands','name','width=400,height=700')"><i class="fa fa-plus" aria-hidden="true"></i> Invite</a>
         </td>
     <td>
             {% if request.user.member == bot.meta.moderator %}
