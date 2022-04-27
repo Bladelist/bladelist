@@ -14,7 +14,7 @@
   </component>
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$" />
-    <orderEntry type="jdk" jdkName="Pipenv (bladebotlist)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Pipenv (bladebotlist-py)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="notyf" level="application" />
   </component>

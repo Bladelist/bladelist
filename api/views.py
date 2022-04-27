@@ -15,7 +15,7 @@ class BotAllView(APIView, ResponseMixin):
 
     def get(self, request):
         if request.user.is_superuser:
-            serializer = BotAllSerializer(Bot.objects.all(), many=True)
+            serializer = BotAllSerializer(Bot.objects.filter(verified=True), many=True)
             return Response(serializer.data, status=200)
 
 
