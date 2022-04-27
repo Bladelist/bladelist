@@ -13,8 +13,8 @@ discord_api = DiscordAPIClient()
 
 class BotAllView(APIView, ResponseMixin):
 
-    def get(self, request, bot_id=None):
-        if not bot_id and request.user.is_superuser:
+    def get(self, request):
+        if request.user.is_superuser:
             serializer = BotAllSerializer(Bot.objects.all(), many=True)
             return Response(serializer.data, status=200)
 
