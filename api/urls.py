@@ -1,6 +1,6 @@
 from django.urls import path
-from .views import BotManageView, ServerManageView
-from .private_views import BotStatusEditView, ServerStatusEditView, BotAllView
+from .views import BotManageView, ServerManageView, BotAllView
+from .private_views import BotStatusEditView, ServerStatusEditView
 
 urlpatterns = [
     path('bots/<str:bot_id>/', BotManageView.as_view(), name='bot_manage_alt'),
