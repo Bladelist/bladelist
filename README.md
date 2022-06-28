@@ -87,7 +87,7 @@ $ sudo apt-get install python3-pip -y
 $ sudo apt-get remove virtualenv -y && sudo python3 -m pip uninstall virtualenv -y
 
 # Clone the repository and cd into the folder
-$ git clone https://github.com/Ryuga/bladelist.git && cd bladelist
+$ git clone https://github.com/bladelist/bladelist.git && cd bladelist
 
 # Install poetry
 $ sudo python3 -m pip install poetry
@@ -108,8 +108,8 @@ DEBUG = True
 ENCRYPTION_SALT = "your_encryption_salt"
 ENCRYPTION_ITERATION = your_iteration_count
 
-AUTH_HANDLER_URL="http://localhost:8000/login/"
-AUTH_CALLBACK_URL="http://localhost:8000login/handlers/"
+AUTH_HANDLER_URL="https://bladelist.gg/login/"
+AUTH_CALLBACK_URL="https://bladelist.gg/login/handlers/"
 
 OAUTH_CLIENT_ID = "your_client_id"
 OAUTH_CLIENT_SECRET = "your_client_secret"
