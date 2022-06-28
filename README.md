@@ -84,9 +84,9 @@ $ git checkout -b "name_of_branch" # example: git checkout -b other/restruture
 # dev branch by making a pr to the development branch fro your branch.
 
 # NOTE:
-1. Add the prefix 'feature' to your branch name if it adds a feature, eg,: feature/add_bot
-2. Add the prefix 'bug' to your branch name if it fixes a bug, eg,: bug/fix_bot
-3. Add the prefix 'other' to your branch name if its none of the above two, eg,: other/code_clean_up
+# 1. Add the prefix 'feature' to your branch name if it adds a feature, eg,: feature/add_bot
+# 2. Add the prefix 'bug' to your branch name if it fixes a bug, eg,: bug/fix_bot
+# 3. Add the prefix 'other' to your branch name if its none of the above two, eg,: other/code_clean_up
 ```
 ### Adding host file configuration for subdomain access in development
 
