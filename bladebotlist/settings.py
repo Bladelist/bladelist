@@ -1,25 +1,19 @@
 from pathlib import Path
-import environ
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# reading .env file
-env = environ.Env(
-    DEBUG=(bool, False)
-)
-
-env_path = environ.Path(__file__) - 2
-environ.Env.read_env(env_file=env_path('.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env('DEBUG')
+DEBUG = config('DEBUG', cast=bool, default=False)
+
 
 if DEBUG:
     ALLOWED_HOSTS = ['*']
@@ -84,10 +78,10 @@ WSGI_APPLICATION = 'bladebotlist.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': env("DB_NAME"),
-        'USER': env("DB_USER"),
-        'PASSWORD': env("DB_PASS"),
-        'HOST': env("DB_HOST"),
+        'NAME': config("DB_NAME"),
+        'USER': config("DB_USER"),
+        'PASSWORD': config("DB_PASS"),
+        'HOST': config("DB_HOST"),
         'PORT': '5432',
     },
 }
@@ -146,11 +140,11 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-OAUTH_CLIENT_ID = env('OAUTH_CLIENT_ID')
-OAUTH_CLIENT_SECRET = env('OAUTH_CLIENT_SECRET')
-ENCRYPTION_SALT = env('ENCRYPTION_SALT')
-ENCRYPTION_ITERATION = env('ENCRYPTION_ITERATION')
-DISCORD_API_TOKEN = env('DISCORD_API_TOKEN')
-AUTH_HANDLER_URL = env('AUTH_HANDLER_URL')
-AUTH_CALLBACK_URL = env('AUTH_CALLBACK_URL')
-LOG_CHANNEL_ID = env('LOG_CHANNEL_ID')
+OAUTH_CLIENT_ID = config('OAUTH_CLIENT_ID')
+OAUTH_CLIENT_SECRET = config('OAUTH_CLIENT_SECRET')
+ENCRYPTION_SALT = config('ENCRYPTION_SALT')
+ENCRYPTION_ITERATION = config('ENCRYPTION_ITERATION')
+DISCORD_API_TOKEN = config('DISCORD_API_TOKEN')
+AUTH_HANDLER_URL = config('AUTH_HANDLER_URL')
+AUTH_CALLBACK_URL = config('AUTH_CALLBACK_URL')
+LOG_CHANNEL_ID = config('LOG_CHANNEL_ID')
