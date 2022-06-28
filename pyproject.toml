@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "bladebotlist-py"
+version = "0.1.0"
+description = ""
+authors = ["ryuga <vaishnav2353@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+Django = "^4.0.5"
+djangorestframework = "^3.13.1"
+gunicorn = "^20.1.0"
+python-decouple = "^3.6"
+django-filter = "^22.1"
+django-hosts = "^5.1"
+Markdown = "^3.3.7"
+psycopg2-binary = "^2.9.3"
+requests = "^2.28.0"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
