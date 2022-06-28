@@ -5,12 +5,17 @@
     <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" />
   </a>
   <a href="https://github.com/bladelist/bladelist/blob/master/LICENCE" target="_blank">
-    <img alt="License: MIT LICENSE" src="https://img.shields.io/badge/License-ALL RIGHTS RESERVED-yellow.svg" />
+    <img alt="License: MIT LICENSE" src="https://img.shields.io/badge/License-MIT LICENSE-yellow.svg" />
   </a>
   <a href="https://discord.gg/WeUtJ7hqum" target="_blank">
     <img alt="Discord: Tortoise Community" src="https://img.shields.io/badge/Discord-Tortoise%20Community-%23ffb101" />
   </a>
+  <a href="https://discord.gg/WeUtJ7hqum" target="_blank">
+    <img alt="website" src="https://img.shields.io/website?url=https%3A%2F%2Fbladelist.gg" />
+  </a>
 </p>
+
+
 
 > BladeList was built for users and developers to manage with ease thier bot page and create something clean.
 
