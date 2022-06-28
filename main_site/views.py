@@ -1,22 +1,27 @@
 from datetime import datetime, timezone
-from django.http import QueryDict, JsonResponse
-from django.shortcuts import render, redirect
+
 from django.views import View
+from django.conf import settings
 from django.contrib.auth.models import User
+from django.shortcuts import render, redirect
+from django.views.generic.list import ListView
+from django.http import QueryDict, JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import login, logout, authenticate
-from utils.background import create_user, update_user
+
 from utils.oauth import Oauth
 from utils.hashing import Hasher
 from utils.mixins import ResponseMixin
-from .models import Bot, BotTag, Member, BotVote, BotReport, Server, ServerTag, ServerReport, ServerVote
-from django.views.generic.list import ListView
 from utils.api_client import DiscordAPIClient
-from django.conf import settings
+from utils.background import create_user, update_user
+from .models import Bot, BotTag, Member, BotVote, BotReport, Server, ServerTag, ServerReport, ServerVote
+
 popup_oauth = Oauth()
 normal_oauth = Oauth(redirect_uri=settings.AUTH_HANDLER_URL)
 hasher = Hasher()
 discord_client = DiscordAPIClient()
+
+
 BOT_TAGS = BotTag.objects.all()
 SERVER_TAGS = ServerTag.objects.all()
 RANDOM_BOTS = Bot.objects.filter(
