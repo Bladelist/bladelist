@@ -68,8 +68,8 @@ $ poetry run python3 manage.py runserver
 # now you can visit http://127.0.0.1:8000 and access the site.
 ```
 
-### Other Requirements For Development:
-1. You need to setup a local postgres database and set values realate to it the .env file.
+### Other requirements for development:
+1. You need to setup a local postgres database and set values related to it the .env file.
 2. Quick setup guide for Ubuntu: [POSTGRES LOCAL SETUP](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-20-04/)
 
 ###  How to make changes?  
