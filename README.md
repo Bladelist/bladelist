@@ -43,6 +43,7 @@ $ poetry install
 $ sudo nano .env
 # add the following environment variables
 
+SECRET_KEY = "your_secret_key" #example: test
 DB_NAME = "your_db_name"
 DB_HOST = "your_db_host"
 DB_PASS = "your_db_password"
@@ -51,7 +52,7 @@ DB_USER = "your_db_user"
 DEBUG = True
 
 ENCRYPTION_SALT = "your_encryption_salt"
-ENCRYPTION_ITERATION = your_iteration_count
+ENCRYPTION_ITERATION = your_iteration_count # example:  10
 
 AUTH_HANDLER_URL="http://localhost:8000/login/"
 AUTH_CALLBACK_URL="http://localhost:8000login/handlers/"
@@ -67,6 +68,26 @@ $ poetry run python3 manage.py runserver
 # now you can visit http://127.0.0.1:8000 and access the site.
 ```
 
+### Other Requirements For Development:
+1. You need to setup a local postgres database and set values realate to it the .env file.
+2. Quick setup guide for Ubuntu: [POSTGRES LOCAL SETUP](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-20-04/)
+
+###  How to make changes?  
+```bash
+# All changes will first go to development branch and will be merged into master after code review.
+
+# Go to your project directory and checkout to development branch
+$ git checkout development
+$ git checkout -b "name_of_branch" # example: git checkout -b other/restruture 
+
+# After this you can start making the changes in your branch and push changes to the
+# dev branch by making a pr to the development branch fro your branch.
+
+# NOTE:
+1. Add the prefix 'feature' to your branch name if it adds a feature, eg,: feature/add_bot
+2. Add the prefix 'bug' to your branch name if it fixes a bug, eg,: bug/fix_bot
+3. Add the prefix 'other' to your branch name if its none of the above two, eg,: other/code_clean_up
+```
 ### Adding host file configuration for subdomain access in development
 
 ### Production Setup
@@ -103,12 +124,13 @@ $ sudo poetry install
 $ sudo nano .env
 # add the following environment variables
 
+SECRET_KEY = "your_secret_key"
 DB_NAME = "your_db_name"
 DB_HOST = "your_db_host"
 DB_PASS = "your_db_password"
 DB_USER = "your_db_user"
 
-DEBUG = True
+DEBUG = False
 
 ENCRYPTION_SALT = "your_encryption_salt"
 ENCRYPTION_ITERATION = your_iteration_count
