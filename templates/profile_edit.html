@@ -14,27 +14,26 @@
 
 <h3 class="ml-3">Twitter</h3>
 <p class="ml-3">You must provide a valid link, not the @username !</p>
-<input type="url" name="twitter" placeholder="https://twitter.com/bladebotlist" value="{% if request.user.member.meta.twitter %}{{ request.user.member.meta.twitter }}{% endif %}" class="text-white ml-3 ml-3">
+<input type="url" name="twitter" placeholder="https://twitter.com/bladelistgg" value="{% if request.user.member.meta.twitter %}{{ request.user.member.meta.twitter }}{% endif %}" class="text-white ml-3 ml-3">
 
 <h3 class="ml-3">Facebook</h3>
 <p class="ml-3">You must provide a valid link, not the username/full name !</p>
-<input type="url" name="facebook" placeholder="https://facebook.com/bladebotlist" value="{% if request.user.member.meta.facebook %}{{ request.user.member.meta.facebook }}{% endif %}" class="text-white ml-3">
+<input type="url" name="facebook" placeholder="https://facebook.com/bladelist" value="{% if request.user.member.meta.facebook %}{{ request.user.member.meta.facebook }}{% endif %}" class="text-white ml-3">
 
 <h3 class="ml-3">GitHub</h3>
 <p class="ml-3">You must provide a valid link, not the username/full name !</p>
-<input type="url" name="github" placeholder="https://github.com/bladebotlist" value="{% if request.user.member.meta.github %}{{ request.user.member.meta.github }}{% endif %}" class="text-white ml-3">
+<input type="url" name="github" placeholder="https://github.com/bladelist" value="{% if request.user.member.meta.github %}{{ request.user.member.meta.github }}{% endif %}" class="text-white ml-3">
 
 <h3 class="ml-3">Website</h3>
 <p class="ml-3">Providing a malicious/illegal website (like selling drugs/arms/malwares/cracks) will expose you to a permanent ban of the website ! <br>we can report this juridically (france) and with some conditions</p>
-<input type="url" name="website" placeholder="https://naodev.eu" value="{% if request.user.member.meta.website %}{{ request.user.member.meta.website }}{% endif %}" class="text-white ml-3">
+<input type="url" name="website" placeholder="https://nao.rip" value="{% if request.user.member.meta.website %}{{ request.user.member.meta.website }}{% endif %}" class="text-white ml-3">
 
 <h3 class="ml-3">Reddit</h3>
 <p class="ml-3">You must provide a valid link, not the username/full name !</p>
-<input type="url" name="reddit" placeholder="https://reddit.com/bladebotlist" value="{% if request.user.member.meta.reddit %}{{ request.user.member.meta.reddit }}{% endif %}" class="text-white ml-3">
+<input type="url" name="reddit" placeholder="https://reddit.com/bladelist" value="{% if request.user.member.meta.reddit %}{{ request.user.member.meta.reddit }}{% endif %}" class="text-white ml-3">
 
-<h3 class="ml-3">Discord.bio</h3>
-<p class="ml-3">You can provide you <a href="https://discord.bio">discord.bio</a> account (we are not affilied with them !)</p>
-<input type="url" name="discordbio" placeholder="https://dsc.bio/nao" value="{% if request.user.member.meta.discord_bio %}{{ request.user.member.meta.discord_bio }}{% endif %}" class="text-white ml-3">
+
+
 <br>
 <button type="submit" class="btn btn-success ml-3"><i class="fa fa-save"></i> Submit</button>
 <button type="reset" class="btn btn-danger"><i class="fas fa-sync-alt"></i> Reset settings</button>
