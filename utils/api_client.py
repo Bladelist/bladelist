@@ -6,13 +6,18 @@ from django.conf import settings
 
 class DiscordAPIClient:
     url = "https://discord.com/api/v8"
-    headers = {"Authorization": f"Bot {settings.DISCORD_API_TOKEN}", "Content-Type": "application/json"}
+    headers = {
+        "Authorization": f"Bot {settings.DISCORD_API_TOKEN}",
+        "Content-Type": "application/json",
+    }
 
     def get(self, endpoint):
-        return requests.get(self.url+endpoint, headers=self.headers)
+        return requests.get(self.url + endpoint, headers=self.headers)
 
     def post(self, endpoint, data: dict):
-        return requests.post(self.url + endpoint, headers=self.headers, json=data)
+        return requests.post(
+            self.url + endpoint, headers=self.headers, json=data
+        )
 
     def get_bot_info(self, bot_id):
         return self.get(f"/users/{bot_id}")
@@ -26,7 +31,14 @@ class DiscordAPIClient:
             return resp.json().get("id")
 
     def send_message(self, channel_id, message: str):
-        return self.post(f"/channels/{channel_id}/messages", data={"content": message})
+        return self.post(
+            f"/channels/{channel_id}/messages", data={"content": message}
+        )
 
-    def send_embed(self, embed: dict, channel_id=settings.LOG_CHANNEL_ID, ping=None):
-        return self.post(f"/channels/{channel_id}/messages", data={"embed": embed, "content": ping})
+    def send_embed(
+        self, embed: dict, channel_id=settings.LOG_CHANNEL_ID, ping=None
+    ):
+        return self.post(
+            f"/channels/{channel_id}/messages",
+            data={"embed": embed, "content": ping},
+        )

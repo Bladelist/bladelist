@@ -1,4 +1,3 @@
-
 from rest_framework.views import APIView
 from main_site.models import Bot, Server
 from utils.mixins import ResponseMixin
@@ -8,31 +7,37 @@ from rest_framework.generics import get_object_or_404
 
 from utils.api_client import DiscordAPIClient
 from .serializers import ServerSerializer, BotAllSerializer
+
 discord_api = DiscordAPIClient()
 
 
 class BotAllView(APIView, ResponseMixin):
-
     def get(self, request):
         if request.user.is_superuser:
-            serializer = BotAllSerializer(Bot.objects.filter(verified=True), many=True)
+            serializer = BotAllSerializer(
+                Bot.objects.filter(verified=True), many=True
+            )
             return Response(serializer.data, status=200)
 
 
 class BotManageView(APIView, ResponseMixin):
 
     """
-        USE: For owners to update the bot server_count and shard_count in regular intervals
-        TYPE: GET, PUT
-        DATA {"server_count": int, "shard_count": int}
+    USE: For owners to update the bot server_count and shard_count in regular intervals
+    TYPE: GET, PUT
+    DATA {"server_count": int, "shard_count": int}
     """
 
     serializers = BotSerializer
 
     def get(self, request, bot_id=None):
         if not bot_id and request.user.is_superuser:
-            serializer = BotAllSerializer(Bot.objects.filter(
-                verification_status__in=["UNVERIFIED", "UNDER_REVIEW"]), many=True)
+            serializer = BotAllSerializer(
+                Bot.objects.filter(
+                    verification_status__in=["UNVERIFIED", "UNDER_REVIEW"]
+                ),
+                many=True,
+            )
             return Response(serializer.data, status=200)
         queryset = get_object_or_404(Bot, id=bot_id)
         serializer = self.serializers(queryset)
@@ -66,9 +71,9 @@ class BotManageView(APIView, ResponseMixin):
 class ServerManageView(APIView, ResponseMixin):
 
     """
-        USE: For bot to update the server member_count and members_online in regular intervals
-        TYPE: GET, PUT
-        DATA {"members_online": int, "member_count": int}
+    USE: For bot to update the server member_count and members_online in regular intervals
+    TYPE: GET, PUT
+    DATA {"members_online": int, "member_count": int}
     """
 
     serializers = ServerSerializer
@@ -89,4 +94,3 @@ class ServerManageView(APIView, ResponseMixin):
                 queryset.meta.save()
             return self.json_response_200()
         return self.json_response_401()
-

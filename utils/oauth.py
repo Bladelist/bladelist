@@ -8,10 +8,11 @@ class Oauth:
     client_id = settings.OAUTH_CLIENT_ID
     client_secret = settings.OAUTH_CLIENT_SECRET
 
-    def __init__(self,
-                 redirect_uri=settings.AUTH_CALLBACK_URL,
-                 scope="identify%20guilds"
-                 ):
+    def __init__(
+        self,
+        redirect_uri=settings.AUTH_CALLBACK_URL,
+        scope="identify%20guilds",
+    ):
         self.redirect_uri = redirect_uri
         self.scope = scope
         self.discord_login_url = (
@@ -20,17 +21,19 @@ class Oauth:
         )
 
     def post(self, endpoint, payload):
-        headers = {'Content-Type': 'application/x-www-form-urlencoded'}
-        return requests.post(url=self.discord_api_url+endpoint, data=payload, headers=headers)
+        headers = {"Content-Type": "application/x-www-form-urlencoded"}
+        return requests.post(
+            url=self.discord_api_url + endpoint, data=payload, headers=headers
+        )
 
     def get_token_json(self, code):
         data = {
-            'client_id': self.client_id,
-            'client_secret': self.client_secret,
-            'grant_type': 'authorization_code',
-            'code': code,
-            'redirect_uri': self.redirect_uri,
-            'scope': self.scope
+            "client_id": self.client_id,
+            "client_secret": self.client_secret,
+            "grant_type": "authorization_code",
+            "code": code,
+            "redirect_uri": self.redirect_uri,
+            "scope": self.scope,
         }
         resp = self.post("/oauth2/token", payload=data)
         return resp.json()
@@ -51,10 +54,10 @@ class Oauth:
 
     def refresh_access_token(self, refresh_token):
         data = {
-            'client_id': self.client_id,
-            'client_secret': self.client_secret,
-            'grant_type': 'refresh_token',
-            'refresh_token': refresh_token
+            "client_id": self.client_id,
+            "client_secret": self.client_secret,
+            "grant_type": "refresh_token",
+            "refresh_token": refresh_token,
         }
         resp = self.post("/oauth2/token", payload=data)
         return resp.json()

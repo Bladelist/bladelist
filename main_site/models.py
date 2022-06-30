@@ -14,7 +14,9 @@ api_client = DiscordAPIClient()
 
 class Member(models.Model):
     id = models.BigIntegerField(primary_key=True)
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="member")
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, related_name="member"
+    )
     tag = models.CharField(max_length=4, default="0000")
     avatar = models.CharField(max_length=100, null=True)
     banned = models.BooleanField(default=False)
@@ -67,8 +69,9 @@ class Member(models.Model):
         token_json = oauth.refresh_access_token(self.meta.refresh_token)
         self.meta.access_token = token_json.get("access_token")
         self.meta.refresh_token = token_json.get("refresh_token")
-        self.meta.access_token_expiry = \
-            datetime.now(timezone.utc) + timedelta(seconds=int(token_json.get("expires_in")))
+        self.meta.access_token_expiry = datetime.now(timezone.utc) + timedelta(
+            seconds=int(token_json.get("expires_in"))
+        )
         self.meta.save()
 
     def refresh_admin_servers(self):
@@ -76,8 +79,10 @@ class Member(models.Model):
             if self.meta.access_token_expiry > datetime.now(timezone.utc):
                 self.refresh_access_token()
             admin_servers = [
-                guild for guild in oauth.get_guild_info_json(self.meta.access_token) if int(guild.get("permissions")) & 8
-                ]
+                guild
+                for guild in oauth.get_guild_info_json(self.meta.access_token)
+                if int(guild.get("permissions")) & 8
+            ]
             self.meta.admin_servers = admin_servers
             self.meta.save()
             return admin_servers
@@ -102,7 +107,9 @@ class Member(models.Model):
 
 
 class MemberMeta(models.Model):
-    member = models.OneToOneField(Member, on_delete=models.CASCADE, related_name="meta")
+    member = models.OneToOneField(
+        Member, on_delete=models.CASCADE, related_name="meta"
+    )
     bio = models.TextField(null=True, blank=True)
     twitter = models.URLField(null=True, blank=True)
     github = models.URLField(null=True, blank=True)
@@ -131,14 +138,18 @@ class Bot(models.Model):
         ("VERIFIED", "Verified"),
         ("UNVERIFIED", "Unverified"),
         ("UNDER_REVIEW", "Under Review"),
-        ("REJECTED", "Rejected")
+        ("REJECTED", "Rejected"),
     )
     id = models.BigIntegerField(primary_key=True)
     name = models.CharField(max_length=50)
-    owner = models.ForeignKey(Member, related_name="bots", on_delete=models.CASCADE)
+    owner = models.ForeignKey(
+        Member, related_name="bots", on_delete=models.CASCADE
+    )
     invite_link = models.URLField(max_length=350)
     votes = models.IntegerField(default=0)
-    verification_status = models.CharField(max_length=20, choices=VERIFICATION_STATUS, default="UNVERIFIED")
+    verification_status = models.CharField(
+        max_length=20, choices=VERIFICATION_STATUS, default="UNVERIFIED"
+    )
     online = models.BooleanField(default=False)
     banned = models.BooleanField(default=False)
     verified = models.BooleanField(default=False)
@@ -147,7 +158,9 @@ class Bot(models.Model):
     avatar = models.CharField(max_length=100, null=True)
     short_desc = models.CharField(max_length=200, null=True)
     tags = models.ManyToManyField(BotTag, related_name="bots", blank=True)
-    banner_url = models.URLField(default="https://i.postimg.cc/15TN17rQ/xirprofilback.jpg")
+    banner_url = models.URLField(
+        default="https://i.postimg.cc/15TN17rQ/xirprofilback.jpg"
+    )
     admins = models.ManyToManyField(Member, related_name="admin_bots")
 
     @property
@@ -180,27 +193,39 @@ class Bot(models.Model):
 
 
 class BotMeta(models.Model):
-    bot = models.OneToOneField(Bot, on_delete=models.CASCADE, related_name="meta")
-    prefix = models.CharField(max_length=20, null=True, blank=True, default="N/A")
+    bot = models.OneToOneField(
+        Bot, on_delete=models.CASCADE, related_name="meta"
+    )
+    prefix = models.CharField(
+        max_length=20, null=True, blank=True, default="N/A"
+    )
     github = models.URLField(null=True, blank=True)
     website = models.URLField(null=True, blank=True)
     privacy = models.URLField(null=True, blank=True)
     twitter = models.URLField(null=True, blank=True)
     donate = models.URLField(null=True, blank=True)
     support_server = models.URLField(null=True, blank=True)
-    library = models.CharField(max_length=15, null=True, blank=True, default="N/A")
+    library = models.CharField(
+        max_length=15, null=True, blank=True, default="N/A"
+    )
     ban_reason = models.TextField(null=True, blank=True)
     shard_count = models.IntegerField(default=0, null=True)
     rejection_count = models.IntegerField(default=0)
     rejection_reason = models.TextField(null=True, blank=True)
-    moderator = models.ForeignKey(Member, on_delete=models.SET_NULL, null=True, blank=True)
+    moderator = models.ForeignKey(
+        Member, on_delete=models.SET_NULL, null=True, blank=True
+    )
     long_desc = models.TextField(null=True, blank=True)
     total_invites = models.IntegerField(default=0, null=True)
 
 
 class BotReport(models.Model):
-    bot = models.ForeignKey(Bot, on_delete=models.CASCADE, related_name="reports")
-    reporter = models.ForeignKey(Member, related_name="reported_bots", on_delete=models.CASCADE)
+    bot = models.ForeignKey(
+        Bot, on_delete=models.CASCADE, related_name="reports"
+    )
+    reporter = models.ForeignKey(
+        Member, related_name="reported_bots", on_delete=models.CASCADE
+    )
     reason = models.TextField()
     creation_date = models.DateTimeField()
     reviewed = models.BooleanField(default=False)
@@ -208,8 +233,12 @@ class BotReport(models.Model):
 
 class BotVote(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True)
-    member = models.ForeignKey(Member, related_name="voted_bots", on_delete=models.CASCADE)
-    bot = models.ForeignKey(Bot, related_name="all_votes", on_delete=models.CASCADE, null=True)
+    member = models.ForeignKey(
+        Member, related_name="voted_bots", on_delete=models.CASCADE
+    )
+    bot = models.ForeignKey(
+        Bot, related_name="all_votes", on_delete=models.CASCADE, null=True
+    )
     creation_time = models.DateTimeField(null=True)
 
 
@@ -218,22 +247,30 @@ class Server(models.Model):
         ("VERIFIED", "Verified"),
         ("UNVERIFIED", "Unverified"),
         ("UNDER_REVIEW", "Under Review"),
-        ("REJECTED", "Rejected")
+        ("REJECTED", "Rejected"),
     )
     id = models.BigIntegerField(primary_key=True)
-    owner = models.ForeignKey(Member, related_name="servers", on_delete=models.CASCADE)
+    owner = models.ForeignKey(
+        Member, related_name="servers", on_delete=models.CASCADE
+    )
     name = models.CharField(max_length=50)
     invite_link = models.URLField()
     votes = models.IntegerField(default=0)
-    verification_status = models.CharField(max_length=20, choices=VERIFICATION_STATUS, default="UNVERIFIED")
+    verification_status = models.CharField(
+        max_length=20, choices=VERIFICATION_STATUS, default="UNVERIFIED"
+    )
     verified = models.BooleanField(default=False)
     date_added = models.DateTimeField()
     is_nsfw = models.BooleanField(default=False)
     members_online = models.IntegerField(default=0, null=True)
     icon = models.CharField(max_length=100, null=True)
     short_desc = models.CharField(max_length=200, null=True)
-    tags = models.ManyToManyField(ServerTag, related_name="attached_servers", blank=True)
-    banner_url = models.URLField(default="https://i.postimg.cc/15TN17rQ/xirprofilback.jpg")
+    tags = models.ManyToManyField(
+        ServerTag, related_name="attached_servers", blank=True
+    )
+    banner_url = models.URLField(
+        default="https://i.postimg.cc/15TN17rQ/xirprofilback.jpg"
+    )
     banned = models.BooleanField(default=False)
     admins = models.ManyToManyField(Member, related_name="admin_servers")
 
@@ -273,27 +310,44 @@ class Server(models.Model):
 
 
 class ServerMeta(models.Model):
-    server = models.OneToOneField(Server, on_delete=models.CASCADE, related_name="meta")
+    server = models.OneToOneField(
+        Server, on_delete=models.CASCADE, related_name="meta"
+    )
     long_desc = models.TextField(null=True, blank=True)
     ban_reason = models.TextField(null=True, blank=True)
     member_count = models.IntegerField(default=0, null=True)
     rejection_count = models.IntegerField(default=0)
     rejection_reason = models.TextField(null=True, blank=True)
-    moderator = models.ForeignKey(Member, on_delete=models.SET_NULL, null=True, blank=True)
+    moderator = models.ForeignKey(
+        Member, on_delete=models.SET_NULL, null=True, blank=True
+    )
     total_invites = models.IntegerField(default=0, null=True)
 
 
 class ServerVote(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True)
-    member = models.ForeignKey(Member, related_name="voted_servers", on_delete=models.CASCADE)
-    server = models.ForeignKey(Server, related_name="all_votes", on_delete=models.CASCADE, null=True)
+    member = models.ForeignKey(
+        Member, related_name="voted_servers", on_delete=models.CASCADE
+    )
+    server = models.ForeignKey(
+        Server, related_name="all_votes", on_delete=models.CASCADE, null=True
+    )
     creation_time = models.DateTimeField(null=True)
 
 
 class ServerReport(models.Model):
-    server = models.ForeignKey(Server, on_delete=models.CASCADE, related_name="reports")
-    reporter = models.ForeignKey(Member, related_name="reported_servers", on_delete=models.CASCADE)
+    server = models.ForeignKey(
+        Server, on_delete=models.CASCADE, related_name="reports"
+    )
+    reporter = models.ForeignKey(
+        Member, related_name="reported_servers", on_delete=models.CASCADE
+    )
     reason = models.TextField()
     creation_date = models.DateTimeField()
     reviewed = models.BooleanField(default=False)
-    reviewer = models.ForeignKey(Member, null=True, related_name="reports_reviewed", on_delete=models.SET_NULL)
+    reviewer = models.ForeignKey(
+        Member,
+        null=True,
+        related_name="reports_reviewed",
+        on_delete=models.SET_NULL,
+    )

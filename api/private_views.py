@@ -19,7 +19,6 @@ discord_api = DiscordAPIClient()
 
 
 class UserMigrateView(APIView, ResponseMixin):
-
     def post(self, request):
         if request.user.is_superuser:
             data = request.data
@@ -31,16 +30,15 @@ class UserMigrateView(APIView, ResponseMixin):
 
 
 class BotMigrateView(APIView, ResponseMixin):
-
     def post(self, request):
         if request.user.is_superuser:
             """
-             {
-                "id": ,"username": "", "owner_id": , "invite": "", "short_desc": "", "date_added": "%d%m%Y",
-                "votes": , "banned": False, "verified": True, "tags": [], "support_server": "", "prefix": "",
-                "github": "", "website": "", "library": "", "twitter": "", "support_server": "", "privacy": "",
-                "donate": "", "long_desc": ""
-             }
+            {
+               "id": ,"username": "", "owner_id": , "invite": "", "short_desc": "", "date_added": "%d%m%Y",
+               "votes": , "banned": False, "verified": True, "tags": [], "support_server": "", "prefix": "",
+               "github": "", "website": "", "library": "", "twitter": "", "support_server": "", "privacy": "",
+               "donate": "", "long_desc": ""
+            }
             """
             data = request.data
             if Bot.objects.filter(id=data.get("id")).exists():
@@ -52,20 +50,26 @@ class BotMigrateView(APIView, ResponseMixin):
                 resp = resp.json()
                 try:
                     owner = Member.objects.get(id=data.get("owner_id"))
-                    bot = Bot.objects.create(id=data.get("id"),
-                                             name=resp.get("username"),
-                                             owner=owner,
-                                             invite_link=data.get("invite"),
-                                             date_added=datetime.utcfromtimestamp(
-                                                 data.get("date_added", 1622042205981)/1000
-                                             ).replace(tzinfo=pytz.utc),
-                                             avatar=resp.get("avatar"),
-                                             short_desc=data.get("short_desc"),
-                                             votes=data.get("votes"),
-                                             verification_status="VERIFIED" if data.get("verified") else "UNVERIFIED",
-                                             banned=data.get("banned"),
-                                             verified=data.get("verified"))
-                    bot.tags.set(BotTag.objects.filter(name__in=data.get('tags')))
+                    bot = Bot.objects.create(
+                        id=data.get("id"),
+                        name=resp.get("username"),
+                        owner=owner,
+                        invite_link=data.get("invite"),
+                        date_added=datetime.utcfromtimestamp(
+                            data.get("date_added", 1622042205981) / 1000
+                        ).replace(tzinfo=pytz.utc),
+                        avatar=resp.get("avatar"),
+                        short_desc=data.get("short_desc"),
+                        votes=data.get("votes"),
+                        verification_status="VERIFIED"
+                        if data.get("verified")
+                        else "UNVERIFIED",
+                        banned=data.get("banned"),
+                        verified=data.get("verified"),
+                    )
+                    bot.tags.set(
+                        BotTag.objects.filter(name__in=data.get("tags"))
+                    )
                     bot.meta.support_server = data.get("support_server")
                     bot.meta.prefix = data.get("prefix")
                     bot.meta.github = data.get("github")
@@ -88,6 +92,7 @@ class BotStatusEditView(APIView, ResponseMixin):
     """
     Used for bot verification using bladelist bot from server without using panel.
     """
+
     model = Bot
     serializer = BotStatusSerializer
 
@@ -129,7 +134,9 @@ class BotStatusEditView(APIView, ResponseMixin):
             elif verification_status == "UNBANNED":
                 bot.banned = False
                 bot.verified = True
-                bot.save(update_fields=["banned", "verified", "verification_status"])
+                bot.save(
+                    update_fields=["banned", "verified", "verification_status"]
+                )
             else:
                 return self.json_response_400()
             return self.json_response_200()
@@ -140,6 +147,7 @@ class ServerStatusEditView(APIView, ResponseMixin):
     """
     Used for server verification using bladelist bot from server without using panel.
     """
+
     model = Server
     serializer = ServerStatusSerializer
 
@@ -181,7 +189,9 @@ class ServerStatusEditView(APIView, ResponseMixin):
             elif verification_status == "UNBANNED":
                 server.banned = False
                 server.verified = True
-                server.save(update_fields=["banned", "verified", "verification_status"])
+                server.save(
+                    update_fields=["banned", "verified", "verification_status"]
+                )
             else:
                 return self.json_response_400()
             return self.json_response_200()

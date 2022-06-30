@@ -20,7 +20,6 @@ class Response:
 
 
 class ResponseMixin(object):
-
     @staticmethod
     def json_response_200():
         return JsonResponse(Response.code_200, status=200)

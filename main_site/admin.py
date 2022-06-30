@@ -1,7 +1,17 @@
 from django.contrib import admin
 from .models import (
-    Member, Bot, BotMeta, BotTag, MemberMeta, BotVote, BotReport,
-    Server, ServerVote, ServerTag, ServerReport, ServerMeta
+    Member,
+    Bot,
+    BotMeta,
+    BotTag,
+    MemberMeta,
+    BotVote,
+    BotReport,
+    Server,
+    ServerVote,
+    ServerTag,
+    ServerReport,
+    ServerMeta,
 )
 
 
