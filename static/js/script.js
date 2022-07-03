@@ -57,6 +57,7 @@ $(document).on('click', '.voteBotBtn', function (){
         success:function (data)
         {
           $("#botVoteCount").text(data["vote_count"]);
+          $("#botInfoVoteCount").text(data["vote_count"]);
           notyf.success("Voted successfully!")
         },
         error:function (response) {
