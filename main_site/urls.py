@@ -9,7 +9,7 @@ from .views import (IndexView, LoginView, ServerModerationView, BotAddView, supp
 urlpatterns = [
     path('login/', LoginView.as_view()),
     path('join/', support_server_invite, name="join_support_server"),
-    path('login/handlers/', login_handler_view),
+    path('login/handlers/', login_handler_view, name="login_handler"),
     re_path(r'^logout', logout_view, name="logout"),
 
     re_path(r'^bots/(?P<bot_id>[0-9]{18,19})/invite/', bot_invite_counter, name="bot_invite"),
