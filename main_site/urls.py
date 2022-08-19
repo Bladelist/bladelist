@@ -12,19 +12,19 @@ urlpatterns = [
     path('login/handlers/', login_handler_view),
     re_path(r'^logout', logout_view, name="logout"),
 
-    re_path(r'^bots/(?P<bot_id>[0-9]{18})/invite/', bot_invite_counter, name="bot_invite"),
-    re_path(r'^bots/(?P<bot_id>[0-9]{18})/edit/', BotEditView.as_view(), name="bot_edit_view"),
-    re_path(r'^bots/(?P<bot_id>[0-9]{18})', BotView.as_view(), name="bot_single"),
+    re_path(r'^bots/(?P<bot_id>[0-9]{18,19})/invite/', bot_invite_counter, name="bot_invite"),
+    re_path(r'^bots/(?P<bot_id>[0-9]{18,19})/edit/', BotEditView.as_view(), name="bot_edit_view"),
+    re_path(r'^bots/(?P<bot_id>[0-9]{18,19})', BotView.as_view(), name="bot_single"),
     re_path(r'^bots/requirements/', TemplateView.as_view(template_name="requirements.html"), name="bot_search"),
     re_path(r'^bots/search/', BotSearchView.as_view(), name="bot_search"),
     re_path(r'^bots/edit/', BotEditView.as_view(), name="bot_edit"),
     re_path(r'^bots/add', BotAddView.as_view(), name="bot_add"),
     re_path(r'^bots', BotListView.as_view(), name="bots"),
 
-    re_path(r'^servers/(?P<server_id>[0-9]{18})/invite/', server_invite_counter, name="server_invite"),
-    re_path(r'^servers/(?P<server_id>[0-9]{18})/edit/', ServerEditView.as_view(), name="server_edit_view"),
+    re_path(r'^servers/(?P<server_id>[0-9]{18,19})/invite/', server_invite_counter, name="server_invite"),
+    re_path(r'^servers/(?P<server_id>[0-9]{18,19})/edit/', ServerEditView.as_view(), name="server_edit_view"),
     re_path(r'^servers/edit/', ServerEditView.as_view(), name="server_edit"),
-    re_path(r'^servers/(?P<server_id>[0-9]{18})', ServerView.as_view(), name="server_single"),
+    re_path(r'^servers/(?P<server_id>[0-9]{18,19})', ServerView.as_view(), name="server_single"),
     re_path(r'^servers/search/', ServerSearchView.as_view(), name="server_search"),
     re_path(r'^servers/add/', ServerAddView.as_view(), name="server_add"),
     re_path(r'^servers/refresh/', server_refresh, name="server_refresh"),
@@ -42,7 +42,7 @@ urlpatterns = [
     re_path(r'^accounts/login/', discord_login_normal, name="normal_login"),
 
     re_path(r'^profile/edit/', ProfileEditView.as_view(), name="edit_profile"),
-    re_path(r'^users/(?P<user_id>[0-9]{18})', ProfileView.as_view(), name="profile"),
+    re_path(r'^users/(?P<user_id>[0-9]{18,19})', ProfileView.as_view(), name="profile"),
 
     path('', IndexView.as_view(), name="home"),
 ]
