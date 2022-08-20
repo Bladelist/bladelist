@@ -151,7 +151,7 @@ class LoginView(View):
         else:
             error = "Internal Server Error"
             return render(request, self.template_name, {"error": error, "search": True})
-        return IndexView.as_view()(self.request)
+        return redirect(to="/")
 
 
 class IndexView(View):
